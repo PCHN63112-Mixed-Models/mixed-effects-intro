@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The Mixed-effects Advantage &#8212; Linear Models with Correlated Errors</title>
+    <title>The LME Advantage &#8212; An Introduction to Mixed-effects Models</title>
   
   
   
@@ -60,9 +60,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '2.lme--advantages';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2.lme-advantages';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hierarchical Models" href="3.hierarchical-models.html" />
+    <link rel="prev" title="The LME Framework" href="1.lme-framework.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -114,8 +116,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -146,8 +146,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models with Correlated Errors - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models with Correlated Errors - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Mixed-effects Models - Home"/>
   
   
 </a></div>
@@ -168,7 +168,12 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.lme-framework.html">The LME Framework</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The LME Advantage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.hierarchical-models.html">Hierarchical Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.estimation-inference.html">Estimation and Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.lme-R.html">LME Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -229,7 +234,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/correlated-errors" target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -246,7 +251,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/correlated-errors/issues/new?title=Issue%20on%20page%20%2F2.lme--advantages.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F2.lme-advantages.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -276,7 +281,7 @@
       
       
       
-      <li><a href="_sources/2.lme--advantages.ipynb" target="_blank"
+      <li><a href="_sources/2.lme-advantages.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -352,7 +357,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Mixed-effects Advantage</h1>
+    <h1>The LME Advantage</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -363,6 +368,7 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
 </ul>
@@ -376,12 +382,16 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-mixed-effects-advantage">
-<h1>The Mixed-effects Advantage<a class="headerlink" href="#the-mixed-effects-advantage" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-lme-advantage">
+<h1>The LME Advantage<a class="headerlink" href="#the-lme-advantage" title="Link to this heading">#</a></h1>
 <p>…Despite this, you may still be wondering <em>why</em> we would use mixed-effects models? They are clearly more complex than an approach such as GLS, so what is the justification?</p>
 <section id="pooling-and-shrinkage">
 <h2>Pooling and Shrinkage<a class="headerlink" href="#pooling-and-shrinkage" title="Link to this heading">#</a></h2>
 <p>…</p>
+</section>
+<section id="the-bias-variance-tradeoff">
+<h2>The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Link to this heading">#</a></h2>
+<p>… So, from this perspective, LME models provide a solution to this issue via pooling and shrinkage. GLS provides <em>no pooling</em> ….</p>
 </section>
 <section id="regularisation">
 <h2>Regularisation<a class="headerlink" href="#regularisation" title="Link to this heading">#</a></h2>
@@ -421,6 +431,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="1.lme-framework.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The LME Framework</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3.hierarchical-models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hierarchical Models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -439,6 +467,7 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
 </ul>
