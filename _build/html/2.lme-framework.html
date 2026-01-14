@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The LME Advantage &#8212; An Introduction to Mixed-effects Models</title>
+    <title>The Mixed-effects Framework &#8212; An Introduction to Mixed-effects Models</title>
   
   
   
@@ -60,11 +60,13 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '2.lme-advantages';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2.lme-framework';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Hierarchical Models" href="3.hierarchical-models.html" />
-    <link rel="prev" title="The LME Framework" href="1.lme-framework.html" />
+    <link rel="next" title="Advantages of Mixed-effects" href="3.lme-advantages.html" />
+    <link rel="prev" title="Generalised Least Squares" href="1.gls.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -170,9 +172,8 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.gls.html">Generalised Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="1.lme-framework.html">The LME Framework</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">The LME Advantage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.hierarchical-models.html">Hierarchical Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Mixed-effects Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.lme-advantages.html">Advantages of Mixed-effects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.estimation-inference.html">Estimation and Inference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.lme-R.html">LME Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -252,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F2.lme-advantages.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F2.lme-framework.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -282,7 +283,7 @@
       
       
       
-      <li><a href="_sources/2.lme-advantages.ipynb" target="_blank"
+      <li><a href="_sources/2.lme-framework.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -358,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The LME Advantage</h1>
+    <h1>The Mixed-effects Framework</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -368,11 +369,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hierarchical-perspective">The Hierarchical Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-model-to-a-single-subject">Fitting a Model to a Single Subject</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hierarchical-model">The Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-hierarchy-to-mixed-effects">From Hierarchy to Mixed-effects</a></li>
 </ul>
             </nav>
         </div>
@@ -384,27 +387,103 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-lme-advantage">
-<h1>The LME Advantage<a class="headerlink" href="#the-lme-advantage" title="Link to this heading">#</a></h1>
-<p>…Despite this, you may still be wondering <em>why</em> we would use LME models? They are clearly more complex than an approach such as GLS, so what is the justification?</p>
-<section id="modelling-data-structure">
-<h2>Modelling Data Structure<a class="headerlink" href="#modelling-data-structure" title="Link to this heading">#</a></h2>
-<p>… In our previous discussion, GLS was used as a method to get around the presence of correlation within repeated measurement data. We impose a structure for GLS to remove. What LME models do instead is get us to model the <em>structure</em> of the data. We do not worry about dependence because this is accommodated <em>automatically</em> as a consequence of the structure. As long as we get the structure right, everything else follows. So this is an entirely different perspective. We are not trying to model correlation, we are trying to get the structure correct. Once we do, everything gets worked out for us, correlation and all.</p>
-</section>
-<section id="pooling-and-shrinkage">
-<h2>Pooling and Shrinkage<a class="headerlink" href="#pooling-and-shrinkage" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-mixed-effects-framework">
+<h1>The Mixed-effects Framework<a class="headerlink" href="#the-mixed-effects-framework" title="Link to this heading">#</a></h1>
 <p>…</p>
+<section id="the-hierarchical-perspective">
+<h2>The Hierarchical Perspective<a class="headerlink" href="#the-hierarchical-perspective" title="Link to this heading">#</a></h2>
+<p>… These are sometimes called <em>hierarchical</em> or <em>multilevel</em> models.</p>
+<section id="fitting-a-model-to-a-single-subject">
+<h3>Fitting a Model to a Single Subject<a class="headerlink" href="#fitting-a-model-to-a-single-subject" title="Link to this heading">#</a></h3>
+<p>To begin with, let us imagine that we only have the data for a <em>single subject</em>. What kind of model could we fit?</p>
+<p>… So, notice that if we allow the model to freely estimate the effect of <code class="docutils literal notranslate"><span class="pre">condition</span></code>, it will fit the data <em>perfectly</em> and there will be no error. This tells us that we cannot let this effect be unique to each subject because the data does not support it. So, in this instance, the data constrains us to the model</p>
+<p>…</p>
+<p>where <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em> across all subjects, rather than being unique to subject <span class="math notranslate nohighlight">\(i\)</span>. So this is our final model, if we <em>only</em> had the data for this one subject.</p>
+<p>Now, let us imagine that we ran the experiment <em>again</em> and collected a different subject. What do we think would change? Well, certainly the term <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. We have different data now and so the grand mean is almost certainly going to change. What else? Well, the errors will also change, as we would expect. What would not change would be <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>, because we have assumed that this is <em>constant</em> across subjects. So, we have <span class="math notranslate nohighlight">\(\mu_{i}\)</span> that wil differ with each new subject and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> that will differ with each observation within each subject.</p>
+<p>What does this mean for both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>? Well, what do we call a variable that changes every time we observe it? A <em>random variable</em>. So, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>random variables</em>. This means that they <em>both</em> have some underlying distribution that they are drawn from. As we know, the <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>errors</em> and thus reflect <em>deflections</em> around the expected value. As such, their distribution is the same as it always was</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_{ij} \sim \mathcal{N}\left(0, \sigma^{2}_{w}\right).
+\]</div>
+<p>But what about the <span class="math notranslate nohighlight">\(\mu_{i}\)</span>? Well, as written above, these are <em>means</em> for each subject, so their expected value will not be 0. Instead, it will be whatever the <em>population grand mean</em> happens to be. Their variance will then represent the variability of the subject means, which we will call <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>. As such</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{b}\right).
+\]</div>
+<p>So our full model is now</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}        &amp;=    \mu_{i} + \alpha_{j} + \eta_{ij}           \\
+    \mu_{i}       &amp;\sim \mathcal{N}\left(\mu,\sigma^{2}_{b}\right) \\
+    \epsilon_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)   \\
+\end{alignat*}
+\end{split}\]</div>
+<p>For each subject we observe, we have a subject-specific intercept <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, a constant effect of condition <span class="math notranslate nohighlight">\(j\)</span> (as constrained by the data) and an observation-specific error <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>.</p>
 </section>
-<section id="the-bias-variance-tradeoff">
-<h2>The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Link to this heading">#</a></h2>
-<p>… So, from this perspective, LME models provide a solution to this issue via pooling and shrinkage. GLS provides <em>no pooling</em> ….</p>
+<section id="fitting-individual-linear-models-in-r">
+<h3>Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-individual-linear-models-in-r" title="Link to this heading">#</a></h3>
+<p>Each time we do this, we will collect the estimates of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>, just to demonstrate that these are the elements that truly <em>do</em> change with each new subject. We will then show the distribution of these at the end to illustrate that these terms are indeed <em>random variables</em>.</p>
 </section>
-<section id="regularisation">
-<h2>Regularisation<a class="headerlink" href="#regularisation" title="Link to this heading">#</a></h2>
+<section id="the-hierarchical-model">
+<h3>The Hierarchical Model<a class="headerlink" href="#the-hierarchical-model" title="Link to this heading">#</a></h3>
+<p>… Given the model above, we can start to play around with how it is written. This will lead us directly to the <em>multilevel</em> way of viewing these models.</p>
+<p>Remembering back to how we can specify a linear model in terms of either a distribution on the <em>outcome variable</em> or a distribution on the <em>errors</em>, we can do exactly the same thing with the <span class="math notranslate nohighlight">\(\mu_{i}\)</span> terms. At present, this is expressed as a distribution on the outcome variable (all the different observed values of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>). But we can separate this out like so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}        \\
+    \mu_{i}   &amp;= \mu + S_{i}                              \\
+    S_{i}     &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+\end{alignat*}
+\end{split}\]</div>
+<p>So we have written <span class="math notranslate nohighlight">\(\mu_{i}\)</span> in terms of its <em>mean function</em> and a new error term <span class="math notranslate nohighlight">\(S_{i}\)</span>. This is <em>exactly</em> the multilevel/hierarchical perspective. We now have <em>two levels</em> of variation that we are modelling. Level 1 expresses the model for an individual subject and Level 2 expresses the model for the <em>group</em> of subjects. We could write this like so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+\text{Level 1 (Subject)}\quad&amp;
+\begin{cases}
+    y_{ij}    = \mu_{i} + \alpha_{j} + \eta_{ij}            \\
+    \eta_{ij} \sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+    
+\end{cases} \\
+\text{Level 2 (Group)}\quad&amp;
+\begin{cases}
+    \mu_{i} = \mu + S_{i}                                 \\
+    S_{i}   \sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+    \end{cases}
+\end{alignat*}
+\end{split}\]</div>
 </section>
-<section id="when-is-gls-enough">
-<h2>When is GLS Enough?<a class="headerlink" href="#when-is-gls-enough" title="Link to this heading">#</a></h2>
-<p>… One example would be time-series data.</p>
+</section>
+<section id="from-hierarchy-to-mixed-effects">
+<h2>From Hierarchy to Mixed-effects<a class="headerlink" href="#from-hierarchy-to-mixed-effects" title="Link to this heading">#</a></h2>
+<p>… So, the key here is recognising that we can collapse the two equations</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
+    \mu_{i}   &amp;= \mu + S_{i}                       \\
+\end{alignat*}
+\end{split}\]</div>
+<p>After all, we can see exactly what <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is equal to. So let us replace <span class="math notranslate nohighlight">\(\mu_{i}\)</span> in the first equation with the equality in the second equation. If we do so, we get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij} &amp;= (\mu + S_{i}) + \alpha_{j} + \eta_{ij} \\
+           &amp;= \mu + \alpha_{j} + S_{i} + \eta_{ij}
+\end{alignat*}
+\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    S_{i}     &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+\end{alignat*}
+\end{split}\]</div>
+<p>This is <em>exactly the partitioned error model we saw last week</em>.</p>
 </section>
 </section>
 
@@ -439,20 +518,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="1.lme-framework.html"
+       href="1.gls.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">The LME Framework</p>
+        <p class="prev-next-title">Generalised Least Squares</p>
       </div>
     </a>
     <a class="right-next"
-       href="3.hierarchical-models.html"
+       href="3.lme-advantages.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Hierarchical Models</p>
+        <p class="prev-next-title">Advantages of Mixed-effects</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -473,11 +552,13 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hierarchical-perspective">The Hierarchical Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-model-to-a-single-subject">Fitting a Model to a Single Subject</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hierarchical-model">The Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-hierarchy-to-mixed-effects">From Hierarchy to Mixed-effects</a></li>
 </ul>
   </nav></div>
 

@@ -5,9 +5,8 @@ format: jb-book
 root: 0.intro
 chapters:
 - file: 1.gls
-- file: 1.lme-framework
-- file: 2.lme-advantages
-- file: 3.hierarchical-models
+- file: 2.lme-framework
+- file: 3.lme-advantages
 - file: 4.estimation-inference
 - file: 5.lme-R
 - file: summary
