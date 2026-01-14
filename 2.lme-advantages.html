@@ -169,6 +169,7 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.gls.html">Generalised Least Squares</a></li>
 <li class="toctree-l1"><a class="reference internal" href="1.lme-framework.html">The LME Framework</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The LME Advantage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.hierarchical-models.html">Hierarchical Models</a></li>
@@ -367,6 +368,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
@@ -384,7 +386,11 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-lme-advantage">
 <h1>The LME Advantage<a class="headerlink" href="#the-lme-advantage" title="Link to this heading">#</a></h1>
-<p>…Despite this, you may still be wondering <em>why</em> we would use mixed-effects models? They are clearly more complex than an approach such as GLS, so what is the justification?</p>
+<p>…Despite this, you may still be wondering <em>why</em> we would use LME models? They are clearly more complex than an approach such as GLS, so what is the justification?</p>
+<section id="modelling-data-structure">
+<h2>Modelling Data Structure<a class="headerlink" href="#modelling-data-structure" title="Link to this heading">#</a></h2>
+<p>… In our previous discussion, GLS was used as a method to get around the presence of correlation within repeated measurement data. We impose a structure for GLS to remove. What LME models do instead is get us to model the <em>structure</em> of the data. We do not worry about dependence because this is accommodated <em>automatically</em> as a consequence of the structure. As long as we get the structure right, everything else follows. So this is an entirely different perspective. We are not trying to model correlation, we are trying to get the structure correct. Once we do, everything gets worked out for us, correlation and all.</p>
+</section>
 <section id="pooling-and-shrinkage">
 <h2>Pooling and Shrinkage<a class="headerlink" href="#pooling-and-shrinkage" title="Link to this heading">#</a></h2>
 <p>…</p>
@@ -398,6 +404,7 @@
 </section>
 <section id="when-is-gls-enough">
 <h2>When is GLS Enough?<a class="headerlink" href="#when-is-gls-enough" title="Link to this heading">#</a></h2>
+<p>… One example would be time-series data.</p>
 </section>
 </section>
 
@@ -466,6 +473,7 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
