@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The Impact of Negative Correlation &#8212; An Introduction to Mixed-effects Models</title>
+    <title>The GLS Covariance Matrix &#8212; An Introduction to Mixed-effects Models</title>
   
   
   
@@ -37,6 +37,9 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -63,6 +66,27 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro-mixed-workshop';</script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -359,7 +383,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Impact of Negative Correlation</h1>
+    <h1>The GLS Covariance Matrix</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -369,7 +393,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Impact of <em>Negative</em> Correlation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The GLS Covariance Matrix</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-setting-correlation-to-1-what-happens">Try Setting Correlation to 1. What happens?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conceptualisation">Univariate Conceptualisation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-normal-distribution-with-2-conditions">Multivariate Normal Distribution with &gt; 2 Conditions</a></li>
@@ -385,8 +409,142 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="the-impact-of-negative-correlation">
-<h1>The Impact of <em>Negative</em> Correlation<a class="headerlink" href="#the-impact-of-negative-correlation" title="Link to this heading">#</a></h1>
+  <section id="the-gls-covariance-matrix">
+<h1>The GLS Covariance Matrix<a class="headerlink" href="#the-gls-covariance-matrix" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">gls.mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marginal variance covariance matrix
+       [,1]   [,2]
+[1,] 653.17 348.30
+[2,] 348.30 653.17
+  Standard Deviations: 25.557 25.557 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span>
+
+<span class="n">gls_marginal_cov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nobs</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+<span class="w">  </span><span class="c1"># Correlation blocks (list) or single matrix if no grouping</span>
+<span class="w">  </span><span class="n">cs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">modelStruct</span><span class="o">$</span><span class="n">corStruct</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">cs</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1"># No correlation structure: R = I</span>
+<span class="w">    </span><span class="n">Rlist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">Matrix</span><span class="o">::</span><span class="nf">Diagonal</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">))</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Rlist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">corMatrix</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+<span class="w">    </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getGroups</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">))</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1"># Variance weights (if no varStruct, all 1s)</span>
+<span class="w">  </span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">modelStruct</span><span class="o">$</span><span class="n">varStruct</span>
+<span class="w">  </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="nf">varWeights</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
+
+<span class="w">  </span><span class="c1"># Indices per group, aligned to the same order as used in the fit</span>
+<span class="w">  </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">split</span><span class="p">(</span><span class="nf">seq_along</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="w"> </span><span class="n">g</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">sig2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span>
+
+<span class="w">  </span><span class="c1"># Build block covariance matrices: Sigma_g = sig2 * D^(1/2) R D^(1/2)</span>
+<span class="w">  </span><span class="c1"># In nlme, varWeights are (typically) inverse-SD-type weights, so Var(e_i) = sig2 / w_i^2.</span>
+<span class="w">  </span><span class="n">Sig_blocks</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">Map</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">ii</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Dhalf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">Diagonal</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+<span class="w">    </span><span class="n">sig2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">Dhalf</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">Dhalf</span><span class="p">)</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="n">Rlist</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">bdiag</span><span class="p">(</span><span class="n">Sig_blocks</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We just print the first 8 rows to show the structure for the first 4 subjects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gls_marginal_cov</span><span class="p">(</span><span class="n">gls.mod</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">8</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">8</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8 x 8 sparse Matrix of class &quot;dgCMatrix&quot;
+                                                                            
+[1,] 653.1733 348.3042   .        .        .        .        .        .     
+[2,] 348.3042 653.1733   .        .        .        .        .        .     
+[3,]   .        .      653.1733 348.3042   .        .        .        .     
+[4,]   .        .      348.3042 653.1733   .        .        .        .     
+[5,]   .        .        .        .      653.1733 348.3042   .        .     
+[6,]   .        .        .        .      348.3042 653.1733   .        .     
+[7,]   .        .        .        .        .        .      653.1733 348.3042
+[8,]   .        .        .        .        .        .      348.3042 653.1733
+</pre></div>
+</div>
+</div>
+</div>
+<p>A more general approach is to create an <em>image</em> of <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, either as a whole</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">image</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" src="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" />
+</div>
+</div>
+<p>Or subsetted to show the general structure more clearly</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">image</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">])</span><span class="w"> </span><span class="c1"># first 10 subjects</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" src="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" />
+</div>
+</div>
+<p>These visualisations also help to make sense of the syntax used for defining the correlation structure. For instance, if we were to specify <code class="docutils literal notranslate"><span class="pre">form=~1|cond</span></code>, this would imply a constant correlation for each level of the repeated measures condition. What would this look like? Let us see</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">gls.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gls</span><span class="p">(</span><span class="n">y.long</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">cond</span><span class="p">,</span><span class="w"> </span><span class="n">correlation</span><span class="o">=</span><span class="nf">corCompSymm</span><span class="p">(</span><span class="n">form</span><span class="o">=~</span><span class="m">1</span><span class="o">|</span><span class="n">cond</span><span class="p">))</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">gls_marginal_cov</span><span class="p">((</span><span class="n">gls.mod</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">Error</span>:
+
+<span class="o">!</span><span class="w"> </span>object<span class="w"> </span><span class="s1">&#39;cond&#39;</span><span class="w"> </span>not<span class="w"> </span>found
+
+    <span class="err">▆</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">1</span><span class="o">.</span> <span class="err">└─</span><span class="n">nlme</span><span class="p">::</span><span class="n">gls</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">2</span><span class="o">.</span>   <span class="err">├─</span><span class="n">base</span><span class="p">::</span><span class="n">do</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">mfArgs</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">3</span><span class="o">.</span>   <span class="err">├─</span><span class="n">stats</span> <span class="p">(</span><span class="n">local</span><span class="p">)</span> <span class="err">`</span><span class="o">&lt;</span><span class="n">fn</span><span class="o">&gt;</span><span class="err">`</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">4</span><span class="o">.</span>   <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">5</span><span class="o">.</span>     <span class="err">└─</span><span class="n">base</span><span class="p">::</span><span class="nb">eval</span><span class="p">(</span><span class="n">predvars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">6</span><span class="o">.</span>       <span class="err">└─</span><span class="n">base</span><span class="p">::</span><span class="nb">eval</span><span class="p">(</span><span class="n">predvars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The data are now organised by whatever term is on the <em>right</em> of <code class="docutils literal notranslate"><span class="pre">|</span></code>, so the first 50 rows represent all the data from condition 1 and the final 50 rows represents all the data from condition 2. So we can see that this structure implies that all the data from condition 1 are correlated across subjects, and all the data from condition 2 are correlated across subjects. This is not particularly sensible or meaningful, but hopefully it makes it clear how the syntax works.</p>
+<p>Notice, however, that GLS is ignoring the structure in the data in terms of the subjects, because it has no knowledge of them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span>
@@ -537,7 +695,7 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Impact of <em>Negative</em> Correlation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The GLS Covariance Matrix</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-setting-correlation-to-1-what-happens">Try Setting Correlation to 1. What happens?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conceptualisation">Univariate Conceptualisation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-normal-distribution-with-2-conditions">Multivariate Normal Distribution with &gt; 2 Conditions</a></li>
