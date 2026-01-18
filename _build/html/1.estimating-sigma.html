@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Estimating Covariance Structures &#8212; An Introduction to Mixed-effects Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '1.estimating-sigma';</script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generalised Least Squares" href="1.gls.html" />
+    <link rel="prev" title="Introduction" href="0.intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Mixed-effects Models - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Estimating Covariance Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.gls.html">Generalised Least Squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.lme-framework.html">The Mixed-effects Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.lme-R.html">LME Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F1.estimating-sigma.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/1.estimating-sigma.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Estimating Covariance Structures</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-covariance-structure">Estimating the Covariance Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ignore-the-problem">1. Ignore the Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-effective-degrees-of-freedom">2. Calculate <em>Effective</em> Degrees of Freedom</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-results-that-are-asymptotically-correct">3. Produce Results that are <em>Asymptotically</em> Correct</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-the-null">4. Simulate the Null</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-constraints">Covariance Constraints</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="estimating-covariance-structures">
+<h1>Estimating Covariance Structures<a class="headerlink" href="#estimating-covariance-structures" title="Link to this heading">#</a></h1>
+<p>We will start our journey into the world of mixed-effects models by first examining a <em>related</em> approach that we have seen before: Generalised Least Squares (GLS). The reason for doing this is twofold. Firstly, GLS actually provides a simpler solution to many of the issues with the repeated measures ANOVA and thus presents a more logical starting point. Secondly, limitations in the way that GLS does this will provide some motivation for mixed-effects as a more complex, but ultimately more flexible, method of dealing with this problem.</p>
+<section id="estimating-the-covariance-structure">
+<h2>Estimating the Covariance Structure<a class="headerlink" href="#estimating-the-covariance-structure" title="Link to this heading">#</a></h2>
+<p>If we <em>do not</em> know <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> ahead of time we must estimate it. Once we do that, the term <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> is no longer a <em>fixed constant</em>. Instead, we have <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}}\)</span>, which is a <em>random variable</em>. This introduces an additional layer of uncertainty that causes some major issues. The full story is given in the drop-down below, but the short version is that treating <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}}\)</span> as an <em>estimate</em> means we no longer know what null distribution our test statistic has. Furthermore, the whole concept of degrees of freedom as a metric that captures the uncertainty in the estimate of the standard error suddenly disappear. This means we do not know how much uncertainty there is around the estimate of the standard error, nor how the standard errors are distributed, nor how our test statistic is distributed under the null. This means we have no way of calculating a <span class="math notranslate nohighlight">\(p\)</span>-value. Worse still, we can <em>reason</em> that the standard errors will be biased because using <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}}\)</span> in place of <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> in their definition does not take the uncertainty in <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}}\)</span> into account. However, without knowing the distribution we have no idea <em>how</em> biased they are and cannot correct for it. So this means that the issue is not <em>just</em> with <span class="math notranslate nohighlight">\(p\)</span>-values, but also with <em>standard errors</em> and <em>confidence intervals</em>. In short, <em>all our inferential machinery falls apart</em>.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">How Estimating <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> Breaks Inference</p>
+<p>To understand why the classical inferential machinery breaks, we need to go back to some of the information covered last semester on <a class="reference external" href="https://pchn63101-advanced-data-skills.github.io/Inference-Linear-Model/2.estimation-uncertainty.html">statistical inference</a>. Recall that, in the normal linear model, the uncertainty that comes from estimating <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> affects inference via the <em>denominator</em> of the test statistic. If we <em>know</em> <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, then our test statistic is a <span class="math notranslate nohighlight">\(z\)</span>-statistic and is distributed as <span class="math notranslate nohighlight">\(z \sim \mathcal{N}(0,1)\)</span>. However, when <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> is <em>estimated</em>, the test statistic is a <span class="math notranslate nohighlight">\(t\)</span>-statistic and is distributed as <span class="math notranslate nohighlight">\(t \sim \mathcal{T}(\nu)\)</span>. Here, <span class="math notranslate nohighlight">\(\nu\)</span> is the <em>degrees of freedom</em>, which characterises the <em>uncertainty</em> in the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. This is what controls the <em>width</em> of the <span class="math notranslate nohighlight">\(t\)</span>-distribution, which will approach the standard normal as the sample size increases. In other words, we can think of the degrees of freedom as “the amount to which the null distribution deviates from a standard normal due to uncertainty in the estimation of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>”. So the degrees of freedom are <em>key</em>.</p>
+<p>Now, the whole reason the <span class="math notranslate nohighlight">\(t\)</span>-distribution exists is because it can be derived from the structure of the test statistic. Because both the numerator and denominator are <em>estimates</em>, they are both random variables with a given sampling distribution. In order to work out the distribution of their ratio, <em>both</em> sampling distributions need to be derived. Last semester, we showed that the distribution of the parameter estimates was a known quantity. For a single slope from a typical regression model, we have</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\beta}_{1} \sim \mathcal{N}\left(\beta_{1}, \frac{\sigma^{2}}{\sum{(x_{i} - \bar{x})^{2}}}\right).
+\]</div>
+<p>Importantly, the variance of this distribution depends upon knowing <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, which we do not. If we replace this with an <em>estimate</em>, <span class="math notranslate nohighlight">\(\hat{\sigma}^{2}\)</span>, we introduce another layer of uncertainty. In order to characterise this addition layer, we need to know the distribution of <span class="math notranslate nohighlight">\(\hat{\sigma}^{2}\)</span>. We glossed-over this last semester, but under the normal linear model this estimate has the following sampling distribution</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\sigma}^{2} \sim \frac{\sigma^{2}}{\nu}\chi^{2}(\nu)
+\]</div>
+<p>This is a <span class="math notranslate nohighlight">\(\chi^{2}\)</span> distribution with <span class="math notranslate nohighlight">\(\nu\)</span> degrees of freedom that is scaled into the same units as the variance. Importantly, knowing this distribution means we can show that <span class="math notranslate nohighlight">\(E(\hat{\sigma}^{2}) = \sigma^{2}\)</span> and thus the variance estimate (and by extension the standard error estimate) is <em>unbiased</em>. This means we can trust these calculations as estimates of the true population values. The other thing to notice here is that this distribution is <em>where degrees of freedom come from</em>. The reason degrees of freedom exist is because they appear as a parameter that governs the <em>width</em> of this sampling distribution. Thus, degrees of freedom directly encode uncertainty around the true value of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. As the sample size goes up, the degrees of freedom go up and the <span class="math notranslate nohighlight">\(\chi^{2}\)</span> gets <em>narrower</em> until it collapses into a single point centred on <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. Because the standard error of the parameter estimate depends upon the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, the scaled <span class="math notranslate nohighlight">\(\chi^{2}\)</span> distribution passes this uncertainty on to the <span class="math notranslate nohighlight">\(t\)</span>-distribution. As such, the <span class="math notranslate nohighlight">\(t\)</span>-distribution is similarly parameterised by the degrees of freedom. The point where the <span class="math notranslate nohighlight">\(\chi^{2}\)</span> collapses to a single point is <em>exactly</em> when the <span class="math notranslate nohighlight">\(t\)</span>-distribution and the standard normal become <em>the same</em>. At that point, uncertainty is effectively 0 and the degrees of freedom are no longer important. This why most of these problems disappear once we have <em>a large sample size</em>.</p>
+<p>Now, what happens to the standard error when <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> is no longer <em>a single number</em> and is instead a complex function of different elements of an unstructured variance-covariance matrix? Well, the clean algebra disappears and the distribution can no longer be derived analytically. It ceases to be a consistent object across all models and, in effect, becomes <em>unknowable</em>. This means that the scaled <span class="math notranslate nohighlight">\(\chi^{2}\)</span> distribution disappears and, along with it, the concept of degrees of freedom. If we divide our parameter estimate by its estimated standard error it is no longer the ratio of two random variables with known distributions. It is the ratio of a random variable with a known distribution and a random variable <em>with no known distribution</em>. This makes the null distribution of this test statistic <em>also unknown</em>. And without a known null, there is no way to calculate a <span class="math notranslate nohighlight">\(p\)</span>-value. Without a known distribution, we also do not know <em>how</em> biased the standard error estimates are and we cannot calculate an accurate confidence interval. In short, <em>we are stuck</em>.</p>
+</div>
+<p>So, we find ourselves in a difficult spot. What we <em>want</em> is a framework where we can have any form of covariance structure to accurately represent the data-generating process. This would allow us to model any type of repeated measures experiment, irrespective of its complexity. However, the inferential devices used by the normal linear model simply <em>do not allow this</em>. The emphasis on <em>knowing</em> the distribution of the estimates in order to calculate <span class="math notranslate nohighlight">\(p\)</span>-values and confidence intervals has backed us into a corner. Once the very specific conditions that allow these to be calculated are gone, so is the whole exact inferential machinery. This does demonstrate how <em>fragile</em> these methods really are.</p>
+<p>In terms of applying methods like FGLS in practice, there are generally 4 approaches we can use: ignore the problem, invent degrees of freedom, use results that do not need degrees of freedom, or simulate the null distributions from the model. We will discuss all these below and then see how they are applied across different packages for FGLS results in <code class="docutils literal notranslate"><span class="pre">R</span></code>. Remember though, this is a <em>general problem</em> that we will see appear again when we get to mixed-effects. Do not make the mistake of thinking this is GLS-specific or that mixed-effects will solve it.</p>
+<section id="ignore-the-problem">
+<h3>1. Ignore the Problem<a class="headerlink" href="#ignore-the-problem" title="Link to this heading">#</a></h3>
+<p>Our first option is to <em>ignore</em> the problem. If we treat our estimate as <em>exactly</em> the population value, then we can carry on without any issues. So, if we take <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}} = \boldsymbol{\Sigma}\)</span> then there are no problems any more. In the context of GLS, this means we can remove the covariance structure <em>perfectly</em> and the whole problem reduces back to a regular regression model with <span class="math notranslate nohighlight">\(i.i.d.\)</span> errors. So, we simply act as if we knew <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> all along.</p>
+<p>Although this is <em>practically</em> appealing, because all the mess indicated above disappears, it comes with some consequences:</p>
+<ul class="simple">
+<li><p>The extra uncertainty from estimating <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> is simply ignored. This means the model contains no penalty for estimating all the variance and covariance parameters.</p></li>
+<li><p>This means that standard errors may be too small, test statistics too large and <span class="math notranslate nohighlight">\(p\)</span>-values overly-optimistic, especially in small samples.</p></li>
+<li><p>We are pretending that degrees of freedom exist, but they technically do not. Furthermore, because we are pretending that we got <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> for free, the degrees of freedom have no correction for estimating <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>. As such, they will be <em>larger</em> than equivalent repeated measures ANOVA models.</p></li>
+</ul>
+</section>
+<section id="calculate-effective-degrees-of-freedom">
+<h3>2. Calculate <em>Effective</em> Degrees of Freedom<a class="headerlink" href="#calculate-effective-degrees-of-freedom" title="Link to this heading">#</a></h3>
+<p>Our second option is to accept that <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}}\)</span> is an estimate and accept that we need to accommodate this uncertainty somehow. In order to do this, we can create <em>fictitious</em> degrees of freedom to allow a <span class="math notranslate nohighlight">\(p\)</span>-value to be calculated. So, although we fully accept that degrees of freedom no longer exist, what we can do is <em>find</em> a null distribution that matches our model and then use the degrees of freedom from that distribution. For instance, we can use a combination of heuristics and information in the model to approximate the <em>variance</em> of the calculated test statistic. If we know that the variance of the <span class="math notranslate nohighlight">\(t\)</span>-distribution is <span class="math notranslate nohighlight">\(\frac{\nu}{\nu - 2}\)</span>, then we can use our approximated variance to solve for <span class="math notranslate nohighlight">\(\nu\)</span>. This gives us a <span class="math notranslate nohighlight">\(t\)</span>-distribution with approximately the <em>correct width</em> for our calculated test statistic. These fictitious degrees of freedom are known as <em>effective</em> degrees of freedom.</p>
+<p>This method is perhaps more appealing than simply pretending there is no problem because it tried to accommodate small sample adjustments and uncertainty, though it also comes with some consequences:</p>
+<ul class="simple">
+<li><p>We are assuming that the true null distribution only differs from known null distributions (such as the <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(F\)</span>) by its width, but not the general shape.</p></li>
+<li><p>This still remains an <em>approximation</em>, though it should behave better in smaller samples when degrees of freedom become more necessary.</p></li>
+<li><p>Degrees of freedom can become fractional and no longer have a clear theoretical grounding. They are more devices to encode “tail-heaviness” within the familiar language of <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(F\)</span> distributions.</p></li>
+</ul>
+<p>In fact, we already saw an example of this last week in terms of the <em>non-sphericity corrections</em>.</p>
+</section>
+<section id="produce-results-that-are-asymptotically-correct">
+<h3>3. Produce Results that are <em>Asymptotically</em> Correct<a class="headerlink" href="#produce-results-that-are-asymptotically-correct" title="Link to this heading">#</a></h3>
+<p>Our third option is to side-step degrees of freedom entirely. Recall from the normal linear model that the uncertainty that comes from estimating <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> effectively <em>disappears</em> once the same size is large enough. This is because <span class="math notranslate nohighlight">\(\hat{\sigma}^{2} = \sigma^{2}\)</span>, for all practical purposes. Thus, we can treat everything as if <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> is known, because our uncertainty is effectively 0. We saw this in the shape of the <span class="math notranslate nohighlight">\(t\)</span>-distribution. Once the sample size is big enough, the <span class="math notranslate nohighlight">\(t\)</span>-distribution <em>becomes</em> a standard normal distribution whose width is fixed, rather than adaptive. When this happens, the degrees of freedom disappear. So, whilst we normally work with something like</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\hat{\beta}_{1}}{\text{SE}(\hat{\beta}_{1})} \sim \mathcal{T}(\nu),
+\]</div>
+<p>it is not wrong to work with</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\hat{\beta}_{1}}{\text{SE}(\hat{\beta}_{1})} \sim \mathcal{N}(0,1).
+\]</div>
+<p>The only caveat is that the sample size needs to be <em>big enough</em> for the second option to be accurate. However, notice that this second option <em>does not need degrees of freedom</em>. We say that this test is <em>asymptotically correct</em>, meaning it gets more accurate as <span class="math notranslate nohighlight">\(n \rightarrow \infty\)</span>. All we need to do is make the assumption that we have enough data so that we can effectively treat our estimate of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> as the <em>true value</em>. At that point it becomes a <em>constant</em>. So, there is no uncertainty to deal with, no sampling distribution to know, no concept of degrees of freedom and all the messiness disappears.</p>
+<p>Although such asymptotic approaches are not necessary with the normal linear model, once we are in the realm of estimating a complex covariance structure this approach becomes more appealing. There is a <em>statistical purity</em> to this result because we do not need to pretend degrees of freedom still exist nor invent fictitious degrees of freedom based on the model. However, there are some clear issues here</p>
+<ul class="simple">
+<li><p>We need to be comfortable assuming that our <span class="math notranslate nohighlight">\(n\)</span> is <em>large-enough</em> for this to work, but this is an <em>unanswerable</em> question (see box below).</p></li>
+<li><p>We need to be comfortable with the idea of dismissing uncertainty in the estimation of <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> as negligible.</p></li>
+<li><p>In small samples this will result in inference that is <em>optimistic</em>, though the open use of asymptotic tests already embeds this as a caution.</p></li>
+</ul>
+<div class="tip admonition">
+<p class="admonition-title">How Large is “Large”?</p>
+<p>If we want to lean on asymptotic theory, the obvious question is “how big does <span class="math notranslate nohighlight">\(n\)</span> need to be?”. The problem is that the definition is based on a <em>limit</em>, so it says that the approximation gets better and better as <span class="math notranslate nohighlight">\(n\)</span> moves towards infinity. For our purpose, <span class="math notranslate nohighlight">\(n\)</span> is the <em>number of subjects</em>, rather than the total amount of data. So, the answer is not that there is some magic sample size that is suddenly large enough, the answer is that the approximation will get better the larger <span class="math notranslate nohighlight">\(n\)</span> becomes. The question then is more about what our tolerance for error is. The point of the asymptotic theory is to say that the error that comes from estimation becomes more negligible as <span class="math notranslate nohighlight">\(n\)</span> grows, as does the penalty for estimating <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> from the data. So, unfortunately, there is <em>no honest numeric answer to this question</em>. The way to think about it is as a <em>degree of comfort</em>. If you are using FGLS with <span class="math notranslate nohighlight">\(n = 5\)</span>, you should feel <em>very uncomfortable</em>. If you are using <span class="math notranslate nohighlight">\(n = 50\)</span>, you should probably feel <em>cautious</em> and if you have <span class="math notranslate nohighlight">\(n &gt; 200\)</span> you should probably be feeling <em>reasonably comfortable</em>. As <span class="math notranslate nohighlight">\(n\)</span> increases beyond that, you should probable feel perfectly fine about this approach. These are only ballpark figures, but the point is really to think of <span class="math notranslate nohighlight">\(n\)</span> as a <em>continuum of comfort</em>, rather than as a <em>threshold</em>.</p>
+</div>
+<section id="simulate-the-null">
+<h4>4. Simulate the Null<a class="headerlink" href="#simulate-the-null" title="Link to this heading">#</a></h4>
+<p>As a final option, we can leave the world of trying to derive precise results mathematically and instead use the power of the <em>computer</em> to find a solution. This gets us into the world of <em>resampling methods</em>, which we encountered briefly last semester in the form of the <em>permutation test</em>, used when the errors are not normally distributed. For the general problem of deriving a null distribution under an arbitrary covariance structure, the <em>parametric bootstrap</em> is most commonly employed. In this method we:</p>
+<ol class="arabic simple">
+<li><p>Treat a fitted null model as the “truth”.</p></li>
+<li><p>Use this fitted model to simulate new data.</p></li>
+<li><p>Refit the model to the simulated dataset and save a copy of the test statistic.</p></li>
+<li><p>Over many repeats of 2 and 3, build up a <em>distribution</em> of the test statistic under the null.</p></li>
+<li><p>Calculate the <span class="math notranslate nohighlight">\(p\)</span>-value and confidence intervals from this distribution.</p></li>
+</ol>
+<p>So this requires <em>zero</em> theory about the distribution of anything. The uncertainty comes through naturally as part of the simulation and we can get a <span class="math notranslate nohighlight">\(p\)</span>-value irrespective of the form of <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>. So this has some distinct advantages because we can get rid of much of the difficult approximation needed in classical approaches. However, the tradeoffs are</p>
+<ul class="simple">
+<li><p>Computational burden, as calculating a single <span class="math notranslate nohighlight">\(p\)</span>-value can be a long process depending upon the complexity of refitting the model 1,000 times or more.</p></li>
+<li><p>Fundamentally, we have to assume that our models is a close approximation to the truth for this to work. This can be seen as quite a <em>strong</em> assumption.</p></li>
+</ul>
+</section>
+</section>
+<section id="covariance-constraints">
+<h3>Covariance Constraints<a class="headerlink" href="#covariance-constraints" title="Link to this heading">#</a></h3>
+<p>As well as understanding that the very process of estimating <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> causes problems, we also need to understand that we cannot have free reign to estimate any old covariance structure we like. One of the most important elements to recognise is that some sort of <em>constraint</em> is always needed when estimating a variance-covariance matrix. To see this, note that for a repeated measures experiment there are <span class="math notranslate nohighlight">\(nt \times nt\)</span> values in this matrix. The values above and below the diagonal are a mirror image, so the true number of unknown values is <span class="math notranslate nohighlight">\(\frac{nt(nt + 1)}{2}\)</span>. For instance, if we had <span class="math notranslate nohighlight">\(n = 5\)</span> subjects and <span class="math notranslate nohighlight">\(t = 3\)</span> repeated measures, there would be <span class="math notranslate nohighlight">\(\frac{15 \times 16}{2} = 120\)</span> unique values in the variance-covariance matrix. If we allowed it to be completely unstructured, we would have 120 values to estimate <em>just</em> for the covariance structure. Indeed, this is not really possible unless the amount of data we have <em>exceeds</em> the number of parameters. So, the data itself imposes a <em>constraint</em> on how unstructured the covariance matrix can be.</p>
+<p>Luckily, for most applications, we not only assume that <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> has a block-diagonal structure (so most off-diagonal entries are 0), but that many of the off-diagonal elements are actually <em>identical</em>. We saw this previously with the repeated measures ANOVA. Even though <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> may have <em>hundreds</em> of values we <em>could</em> fill-in, if we assume compound symmetry only within each subject, there are only <em>two</em> covariance parameters to be estimated: <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>. The whole matrix can then be constructed using those two alone. This is an example of <em>extreme simplification</em>, but it does highlight that we generally do not estimate the <em>whole</em> variance-covariance matrix. We only estimate <em>small parts</em> of it. Indeed, making the covariance matrix more general is often a risky move because of the number of additional parameters needed. The more we estimate from the same data, the greater our uncertainty will become because each element of the covariance-matrix is supported by <em>less data</em>. Complexity always comes at a price.</p>
+<div class="warning admonition">
+<p class="admonition-title">Where Does This All Leave Us?</p>
+<p>So, where do these problems leave us in terms of leaving the world of very stringent covariance assumptions?</p>
+<p>… Ultimately, from the pure perspective of a <em>model</em> that capture the <em>data-generating process</em>, FGLS is an attractive proposition … Unfortunately, the problems arrive as soon as we get to <em>inference</em> due to the fragility of the classic approaches to this problem. However, the reality is that as soon as we leave the world of the normal linear model, we leave the world of precise results and always end up in a world of approximations. This is not just a FGLS problem, this is a <em>global</em> problem. So if we ever want to use something more complicated than the normal linear model, we have to accept that precise inference breaks-down and we have to approximate it. The fundamental question simply becomes how <em>best</em> to approximate it so we can still reach useful conclusions from our models.</p>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="0.intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="1.gls.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generalised Least Squares</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-covariance-structure">Estimating the Covariance Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ignore-the-problem">1. Ignore the Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-effective-degrees-of-freedom">2. Calculate <em>Effective</em> Degrees of Freedom</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-results-that-are-asymptotically-correct">3. Produce Results that are <em>Asymptotically</em> Correct</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-the-null">4. Simulate the Null</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-constraints">Covariance Constraints</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
