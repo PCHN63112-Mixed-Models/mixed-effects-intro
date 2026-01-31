@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Estimation and Inference &#8212; An Introduction to Mixed-effects Models</title>
+    <title>Advantages of Mixed-effects Models &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
   
   
   
@@ -63,7 +63,7 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '4.estimation-inference';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.advantages';</script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
@@ -87,6 +87,8 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="prev" title="The Implied Marginal Model" href="4.implied-marginal-model.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -138,8 +140,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -170,8 +170,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
   
   
 </a></div>
@@ -192,11 +192,12 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="1.estimating-sigma.html">Estimating Covariance Structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="1.gls.html">Generalised Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2.lme-framework.html">The Mixed-effects Framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.lme-R.html">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.implied-marginal-model.html">The Implied Marginal Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advantages of Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -274,7 +275,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F4.estimation-inference.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F5.advantages.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -304,7 +305,7 @@
       
       
       
-      <li><a href="_sources/4.estimation-inference.ipynb" target="_blank"
+      <li><a href="_sources/5.advantages.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -380,7 +381,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Estimation and Inference</h1>
+    <h1>Advantages of Mixed-effects Models</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -390,9 +391,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-on-individual-coefficients">Tests on Individual Coefficients</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#omnibus-tests">Omnibus Tests</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-tests">Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
 </ul>
             </nav>
         </div>
@@ -404,17 +410,30 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="estimation-and-inference">
-<h1>Estimation and Inference<a class="headerlink" href="#estimation-and-inference" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="advantages-of-mixed-effects-models">
+<h1>Advantages of Mixed-effects Models<a class="headerlink" href="#advantages-of-mixed-effects-models" title="Link to this heading">#</a></h1>
 <p>…</p>
-<section id="tests-on-individual-coefficients">
-<h2>Tests on Individual Coefficients<a class="headerlink" href="#tests-on-individual-coefficients" title="Link to this heading">#</a></h2>
+<section id="advantages-of-mixed-effects">
+<h2>Advantages of Mixed-effects<a class="headerlink" href="#advantages-of-mixed-effects" title="Link to this heading">#</a></h2>
+<section id="modelling-data-structure">
+<h3>Modelling Data Structure<a class="headerlink" href="#modelling-data-structure" title="Link to this heading">#</a></h3>
+<p>… In our previous discussion, GLS was used as a method to get around the presence of correlation within repeated measurement data. We impose a structure for GLS to remove. What LME models do instead is get us to model the <em>structure</em> of the data. We do not worry about dependence because this is accommodated <em>automatically</em> as a consequence of the structure. As long as we get the structure right, everything else follows. So this is an entirely different perspective. We are not trying to model correlation, we are trying to get the structure correct. Once we do, everything gets worked out for us, correlation and all.</p>
 </section>
-<section id="omnibus-tests">
-<h2>Omnibus Tests<a class="headerlink" href="#omnibus-tests" title="Link to this heading">#</a></h2>
+<section id="pooling-and-shrinkage">
+<h3>Pooling and Shrinkage<a class="headerlink" href="#pooling-and-shrinkage" title="Link to this heading">#</a></h3>
+<p>…</p>
 </section>
-<section id="follow-up-tests">
-<h2>Follow-up Tests<a class="headerlink" href="#follow-up-tests" title="Link to this heading">#</a></h2>
+<section id="the-bias-variance-tradeoff">
+<h3>The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Link to this heading">#</a></h3>
+<p>… So, from this perspective, LME models provide a solution to this issue via pooling and shrinkage. GLS provides <em>no pooling</em> ….</p>
+</section>
+<section id="regularisation">
+<h3>Regularisation<a class="headerlink" href="#regularisation" title="Link to this heading">#</a></h3>
+</section>
+</section>
+<section id="when-is-gls-enough">
+<h2>When is GLS Enough?<a class="headerlink" href="#when-is-gls-enough" title="Link to this heading">#</a></h2>
+<p>… One example would be time-series data.</p>
 </section>
 </section>
 
@@ -448,6 +467,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="4.implied-marginal-model.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Implied Marginal Model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="summary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -465,9 +502,14 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-on-individual-coefficients">Tests on Individual Coefficients</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#omnibus-tests">Omnibus Tests</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-tests">Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularisation">Regularisation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-gls-enough">When is GLS Enough?</a></li>
 </ul>
   </nav></div>
 

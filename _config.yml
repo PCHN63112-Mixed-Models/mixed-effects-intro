@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "An Introduction to Mixed-effects Models"
+title: "Estimating Covariance Structures and Generalised Least Squares"
 author: Dr Martyn McFarquhar
 copyright: "2026"
 logo: logo.png
