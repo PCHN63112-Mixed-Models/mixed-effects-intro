@@ -1,0 +1,743 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>The Multilevel Framework &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2.multilevel-framework';</script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="From Multilevel to Mixed-effects" href="3.multilevel-to-mixed.html" />
+    <link rel="prev" title="Introduction to Mixed-effects Models" href="1.intro-mixed.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Multilevel Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.implied-marginal-model.html">The Implied Marginal Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.advantages.html">Advantages of Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F2.multilevel-framework.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/2.multilevel-framework.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Multilevel Framework</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-model-to-one-subject">Fitting a Model to One Subject</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-model-to-multiple-subjects">Extending the Model to Multiple Subjects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-generating-process">The Data-generating Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-multilevel-framework">
+<h1>The Multilevel Framework<a class="headerlink" href="#the-multilevel-framework" title="Link to this heading">#</a></h1>
+<p>We will start our journey into the world of mixed-effects models from the perspective of a <em>multilevel</em> model. This is primarily because we can build the pieces of a mixed-effects model very slowly from first principles. In addition, the multilevel framework is often the most <em>intuitive</em> way to think about these models, they are just rarely implemented in this fashion. …. Remember as well, we will use the term <em>multilevel</em> throughout, but the term <em>hierarchical</em> is entirely equivalent. So, if anyone ever says “hierarchical linear model” to you, you just need to do a mental substitution for the term “multilevel linear model”. They mean exactly the same thing.</p>
+<section id="fitting-a-model-to-one-subject">
+<h2>Fitting a Model to One Subject<a class="headerlink" href="#fitting-a-model-to-one-subject" title="Link to this heading">#</a></h2>
+<p>To begin with, let us imagine that we only have the data for a <em>single subject</em>. What kind of model could we fit?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sub.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selfesteem.long</span><span class="p">[</span><span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">,]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sub.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  id time    score
+1  1   t1 4.005027
+2  1   t2 5.182286
+3  1   t3 7.107831
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, our key question here is what model is possible?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.sub.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">sub.1</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lm.sub.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = score ~ time, data = sub.1)
+
+Residuals:
+ALL 3 residuals are 0: no residual degrees of freedom!
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    4.005        NaN     NaN      NaN
+timet2         1.177        NaN     NaN      NaN
+timet3         3.103        NaN     NaN      NaN
+
+Residual standard error: NaN on 0 degrees of freedom
+Multiple R-squared:      1,	Adjusted R-squared:    NaN 
+F-statistic:   NaN on 2 and 0 DF,  p-value: NA
+</pre></div>
+</div>
+</div>
+</div>
+<p>… So, notice that if we allow the model to freely estimate the effect of <code class="docutils literal notranslate"><span class="pre">condition</span></code>, it will fit the data <em>perfectly</em> and there will be no error. This tells us that we cannot let this effect be unique to each subject because the data does not support it. So, in this instance, the data constrains us to the model</p>
+</section>
+<section id="extending-the-model-to-multiple-subjects">
+<h2>Extending the Model to Multiple Subjects<a class="headerlink" href="#extending-the-model-to-multiple-subjects" title="Link to this heading">#</a></h2>
+<p>But of course, we do not <em>only</em> have subject 1. So let us now do the same thing with subject 2 …</p>
+<div class="math notranslate nohighlight">
+\[\]</div>
+<p>So, we now have these two models separately, but notice that we <em>can</em> now estimate the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> because we have replications of <code class="docutils literal notranslate"><span class="pre">time</span></code> <em>across</em> the subjects. So now, we can think of these two models as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{1j} &amp;= \mu_{1} + \alpha_{j} + \eta_{1j} \\
+    y_{2j} &amp;= \mu_{2} + \alpha_{j} + \eta_{2j} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>which, across all subjects, just gives us</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}.
+\]</div>
+<p>So, we now have <em>subject-specific</em> means (<span class="math notranslate nohighlight">\(\mu_{1}, \mu_{2}, \dots, \mu_{n}\)</span>) and an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). But notice that there is no subject index on this effect. So it is <em>the same</em> irrespective of the specific subject. This is important because it indicates that <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> captures something <em>universal</em> from across all subjects, which is precisely what we want in terms of understanding the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> on the self-esteem <code class="docutils literal notranslate"><span class="pre">score</span></code>.</p>
+<p>In order to understand where we go from here, imagine that we ran the experiment <em>again</em> and collected a new subject. What do we think would change? Well, certainly the term <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. We have different data now and so the grand mean is almost certainly going to change. What else? Well, the errors will also change, as we would expect. What would not change would be <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>, because we have assumed that this is <em>constant</em> across subjects. So, we have <span class="math notranslate nohighlight">\(\mu_{i}\)</span> that will differ with each new subject and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> that will differ with each observation within each subject.</p>
+<p>What does this mean for both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>? Well, what do we call a variable that changes every time we observe it? A <em>random variable</em>. So, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>random variables</em>. This means that they <em>both</em> have some underlying distribution that they are drawn from. As we know, the <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>errors</em> and thus reflect <em>deflections</em> around the expected value. As such, their distribution is the same as it always was</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_{ij} \sim \mathcal{N}\left(0, \sigma^{2}_{w}\right).
+\]</div>
+<p>But what about the <span class="math notranslate nohighlight">\(\mu_{i}\)</span>? Well, as written above, these are <em>means</em> for each subject, so their expected value will not be 0. Instead, it will be whatever the <em>population grand mean</em> happens to be. Their variance will then represent the variability of the subject means, which we will call <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>. As such</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{b}\right).
+\]</div>
+<p>As we know from our discussions last semester, we can always write a linear model as an equation for the mean function with the probabilistic behaviour of the random variable attributable to an error term. So we can write the above as</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{i} = \mu + S_{i}
+\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[
+S_{i} \sim \mathcal{N}(0,\sigma^{2}_{b})
+\]</div>
+</section>
+<section id="the-complete-multilevel-model">
+<h2>The Complete Multilevel Model<a class="headerlink" href="#the-complete-multilevel-model" title="Link to this heading">#</a></h2>
+<p>So, putting all these pieces together, our full model is now</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}        &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
+    \mu_{i}       &amp;= \mu + S_{i} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+     S_{i}    &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right)   \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+\end{alignat*}
+\end{split}\]</div>
+<p>So, these are in fact <em>two</em> models that are <em>linked together</em>. We have a <em>hierarchy</em> of models, or a single model with <em>multiple levels</em>. Indeed, from the multilevel perspective, it is typical to label these models like so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    y_{ij}        &amp;= \mu_{i} + \alpha_{j} + \eta_{ij} &amp;\quad\text{(Level 1)} \\
+    \mu_{i}       &amp;= \mu + S_{i}                      &amp;\quad\text{(Level 2)} \\
+\end{alignat*}
+\end{split}\]</div>
+<section id="the-data-generating-process">
+<h3>The Data-generating Process<a class="headerlink" href="#the-data-generating-process" title="Link to this heading">#</a></h3>
+<p>In order to fully conceptualise what the multilevel model is saying, we need to think of it as an explanation of <em>where</em> our data come from.</p>
+<p>So, for a single subject, their mean for a given value of <code class="docutils literal notranslate"><span class="pre">time</span></code> is <em>unique</em> to them. But we can decompose this into a <em>subject-specific</em> mean and a constant effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. So each measurement from each subject is composed of three parts</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\mu_{i}\)</span> - something unique and specific to individual <span class="math notranslate nohighlight">\(i\)</span> that is true across all measurements taken from them</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_{j}\)</span> - something universal about the effect of time-point <span class="math notranslate nohighlight">\(j\)</span> that is true irrespective of the individual</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_{ij}\)</span> - a random perturbation of measurement <span class="math notranslate nohighlight">\(ij\)</span> that captures all the reasons why this is not exactly <span class="math notranslate nohighlight">\(\mu_{i} + \alpha_{j}\)</span></p></li>
+</ol>
+<p>… SO we can think of the expected value <em>conditional</em> on a specific subject. For instance, when <span class="math notranslate nohighlight">\(i = 1\)</span> we expect</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{1j}) = \mu_{1} + \alpha_{j}.
+\]</div>
+<p>So each subject has their own specific mean. However, whenever we consider <em>all</em> subjects we have</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{ij}) = E(\mu_{i}) + \alpha_{j} = \mu + \alpha_{j}.
+\]</div>
+<p>which consists of only those effects that are <em>universal</em> across all subjects. Again, this captures the idea that we have many <em>little</em> models for each individual subject as well as one <em>big</em> model for all subjects.</p>
+</section>
+<section id="fitting-individual-linear-models-in-r">
+<h3>Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-individual-linear-models-in-r" title="Link to this heading">#</a></h3>
+<p>Each time we do this, we will collect the estimates of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>, just to demonstrate that these are the elements that truly <em>do</em> change with each new subject. We will then show the distribution of these at the end to illustrate that these terms are indeed <em>random variables</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">level.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">selfesteem.long</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that this bears a striking similarity to how we specified the repeated measures ANOVA using <code class="docutils literal notranslate"><span class="pre">lm()</span></code> a couple of weeks ago. We will make this connection more explicit a little later in this lesson.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">level.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = score ~ 0 + id + time, data = selfesteem.long)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.3509 -0.5233 -0.0888  0.5304  1.9560 
+
+Coefficients:
+       Estimate Std. Error t value Pr(&gt;|t|)    
+id1      3.3350     0.6078   5.487 3.28e-05 ***
+id2      3.1631     0.6078   5.204 5.98e-05 ***
+id3      3.7253     0.6078   6.129 8.66e-06 ***
+id4      3.3961     0.6078   5.588 2.65e-05 ***
+id5      2.3156     0.6078   3.810 0.001283 ** 
+id6      2.5832     0.6078   4.250 0.000482 ***
+id7      3.2189     0.6078   5.296 4.91e-05 ***
+id8      3.0261     0.6078   4.979 9.72e-05 ***
+id9      3.3630     0.6078   5.533 2.97e-05 ***
+id10     3.2747     0.6078   5.388 4.04e-05 ***
+timet2   1.7938     0.4298   4.174 0.000570 ***
+timet3   4.4962     0.4298  10.462 4.44e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.961 on 18 degrees of freedom
+Multiple R-squared:  0.9824,	Adjusted R-squared:  0.9707 
+F-statistic: 83.89 on 12 and 18 DF,  p-value: 2.944e-13
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, we now have individual effects unique to each subject, as well as effects of <code class="docutils literal notranslate"><span class="pre">time</span></code> that exist <em>across</em> subjects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu.i</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">level.1</span><span class="p">)[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">]</span>
+<span class="n">level.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mu.i</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Due to the way the model is coded, this is therefore the <em>group mean</em> for <code class="docutils literal notranslate"><span class="pre">time1</span></code>.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="1.intro-mixed.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Mixed-effects Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3.multilevel-to-mixed.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">From Multilevel to Mixed-effects</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-model-to-one-subject">Fitting a Model to One Subject</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-model-to-multiple-subjects">Extending the Model to Multiple Subjects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-generating-process">The Data-generating Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
