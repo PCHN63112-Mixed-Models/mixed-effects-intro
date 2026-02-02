@@ -397,10 +397,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-model-to-multiple-subjects">Extending the Model to Multiple Subjects</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-mu-i-as-a-random-variable">Understanding <span class="math notranslate nohighlight">\(\mu_{i}\)</span> as a <em>Random Variable</em></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-generating-process">The Data-generating Process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -475,11 +476,11 @@ F-statistic:   NaN on 2 and 0 DF,  p-value: NA
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    y_{1j}    &amp;= \mu_{1} + \eta_{ij} \\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right)
+    y_{1j}    &amp;= \mu_{1} + \eta_{1j} \\
+    \eta_{1j} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right)
 \end{alignat*}
 \end{split}\]</div>
-<p>irrespective of the value of <span class="math notranslate nohighlight">\(j\)</span>. We have used <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> to refer to the errors rather than the usual <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>, for reasons that will become clearer as we progress. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this model would be</p>
+<p>Where we have used <span class="math notranslate nohighlight">\(\eta\)</span> to refer to the errors rather than the usual <span class="math notranslate nohighlight">\(\epsilon\)</span>, for reasons that will become clearer as we progress. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this model would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.sub.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">sub.1</span><span class="p">)</span>
@@ -506,7 +507,7 @@ Residual standard error: 1.566 on 2 degrees of freedom
 </div>
 </div>
 </div>
-<p>So now we have residuals and everything else can work. There is nothing ground-breaking or Earth-shattering about any of this. All we are concluding is that, based on only having a <em>single</em> subject from this experiment, the best we could do is model a <em>subject-specific constant</em> and nothing else. In this example, the average value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for subject 1 was estimated to be <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 5.43\)</span>. That is it.</p>
+<p>So now we have residuals and everything else will work. There is nothing ground-breaking or Earth-shattering about any of this. All we are concluding is that, based on only having a <em>single</em> subject from this experiment, the best we could do is model a <em>subject-specific constant</em> and nothing else. In this example, the average value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for subject 1 was estimated to be <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 5.43\)</span>. That is it.</p>
 </section>
 <section id="extending-the-model-to-multiple-subjects">
 <h2>Extending the Model to Multiple Subjects<a class="headerlink" href="#extending-the-model-to-multiple-subjects" title="Link to this heading">#</a></h2>
@@ -593,7 +594,8 @@ Residual standard error: 2.359 on 2 degrees of freedom
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}.
 \]</div>
-<p>So, we now have a <em>subject-specific</em> mean (<span class="math notranslate nohighlight">\(\mu_{i}\)</span>) and an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). But notice that there is no subject index on <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. So this is <em>the same</em> irrespective of the specific subject. This is important because it indicates that <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> captures something <em>universal</em> from across all subjects. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this complete model would be</p>
+<p>So, we now have a <em>subject-specific</em> mean (<span class="math notranslate nohighlight">\(\mu_{i}\)</span>) and an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). But notice that there is no subject index on <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> meaning that its value is <em>the same</em> irrespective of the specific subject. This is important because it indicates that <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> captures something <em>universal</em> across <em>all</em> subjects.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this complete model would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.all.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">selfesteem.long</span><span class="p">)</span>
@@ -633,7 +635,8 @@ F-statistic: 10.54 on 11 and 18 DF,  p-value: 9.779e-06
 </div>
 </div>
 </div>
-<p>So we now have <em>subject-specific</em> intercepts, as well as a <em>universal</em> effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. In general, what we have done here is create a model that has a different predicted value for each subject. So, each subject gets their <em>own model</em>. Subject 1 is</p>
+<p>So we now have <em>subject-specific</em> intercepts, as well as a <em>universal</em> effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>.</p>
+<p>In general, what we have done here is create a model that has a <em>different predicted value for each subject</em>. Each subject gets their <em>own model</em>. Subject 1 is</p>
 <div class="math notranslate nohighlight">
 \[
 E(y_{1j}) = \mu_{1} + \alpha_{j} = \mu_{1j},
@@ -643,7 +646,7 @@ E(y_{1j}) = \mu_{1} + \alpha_{j} = \mu_{1j},
 \[
 E(y_{2j}) = \mu_{2} + \alpha_{j} = \mu_{2j}
 \]</div>
-<p>and so on. It is like the <em>subjects</em> form the <em>cells</em> of the design. However, crucially, each subject’s expected value is a <em>combination</em> of something specific to them <span class="math notranslate nohighlight">\(\left(\mu_{1}, \mu_{2}, \dots, \mu_{n}\right)\)</span> and something <em>universal</em> from across subjects <span class="math notranslate nohighlight">\(\left(\alpha_{1},\alpha_{2},\alpha_{3}\right)\)</span>. Thus, this model captures two important elements of our data: the <em>idiosyncrasies</em> of the individual and the <em>constant effect</em> in the population.</p>
+<p>and so on. It is like the subjects form the <em>cells</em> of the design. Crucially, each subject’s expected value is a <em>combination</em> of something specific to them <span class="math notranslate nohighlight">\(\left(\mu_{1}, \mu_{2}, \dots, \mu_{n}\right)\)</span> and something <em>universal</em> from across subjects <span class="math notranslate nohighlight">\(\left(\alpha_{1},\alpha_{2},\alpha_{3}\right)\)</span>. Thus, this model captures two important elements of our data: the <em>idiosyncrasies</em> of the individual and the <em>constant effect</em> in the population.</p>
 <div class="tip admonition">
 <p class="admonition-title">Connections with the Repeated Measures ANOVA</p>
 <p>Hopefully the connections with the repeated measures ANOVA are starting to emerge, but we will make this more explicit later in the lesson.</p>
@@ -651,159 +654,150 @@ E(y_{2j}) = \mu_{2} + \alpha_{j} = \mu_{2j}
 </section>
 <section id="understanding-mu-i-as-a-random-variable">
 <h2>Understanding <span class="math notranslate nohighlight">\(\mu_{i}\)</span> as a <em>Random Variable</em><a class="headerlink" href="#understanding-mu-i-as-a-random-variable" title="Link to this heading">#</a></h2>
-<p>In terms of understanding the next step towards a complete multilevel model, we need to imagine that we ran the experiment <em>again</em> and collected a new subject. Take another look at the model</p>
+<p>In order to understand the next steps towards a complete multilevel model, we need to imagine that we ran the experiment <em>again</em> and collected a new subject. Take another look at the model</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 \]</div>
-<p>and remember that this is the theoretical <em>population-level</em> description of the data-generating process. As such, what do we imagine changes about this description for each <em>new</em> subject? Ponder this for a moment, before we move on.</p>
-<p>If we have a new subject, we also have a new value of <span class="math notranslate nohighlight">\(i\)</span>. So which of the terms above depend upon <span class="math notranslate nohighlight">\(i\)</span>? Well, certainly <span class="math notranslate nohighlight">\(\mu_{i}\)</span> does. Each subject has their own unique mean that is specific to them. So, a <em>new</em> subject means a <em>new</em> value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. In addition, the errors <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> depend upon the value of <span class="math notranslate nohighlight">\(i\)</span>, as these will change with each observation within each subject. So in terms of what changes in the model above when we sample someone new, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> will shift.</p>
-<p>Importantly, what does <em>not</em> change is <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. Why? Because this has <em>no</em> subject-specific index. <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> is the same whether <span class="math notranslate nohighlight">\(i = 1\)</span> or <span class="math notranslate nohighlight">\(i = 1,427\)</span>. This is because this is a <em>universal effect</em> across all subjects. Yes, its <em>estimate</em> would change with another subject (because there is now <em>more data</em>), but remember we are thinking about the true population description of the data-generating process here. In this sense, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>. It does not change with each sample, it remains a <em>fixed</em> element of the universe.</p>
-<p>So, if <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is <em>fixed</em>, what does this mean for <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>? Well, what do we call a variable that changes every time we observe it? A <em>random variable</em>. So, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>random variables</em>. We already know this about <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because we already ascribed it a distribution earlier. Indeed, we have <em>always</em> treated the errors as random, so this is nothing new. What <em>is</em> new is having <em>another random variable in the model</em>.</p>
+<p>and remember that this is the theoretical <em>population-level</em> description of the data-generating process. As such, what do we imagine changes about this description for each <em>new</em> subject? Ponder this for a moment.</p>
+<p>If we have a new subject, we have a new value of <span class="math notranslate nohighlight">\(i\)</span>. So which of the terms above depend upon <span class="math notranslate nohighlight">\(i\)</span>? Certainly <span class="math notranslate nohighlight">\(\mu_{i}\)</span> does. Each subject has their own unique mean that is specific to them, so a <em>new</em> subject means a <em>new</em> value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. In addition, the errors <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> depend upon the value of <span class="math notranslate nohighlight">\(i\)</span> and will change with every observation. So, when we sample someone new both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> will change.</p>
+<p>Importantly, what does <em>not</em> change is <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. Why? Because this has <em>no</em> subject-specific index. <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> is the same whether <span class="math notranslate nohighlight">\(i = 1\)</span> or <span class="math notranslate nohighlight">\(i = 1,427\)</span>. This is because this is a <em>universal effect</em> across all subjects. Its <em>estimate</em> would change with another subject (because there is now <em>more data</em>), but remember we are thinking about the true population description of the data-generating process here. In this sense, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>. It does not change with each sample, it remains a <em>fixed</em> and <em>unwavering</em> element of the universe.</p>
+<p>So, if <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is <em>fixed</em>, what does this mean for <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>? Well, what do we call a variable who’s value changes every time we observe it? That’s right: a <em>random variable</em>.</p>
+<p>So, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> have to be <em>random variables</em>. We already know this about <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because we always think of the errors as random and ascribe them a probability distribution. So this is nothing new. What <em>is</em> new is having <em>another random variable in the model</em>. In fact, pretty much every complication that follows is a direct knock-on effect of having <em>multiple random variables</em> in the model.</p>
 <div class="tip admonition">
 <p class="admonition-title">Fixed-effects and Random-effects</p>
-<p>Although we are currently focusing on the <em>multilevel</em> perspective, we can already see the <em>mixed-effects</em> perspective creeping up on us. A mixed-effects model is, by definition, a model that contains <em>both</em> population-level constant <em>and</em> random variables. These are usually referred to as <em>fixed-effects</em> and <em>random-effects</em>. So, in our example so far we have</p>
+<p>Although we are currently focusing on the <em>multilevel</em> perspective, we can already see the <em>mixed-effects</em> perspective creeping in. A mixed-effects model is, by definition, a model that contains <em>both</em> population-level constants <em>and</em> random variables. These are usually referred to as <em>fixed-effects</em> and <em>random-effects</em>. So, in our example so far we have</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\alpha_{j}\)</span> - a <em>fixed-effect</em> that represents a population-level constant that we want to <em>estimate</em> and tells us something universal about our data</p></li>
-<li><p><span class="math notranslate nohighlight">\(\mu_{i}\)</span> - a <em>random-effect</em> that represents a realised value of a <em>random variable</em> that tells something about the variability in our data</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_{j}\)</span> - a <em>fixed-effect</em></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_{i}\)</span> - a <em>random-effect</em></p></li>
 </ul>
-<p>This connection between variability and random effects may not be completely clear right now, but we will get to it shortly. However, for the time being, you can think of</p>
-<ul class="simple">
-<li><p><em>Fixed-effects</em> = elements of the <em>mean function</em></p></li>
-<li><p><em>Random-effects</em> = elements of the <em>variance function</em></p></li>
-</ul>
-<p>We perform <em>inference</em> on the estimated fixed-effects, using the <em>uncertainty</em> encoded by the random-effects. This is the core definition that we need to keep in mind throughout this entire section of the unit. But do not worry if its not wholly clear right now.</p>
+<p>We will discuss more about what it means to have these different types of effects in a model later in the lesson. For now, the only thing to note is that the <em>multilevel</em> and <em>mixed-effects</em> frameworks cannot be separated. A discussion of one is naturally a discussion of the other. They are simply different ways of viewing the <em>same thing</em>.</p>
 </div>
 <p>Because <em>both</em> <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>random variables</em> they will both, by definition, have some probability distribution that describes their behaviour over repeated samples. As we know, the <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>errors</em> and thus reflect <em>deflections</em> around the expected value. As such, their distribution is the same as it always was</p>
 <div class="math notranslate nohighlight">
 \[
-\eta_{ij} \sim \mathcal{N}\left(0, \sigma^{2}_{w}\right).
+\eta_{ij} \sim \mathcal{N}\left(0, \sigma^{2}_{1}\right).
 \]</div>
 <p>But what about the <span class="math notranslate nohighlight">\(\mu_{i}\)</span>?</p>
-<p>Well, as written above, these are <em>means</em> for each subject, so their expected value will not be 0. We saw already earlier that our estimates for the first two subjects from <code class="docutils literal notranslate"><span class="pre">selfesteem</span></code> were <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 5.43\)</span> and <span class="math notranslate nohighlight">\(\hat{\mu}_{2} = 5.26\)</span>. Clearly these are <em>not</em> 0 because they are on the same scale as <code class="docutils literal notranslate"><span class="pre">score</span></code>. So, instead, the expected value of each of these subject-specific means will be whatever the <em>population grand mean</em> is. Their variance will then represent the variability of the subject means, which we will call <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>. As such</p>
+<p>Well, as written above, these are <em>means</em> for each subject, so their expected value will not be 0. We saw already that our estimates for the first two subjects from <code class="docutils literal notranslate"><span class="pre">selfesteem</span></code> were <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 5.43\)</span> and <span class="math notranslate nohighlight">\(\hat{\mu}_{2} = 5.26\)</span>. Clearly these are <em>not</em> 0 because they are on the same scale as <code class="docutils literal notranslate"><span class="pre">score</span></code>. So, instead, the expected value of each of these subject-specific means will be whatever the <em>population grand mean</em> is. If we stick with the convention of assuming that these subject means are normally distributed, we have</p>
 <div class="math notranslate nohighlight">
 \[
-\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{b}\right).
+\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{2}\right).
 \]</div>
-<p>This means that our mental model of where our data comes from now consists of <em>two layers</em>. …</p>
+<p>There are several consequences of the assumptions made above. To begin with, there are now <em>two</em> probability distributions describing where our data come from. These distributions have different variances (<span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span>), meaning we have <em>two</em> sources of error to now consider. We also need to <em>estimate</em> both of these variances from the data in order to complete the unknowns for this model. Last semester, our focus was almost exclusively on the <em>mean function</em>, but now we can see that we are shifting focus and adding complexity to the <em>variance function</em>. This means that our mental model of where our data comes from now consists of <em>two layers</em>, which is precisely the conceptualisation that a multilevel model makes explicit, as we will now discuss.</p>
 </section>
 <section id="the-complete-multilevel-model">
 <h2>The Complete Multilevel Model<a class="headerlink" href="#the-complete-multilevel-model" title="Link to this heading">#</a></h2>
-<p>…As we know from our discussions last semester, we can always write a linear model as an equation for the mean function with the probabilistic behaviour of the random variable attributable to an error term. So we can write the above as</p>
-<div class="math notranslate nohighlight">
-\[
-\mu_{i} = \mu + S_{i}
-\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[
-S_{i} \sim \mathcal{N}(0,\sigma^{2}_{b})
-\]</div>
-<p>So, putting all these pieces together, our full model is now</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-    y_{ij}        &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
-    \mu_{i}       &amp;= \mu + S_{i} \\
-\end{alignat*}
-\end{split}\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-     S_{i}    &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right)   \\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
-\end{alignat*}
-\end{split}\]</div>
-<p>So, these are in fact <em>two</em> models that are <em>linked together</em>. We have a <em>hierarchy</em> of models, or a single model with <em>multiple levels</em>. Indeed, from the multilevel perspective, it is typical to label these models like so</p>
+<p>Given the discussions above about both <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and <span class="math notranslate nohighlight">\(\mu_{i}\)</span> being random variables, we can now write our model as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{2}
-    y_{ij}        &amp;= \mu_{i} + \alpha_{j} + \eta_{ij} &amp;\quad\text{(Level 1)} \\
-    \mu_{i}       &amp;= \mu + S_{i}                      &amp;\quad\text{(Level 2)} \\
+    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) &amp;\quad\text{(Level 1)} \\
+    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 &amp;\quad\text{(Level 2)} \\
 \end{alignat*}
 \end{split}\]</div>
-<section id="the-data-generating-process">
-<h3>The Data-generating Process<a class="headerlink" href="#the-data-generating-process" title="Link to this heading">#</a></h3>
-<p>In order to fully conceptualise what the multilevel model is saying, we need to think of it as an explanation of <em>where</em> our data come from.</p>
-<p>So, for a single subject, their mean for a given value of <code class="docutils literal notranslate"><span class="pre">time</span></code> is <em>unique</em> to them. But we can decompose this into a <em>subject-specific</em> mean and a constant effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. So each measurement from each subject is composed of three parts</p>
-<ol class="arabic simple">
-<li><p><span class="math notranslate nohighlight">\(\mu_{i}\)</span> - something unique and specific to individual <span class="math notranslate nohighlight">\(i\)</span> that is true across all measurements taken from them</p></li>
-<li><p><span class="math notranslate nohighlight">\(\alpha_{j}\)</span> - something universal about the effect of time-point <span class="math notranslate nohighlight">\(j\)</span> that is true irrespective of the individual</p></li>
-<li><p><span class="math notranslate nohighlight">\(\eta_{ij}\)</span> - a random perturbation of measurement <span class="math notranslate nohighlight">\(ij\)</span> that captures all the reasons why this is not exactly <span class="math notranslate nohighlight">\(\mu_{i} + \alpha_{j}\)</span></p></li>
-</ol>
-<p>… SO we can think of the expected value <em>conditional</em> on a specific subject. For instance, when <span class="math notranslate nohighlight">\(i = 1\)</span> we expect</p>
-<div class="math notranslate nohighlight">
-\[
-E(y_{1j}) = \mu_{1} + \alpha_{j}.
-\]</div>
-<p>So each subject has their own specific mean. However, whenever we consider <em>all</em> subjects we have</p>
-<div class="math notranslate nohighlight">
-\[
-E(y_{ij}) = E(\mu_{i}) + \alpha_{j} = \mu + \alpha_{j}.
-\]</div>
-<p>which consists of only those effects that are <em>universal</em> across all subjects. Again, this captures the idea that we have many <em>little</em> models for each individual subject as well as one <em>big</em> model for all subjects.</p>
+<p>So, we can see where the term <em>multilevel</em> comes from, as we are thinking of our data-generation as occurring at <em>two levels</em> or <em>layers</em>.</p>
+<section id="level-1">
+<h3>Level 1<a class="headerlink" href="#level-1" title="Link to this heading">#</a></h3>
+<p>At Level 1, our data are drawn from a normal distribution with a mean that depends upon two parts. The first is <em>unique</em> and <em>specific</em> to subject <span class="math notranslate nohighlight">\(i\)</span>, and the second is <em>constant</em> across subjects. We imagine that, at the level of the <em>population</em>, the effect of the experimental manipulation is the <em>same</em> for every subject. However, we also imagine that each subject will be <em>offset</em> by a certain amount. This captures the idea that the <em>relative</em> differences in <code class="docutils literal notranslate"><span class="pre">score</span></code> between the levels of <code class="docutils literal notranslate"><span class="pre">time</span></code> is constant in the population, but that the <em>absolute</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code> depends on individual subjects. This captures the idea that <code class="docutils literal notranslate"><span class="pre">time</span></code> has an average effect across all subjects that we are attempting to capture. This is no different to any other effect we have tried to capture in models before. What <em>is</em> different is the idea that each subject has their own unique <em>offset</em>. This captures the idea that a single subject may have an overall <em>lower</em> or <em>higher</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code>. Individual subjects will have their own unique level of self-esteem. While the <code class="docutils literal notranslate"><span class="pre">time</span></code> manipulation may serve to <em>increase</em> or <em>decrease</em> self-esteem, someone with <em>low</em> self-esteem will still remain <em>low</em> even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Similarly, someone with <em>high</em> self-esteem will still remain <em>high</em>, even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. The measurements from each individual subject are therefore <em>connected</em> by the <span class="math notranslate nohighlight">\(\mu_{i}\)</span> term, which is an important insight we will explore more below. In sum, we can think of Level 1 as explaining each subject as an individual entity and thus forming the individual models of each subject separately.</p>
 </section>
-<section id="fitting-individual-linear-models-in-r">
-<h3>Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-individual-linear-models-in-r" title="Link to this heading">#</a></h3>
-<p>Each time we do this, we will collect the estimates of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>, just to demonstrate that these are the elements that truly <em>do</em> change with each new subject. We will then show the distribution of these at the end to illustrate that these terms are indeed <em>random variables</em>.</p>
+<section id="level-2">
+<h3>Level 2<a class="headerlink" href="#level-2" title="Link to this heading">#</a></h3>
+<p>At Level 2, our data are drawn from … This also implies a <em>hierarchy</em> of data-generation, where the data at Level 1 depends upon the data at Level 2. This is why these types of model are also known as <em>hierarchical</em> linear models.</p>
+<p>We can also write this model in a slightly different way. As we know from last semester, we can always separate a probability model into an equation for the expected value plus random error. So, if we apply that principle here we can rewrite the above as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
+    \mu_{i}   &amp;= \mu + S_{i} \\
+     S_{i}    &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right)   \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right). \\
+\end{alignat*}
+\end{split}\]</div>
+<p>This makes it explicit that what each distribution is capturing is <em>error variance</em>. From this perspective, the random element of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is the error-term <span class="math notranslate nohighlight">\(S_{i}\)</span>. So what we <em>really</em> have is a model with <em>two sets of errors</em>. Each type of error captures a different form of <em>deflection</em> and thus a different <em>source of variance</em> … So, we can see that we have now managed to describe our data in terms of <em>two</em> linear models. One of these models explains … The other model explains … Importantly, these two models are <em>connected</em>.</p>
+</section>
+</section>
+<section id="simulating-a-multilevel-model-in-r">
+<h2>Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#simulating-a-multilevel-model-in-r" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">level.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">selfesteem.long</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">n.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span>
+<span class="n">n.t</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">y</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">)</span>
+
+<span class="c1"># fixed-effects</span>
+<span class="n">mu</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+<span class="n">alpha</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)</span>
+
+<span class="c1"># variances</span>
+<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span>
+<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+
+<span class="c1"># Level 2</span>
+<span class="n">mu.i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
+
+<span class="c1"># Level 1</span>
+<span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.subs</span><span class="p">){</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.t</span><span class="p">){</span>
+<span class="w">    </span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
+<span class="w">    </span><span class="n">idx</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Notice that this bears a striking similarity to how we specified the repeated measures ANOVA using <code class="docutils literal notranslate"><span class="pre">lm()</span></code> a couple of weeks ago. We will make this connection more explicit a little later in this lesson.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">level.1</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">mu.i</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
-lm(formula = score ~ 0 + id + time, data = selfesteem.long)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--1.3509 -0.5233 -0.0888  0.5304  1.9560 
-
-Coefficients:
-       Estimate Std. Error t value Pr(&gt;|t|)    
-id1      3.3350     0.6078   5.487 3.28e-05 ***
-id2      3.1631     0.6078   5.204 5.98e-05 ***
-id3      3.7253     0.6078   6.129 8.66e-06 ***
-id4      3.3961     0.6078   5.588 2.65e-05 ***
-id5      2.3156     0.6078   3.810 0.001283 ** 
-id6      2.5832     0.6078   4.250 0.000482 ***
-id7      3.2189     0.6078   5.296 4.91e-05 ***
-id8      3.0261     0.6078   4.979 9.72e-05 ***
-id9      3.3630     0.6078   5.533 2.97e-05 ***
-id10     3.2747     0.6078   5.388 4.04e-05 ***
-timet2   1.7938     0.4298   4.174 0.000570 ***
-timet3   4.4962     0.4298  10.462 4.44e-09 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 0.961 on 18 degrees of freedom
-Multiple R-squared:  0.9824,	Adjusted R-squared:  0.9707 
-F-statistic: 83.89 on 12 and 18 DF,  p-value: 2.944e-13
-</pre></div>
+<img alt="_images/d09559d6cbc40e23fd95e90d61b4311ab63b3de9438b0d494e4ee26a14d6e4e7.png" src="_images/d09559d6cbc40e23fd95e90d61b4311ab63b3de9438b0d494e4ee26a14d6e4e7.png" />
 </div>
 </div>
-</div>
-<p>So, we now have individual effects unique to each subject, as well as effects of <code class="docutils literal notranslate"><span class="pre">time</span></code> that exist <em>across</em> subjects.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu.i</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">level.1</span><span class="p">)[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">]</span>
-<span class="n">level.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mu.i</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">y.t1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
+<span class="n">y.t2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
+<span class="n">y.t3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
+
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y.t2</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 2)&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y.t3</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 3)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/a9cf1d440c49d40b933ca3db8bac2f34193c7e6bf6f22d0f4252c15430b69333.png" src="_images/a9cf1d440c49d40b933ca3db8bac2f34193c7e6bf6f22d0f4252c15430b69333.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="n">mu.i</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nf">cbind</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="n">y.t2</span><span class="p">,</span><span class="n">y.t3</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.981374
+         y.t1     y.t2     y.t3
+y.t1 4.984949 1.960462 1.923993
+y.t2 1.960462 5.010419 2.030187
+y.t3 1.923993 2.030187 4.950167
 </pre></div>
 </div>
 </div>
 </div>
-<p>Due to the way the model is coded, this is therefore the <em>group mean</em> for <code class="docutils literal notranslate"><span class="pre">time1</span></code>.</p>
-</section>
+<ul class="simple">
+<li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
+<li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
+<li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
+<li><p>This structure implies a compound-symmetric covariance matrix</p></li>
+</ul>
 </section>
 </section>
 
@@ -876,10 +870,11 @@ F-statistic: 83.89 on 12 and 18 DF,  p-value: 2.944e-13
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-model-to-multiple-subjects">Extending the Model to Multiple Subjects</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-mu-i-as-a-random-variable">Understanding <span class="math notranslate nohighlight">\(\mu_{i}\)</span> as a <em>Random Variable</em></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-generating-process">The Data-generating Process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-individual-linear-models-in-r">Fitting Individual Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
   </nav></div>
 

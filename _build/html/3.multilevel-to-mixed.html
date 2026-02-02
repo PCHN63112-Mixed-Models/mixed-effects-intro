@@ -396,6 +396,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-our-hierarchy">Why Collapse Our Hierarchy?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">From Multilevel to Mixed-effects</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-models-applied-to-repeated-measurements">Mixed-effects Models Applied to Repeated Measurements</a></li>
 </ul>
             </nav>
         </div>
@@ -449,6 +450,86 @@
 </section>
 <section id="mixed-effects-using-lme">
 <h2>Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#mixed-effects-using-lme" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;reshape2&#39;</span><span class="p">)</span>
+
+<span class="nf">data</span><span class="p">(</span><span class="s">&#39;selfesteem&#39;</span><span class="p">)</span>
+
+<span class="c1"># repeats and number of subjects</span>
+<span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dim</span><span class="p">(</span><span class="n">selfesteem</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span>
+
+<span class="c1"># reshape wide -&gt; long</span>
+<span class="n">selfesteem.long</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">melt</span><span class="p">(</span><span class="n">selfesteem</span><span class="p">,</span><span class="w">            </span><span class="c1"># wide data frame</span>
+<span class="w">                        </span><span class="n">id.vars</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="w">          </span><span class="c1"># what stays fixed?</span>
+<span class="w">                        </span><span class="n">variable.name</span><span class="o">=</span><span class="s">&quot;time&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># name for the new predictor</span>
+<span class="w">                        </span><span class="n">value.name</span><span class="o">=</span><span class="s">&quot;score&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1"># name for the new outcome</span>
+
+<span class="n">selfesteem.long</span><span class="w">           </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selfesteem.long</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="p">),]</span><span class="w"> </span><span class="c1"># order by ID</span>
+<span class="nf">rownames</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w">                                  </span><span class="c1"># fix row names</span>
+<span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="p">)</span><span class="w">               </span><span class="c1"># convert ID to factor</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="mixed-effects-models-applied-to-repeated-measurements">
+<h2>Mixed-effects Models Applied to Repeated Measurements<a class="headerlink" href="#mixed-effects-models-applied-to-repeated-measurements" title="Link to this heading">#</a></h2>
+<p>… So, in fact, applying the model above effectively takes us back to the <em>repeated measures ANOVA</em>. This is not a coincidence. The repeated measures ANOVA <em>is</em> a very basic multilevel/mixed-effects model. So, it may appear that despite all the discussion above, we have not actually made any progress. In a way, this is <em>true</em>. … This alone reveals a truth about multilevel/mixed-effects models that is not always appreciated: if you have <em>no</em> replications per-subject and per-repeated measurements, a multilevel/mixed-effects model will do <em>no  better</em> than a repeated measures ANOVA. In fact, it is arguably <em>worse</em> because the mixed-effects model has no correction for violations of sphericity. The covariance structure simply is what it is and the inference is based off of this assumption. These correction exist for the repeated measures ANOVA precisely because it has no flexibility in its covariance structure. Because mixed-effects models have much more flexibility, there is no sense of applying a correction for misspecification. If we want a more flexible structure, we just need to specify it. However, because this structure is <em>implicit</em>, the data must be able to support it. When the data cannot, we fallback on a simpler structure. So, when mixed-effects and the repeated measures ANOVA converge, the is argument to be made that mixed-effects is actually <em>less precise</em> for inference.</p>
+<p>Now, there <em>are</em> advantages to the mixed-effects framework with a compound symmetric covariance structure. For instance, we do not need to manually assign error terms for tests…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+<span class="n">lme.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">selfesteem.long</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">))</span>
+
+<span class="nf">Anova</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: selfesteem.long 
+       AIC      BIC    logLik
+  86.99346 93.47264 -38.49673
+
+Random effects:
+ Formula: ~1 | id
+         (Intercept)  Residual
+StdDev: 2.772358e-05 0.8859851
+
+Fixed effects:  score ~ time 
+               Value Std.Error DF   t-value p-value
+(Intercept) 3.140122 0.2801731 18 11.207793   0e+00
+timet2      1.793820 0.3962246 18  4.527281   3e-04
+timet3      4.496220 0.3962246 18 11.347655   0e+00
+ Correlation: 
+       (Intr) timet2
+timet2 -0.707       
+timet3 -0.707  0.500
+
+Standardized Within-Group Residuals:
+       Min         Q1        Med         Q3        Max 
+-1.4987927 -0.6279054 -0.0321792  0.4530803  2.4177254 
+
+Number of Observations: 30
+Number of Groups: 10 
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: score
+      Chisq Df Pr(&gt;Chisq)    
+time 130.52  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -520,6 +601,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-our-hierarchy">Why Collapse Our Hierarchy?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">From Multilevel to Mixed-effects</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-models-applied-to-repeated-measurements">Mixed-effects Models Applied to Repeated Measurements</a></li>
 </ul>
   </nav></div>
 
