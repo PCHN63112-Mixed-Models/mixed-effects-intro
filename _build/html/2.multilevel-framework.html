@@ -399,6 +399,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -682,43 +683,94 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 <p>Well, as written above, these are <em>means</em> for each subject, so their expected value will not be 0. We saw already that our estimates for the first two subjects from <code class="docutils literal notranslate"><span class="pre">selfesteem</span></code> were <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 5.43\)</span> and <span class="math notranslate nohighlight">\(\hat{\mu}_{2} = 5.26\)</span>. Clearly these are <em>not</em> 0 because they are on the same scale as <code class="docutils literal notranslate"><span class="pre">score</span></code>. So, instead, the expected value of each of these subject-specific means will be whatever the <em>population grand mean</em> is. If we stick with the convention of assuming that these subject means are normally distributed, we have</p>
 <div class="math notranslate nohighlight">
 \[
-\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{2}\right).
+\mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{2}\right),
 \]</div>
-<p>There are several consequences of the assumptions made above. To begin with, there are now <em>two</em> probability distributions describing where our data come from. These distributions have different variances (<span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span>), meaning we have <em>two</em> sources of error to now consider. We also need to <em>estimate</em> both of these variances from the data in order to complete the unknowns for this model. Last semester, our focus was almost exclusively on the <em>mean function</em>, but now we can see that we are shifting focus and adding complexity to the <em>variance function</em>. This means that our mental model of where our data comes from now consists of <em>two layers</em>, which is precisely the conceptualisation that a multilevel model makes explicit, as we will now discuss.</p>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the grand mean of the population.</p>
+<p>There are several consequences of the assumptions made above. To begin with, there are now <em>two</em> probability distributions describing where our data come from. These distributions have different variances (<span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span>), meaning we have <em>two</em> sources of error to now consider. We also need to <em>estimate</em> both of these variances from the data in order to complete the unknowns for this model. Last semester, our focus was almost exclusively on the <em>mean function</em>, but now we can see that we are shifting focus and adding complexity to the <em>variance function</em>. This means that our mental model of where our data comes from now consists of <em>two layers</em>. This is precisely the conceptualisation that a multilevel model makes explicit.</p>
 </section>
 <section id="the-complete-multilevel-model">
 <h2>The Complete Multilevel Model<a class="headerlink" href="#the-complete-multilevel-model" title="Link to this heading">#</a></h2>
-<p>Given the discussions above about both <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and <span class="math notranslate nohighlight">\(\mu_{i}\)</span> being random variables, we can now write our model as</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{2}
-    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) &amp;\quad\text{(Level 1)} \\
-    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 &amp;\quad\text{(Level 2)} \\
-\end{alignat*}
-\end{split}\]</div>
-<p>So, we can see where the term <em>multilevel</em> comes from, as we are thinking of our data-generation as occurring at <em>two levels</em> or <em>layers</em>.</p>
-<section id="level-1">
-<h3>Level 1<a class="headerlink" href="#level-1" title="Link to this heading">#</a></h3>
-<p>At Level 1, our data are drawn from a normal distribution with a mean that depends upon two parts. The first is <em>unique</em> and <em>specific</em> to subject <span class="math notranslate nohighlight">\(i\)</span>, and the second is <em>constant</em> across subjects. We imagine that, at the level of the <em>population</em>, the effect of the experimental manipulation is the <em>same</em> for every subject. However, we also imagine that each subject will be <em>offset</em> by a certain amount. This captures the idea that the <em>relative</em> differences in <code class="docutils literal notranslate"><span class="pre">score</span></code> between the levels of <code class="docutils literal notranslate"><span class="pre">time</span></code> is constant in the population, but that the <em>absolute</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code> depends on individual subjects. This captures the idea that <code class="docutils literal notranslate"><span class="pre">time</span></code> has an average effect across all subjects that we are attempting to capture. This is no different to any other effect we have tried to capture in models before. What <em>is</em> different is the idea that each subject has their own unique <em>offset</em>. This captures the idea that a single subject may have an overall <em>lower</em> or <em>higher</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code>. Individual subjects will have their own unique level of self-esteem. While the <code class="docutils literal notranslate"><span class="pre">time</span></code> manipulation may serve to <em>increase</em> or <em>decrease</em> self-esteem, someone with <em>low</em> self-esteem will still remain <em>low</em> even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Similarly, someone with <em>high</em> self-esteem will still remain <em>high</em>, even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. The measurements from each individual subject are therefore <em>connected</em> by the <span class="math notranslate nohighlight">\(\mu_{i}\)</span> term, which is an important insight we will explore more below. In sum, we can think of Level 1 as explaining each subject as an individual entity and thus forming the individual models of each subject separately.</p>
-</section>
-<section id="level-2">
-<h3>Level 2<a class="headerlink" href="#level-2" title="Link to this heading">#</a></h3>
-<p>At Level 2, our data are drawn from … This also implies a <em>hierarchy</em> of data-generation, where the data at Level 1 depends upon the data at Level 2. This is why these types of model are also known as <em>hierarchical</em> linear models.</p>
-<p>We can also write this model in a slightly different way. As we know from last semester, we can always separate a probability model into an equation for the expected value plus random error. So, if we apply that principle here we can rewrite the above as</p>
+<p>Given the discussions above about the nature of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, we can now write our model as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
-    \mu_{i}   &amp;= \mu + S_{i} \\
-     S_{i}    &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right)   \\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right). \\
+    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) \\
+    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 \\
 \end{alignat*}
 \end{split}\]</div>
-<p>This makes it explicit that what each distribution is capturing is <em>error variance</em>. From this perspective, the random element of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is the error-term <span class="math notranslate nohighlight">\(S_{i}\)</span>. So what we <em>really</em> have is a model with <em>two sets of errors</em>. Each type of error captures a different form of <em>deflection</em> and thus a different <em>source of variance</em> … So, we can see that we have now managed to describe our data in terms of <em>two</em> linear models. One of these models explains … The other model explains … Importantly, these two models are <em>connected</em>.</p>
+<p>In the multilevel framework, these equations are considered multiple <em>layers</em> or <em>levels</em> of the data, and are usually labelled like so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) &amp;\quad\text{Level 1} \\
+    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 &amp;\quad\text{Level 2} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>This also implies a <em>hierarchy</em> of data-generation, where the data at Level 1 depends upon the data at Level 2. This is why these types of model are also known as <em>hierarchical</em> linear models.</p>
+<p>We can also write this model in a slightly different way. As we know from last semester, we can always separate a probability model into an equation for the <em>fixed</em> expected value plus <em>random</em> error. For instance, we can write a simple regression model as</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
+\]</div>
+<p>or as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{i}        &amp;=    \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
+    \epsilon_{i} &amp;\sim \mathcal{N}(0, \sigma^{2})                \\
+\end{alignat*}
+\end{split}\]</div>
+<p>where, in the second form, we move the probabilistic behaviour into a new error term that captures the variation in <span class="math notranslate nohighlight">\(y\)</span> around the expected value. So, if we apply the same principles here, we can rewrite the multilevel model as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}             &amp;\quad\text{Level 1} \\
+    \mu_{i}   &amp;= \mu + \xi_{i}                                &amp;\quad\text{Level 2} \\
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right)  &amp;\\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right), &amp;\\
+\end{alignat*}
+\end{split}\]</div>
+<p>where we have added a new error term <span class="math notranslate nohighlight">\(\xi_{i}\)</span><a class="footnote-reference brackets" href="#xi-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> at Level 2. When written this way, we can see that actually what we have is two models containing <em>two error terms</em>. Each of these error terms captures a different form of <em>random deviation</em> and thus a different <em>source of variance</em>. So what we have <em>really</em> allowed here is a <em>partitioning</em> of the variance into two different chunks, which may be starting to sound familiar. To understand this more, let us discuss each of these levels in turn.</p>
+<section id="level-1">
+<h3>Level 1<a class="headerlink" href="#level-1" title="Link to this heading">#</a></h3>
+<p>At Level 1, the model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}    &amp;=    \mu_{i} + \alpha_{j} + \eta_{ij}         \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right) \\
+\end{alignat*}
+\end{split}\]</div>
+<p>So, our data are drawn from a normal distribution with a mean that depends upon two parts. The first is <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, which is <em>unique</em> and <em>specific</em> to subject <span class="math notranslate nohighlight">\(i\)</span>. The second is <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>, which is <em>constant</em> and <em>fixed</em> across subjects.</p>
+<p>At this level, we imagine that the effect of the experimental manipulation is the <em>same</em> for every subject. This is no different to our usual assumption about <em>regression slopes</em> or <em>group means</em> or any other phenomena captured by a parameter we are trying to estimate. If we had the <em>whole population</em> at our disposal, we would know <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> precisely and our job would be done. The difference now is that we also imagine that each individual subject from that population will be <em>offset</em> by a certain amount. This implies that the <em>relative</em> differences in <code class="docutils literal notranslate"><span class="pre">score</span></code> between the levels of <code class="docutils literal notranslate"><span class="pre">time</span></code> is constant in the population, but that the <em>absolute</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code> depends on individual subjects. This captures the idea that a single subject may have an overall <em>lower</em> or <em>higher</em> value of <code class="docutils literal notranslate"><span class="pre">score</span></code> because each individual will have their own unique level of self-esteem. While the <code class="docutils literal notranslate"><span class="pre">time</span></code> manipulation may serve to <em>increase</em> or <em>decrease</em> self-esteem, someone with <em>low</em> self-esteem will still remain <em>low</em> even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Similarly, someone with <em>high</em> self-esteem will still remain <em>high</em>, even after the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. The measurements from each individual subject are therefore <em>connected</em> by the <span class="math notranslate nohighlight">\(\mu_{i}\)</span> term, which is an important insight we will explore more below.</p>
+<div class="info admonition">
+<p class="admonition-title">Level 1 Summary</p>
+<p>In this model, Level 1 explains each subject as an individual entity. Their measured values of <code class="docutils literal notranslate"><span class="pre">score</span></code> can be decomposed into a term unique to them (<span class="math notranslate nohighlight">\(\mu_{i}\)</span>) and a population-level effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). As such, each subject provides information about the effect we are interested in, but will also be offset by some amount that is specific to them. The errors at this level correspond to deviations in the value of <code class="docutils literal notranslate"><span class="pre">score</span></code> from the expected value for each subject specifically. For instance, the errors for subject 1 correspond to deviations from <span class="math notranslate nohighlight">\(\mu_{1} + \alpha_{j}\)</span>, the errors for subject 2 correspond to deviations from <span class="math notranslate nohighlight">\(\mu_{2} + \alpha_{j}\)</span> and so on. The variance at this level <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{1}\right)\)</span> therefore corresponds to the <em>internally consistency</em> of each individual subject. It is <em>within-subject</em> variance. It does not tell us how much the subjects differ <em>from each other</em>, rather it tells us how much the <em>repeated measurements</em> differ on average <em>within</em> a single subject.</p>
+</div>
+</section>
+<section id="level-2">
+<h3>Level 2<a class="headerlink" href="#level-2" title="Link to this heading">#</a></h3>
+<p>At Level 2, the model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \mu_{i}  &amp;=    \mu + \xi_{i}                            \\
+     \xi_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right) \\
+\end{alignat*}
+\end{split}\]</div>
+<div class="info admonition">
+<p class="admonition-title">Level 2 Summary</p>
+<p>In this model, Level 2 explains all subject as as a group. … The variance at this level <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{2}\right)\)</span> therefore corresponds to the consistency of the <em>group of subjects</em>. It is <em>between-subject</em> variance that tells us precisely how much the subjects differ <em>from each other</em>.</p>
+</div>
+</section>
+<section id="multilevel-visualisation">
+<h3>Multilevel Visualisation<a class="headerlink" href="#multilevel-visualisation" title="Link to this heading">#</a></h3>
+<p>… We saw this already when we discussed the repeated measures ANOVA, which should start showing the connection between these methods.</p>
 </section>
 </section>
 <section id="simulating-a-multilevel-model-in-r">
 <h2>Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#simulating-a-multilevel-model-in-r" title="Link to this heading">#</a></h2>
+<p>As the final section in this part of the lesson, we will look at <em>simulating</em> the model above in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This will serve two purposes. Firstly, it can be useful in understanding the abstract representation above by seeing code that implements it. Secondly, there are some not-so-obvious consequences of the multilevel framework that make it particularly suited for repeated measurements. Although these consequences can just be stated, it will make them more concrete when we can actually <em>see</em> them via simulation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">n.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span>
@@ -730,17 +782,17 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 <span class="n">alpha</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)</span>
 
 <span class="c1"># variances</span>
-<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span>
-<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="c1"># Level 1 (within-subject)</span>
+<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="c1"># Level 2 (between-subjects)</span>
 
 <span class="c1"># Level 2</span>
-<span class="n">mu.i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
+<span class="n">mu.i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
 
 <span class="c1"># Level 1</span>
 <span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
 <span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.subs</span><span class="p">){</span>
 <span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.t</span><span class="p">){</span>
-<span class="w">    </span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
+<span class="w">    </span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
 <span class="w">    </span><span class="n">idx</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -755,7 +807,7 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d09559d6cbc40e23fd95e90d61b4311ab63b3de9438b0d494e4ee26a14d6e4e7.png" src="_images/d09559d6cbc40e23fd95e90d61b4311ab63b3de9438b0d494e4ee26a14d6e4e7.png" />
+<img alt="_images/1cb8f0cb9ba81332b2445639add297b6b48be0629a2eeecd615ade91365034ce.png" src="_images/1cb8f0cb9ba81332b2445639add297b6b48be0629a2eeecd615ade91365034ce.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -772,32 +824,47 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/a9cf1d440c49d40b933ca3db8bac2f34193c7e6bf6f22d0f4252c15430b69333.png" src="_images/a9cf1d440c49d40b933ca3db8bac2f34193c7e6bf6f22d0f4252c15430b69333.png" />
+<img alt="_images/ecbd64c78d3399cc6f81aeb0c20c2ab20ef9bc3b313613510dee675f1aa2612e.png" src="_images/ecbd64c78d3399cc6f81aeb0c20c2ab20ef9bc3b313613510dee675f1aa2612e.png" />
 </div>
 </div>
+<p>Now, for the party trick. Let us first combine together the simulated values of <code class="docutils literal notranslate"><span class="pre">y</span></code> for each time point into different columns of a matrix</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="n">mu.i</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nf">cbind</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="n">y.t2</span><span class="p">,</span><span class="n">y.t3</span><span class="p">)))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="n">y.t2</span><span class="p">,</span><span class="n">y.t3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let us calculate the variance-covariance matrix of these data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.981374
-         y.t1     y.t2     y.t3
-y.t1 4.984949 1.960462 1.923993
-y.t2 1.960462 5.010419 2.030187
-y.t3 1.923993 2.030187 4.950167
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         y.t1     y.t2     y.t3
+y.t1 5.029147 1.992823 2.001532
+y.t2 1.992823 5.079688 2.009151
+y.t3 2.001532 2.009151 4.989089
 </pre></div>
 </div>
 </div>
 </div>
+<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. This is not necessarily surprising, except for the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given correlation structure anywhere in the code above. So where did the correlation come from? This is actually a <em>natural consequence</em> of the algebra of a multilevel model. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but we can see it clearly above.</p>
 <ul class="simple">
 <li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
 <li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
 <li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
 <li><p>This structure implies a compound-symmetric covariance matrix</p></li>
 </ul>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="xi-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The Greek letter <em>xi</em>.</p>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -872,6 +939,7 @@ y.t3 1.923993 2.030187 4.950167
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
