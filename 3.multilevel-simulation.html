@@ -396,7 +396,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-mean">The Multilevel Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-variance">The Multilevel Variance</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
 </ul>
             </nav>
@@ -562,6 +566,8 @@
 <img alt="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" src="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" />
 </div>
 </div>
+<section id="the-multilevel-mean">
+<h3>The Multilevel Mean<a class="headerlink" href="#the-multilevel-mean" title="Link to this heading">#</a></h3>
 <p>The mean of this distribution is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -577,7 +583,7 @@
 </div>
 <p>Where does this value come from? Well, on average we expect the subject means to be equal to <span class="math notranslate nohighlight">\(\mu\)</span>, because this is the mean of the Level 2 distribution. In the simulations we set <span class="math notranslate nohighlight">\(\mu = 5\)</span>, so the average subject from the population should have a mean equal to 5. Then, we set the fixed effect for Time 1 to be <span class="math notranslate nohighlight">\(\alpha_{1} = -2\)</span>. So the true deviation from the mean for Time 1 is equal to -2. So, on average a subject from this population will have a mean of 5, which will reduce by 2 during Time 1. So, our distribution for Time 1 has a mean of <span class="math notranslate nohighlight">\(5 + (-2) = 3\)</span>, which is exactly what we see. Importantly, this is a product of <em>both levels</em> of the data-generating process. This is how the data are formed from Level 1 <em>and</em> Level 2 combined.</p>
 <div class="tip dropdown admonition">
-<p class="admonition-title">Formal version of this result</p>
+<p class="admonition-title">Formal Version of the Multilevel Mean</p>
 <p>We can also see this formally, rather than relying on simulation. If we work out the expected value of our data, given our model, we get</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -590,6 +596,9 @@
 \end{split}\]</div>
 <p>Because <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>, its expected value is just equal to itself. Its value never changes, so its average over repeated sampling is just equal to its original value. <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is error with <span class="math notranslate nohighlight">\(E(\eta_{ij}) = 0\)</span>, so it falls-out. This only leaves the expected value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, which comes from the Level 2 distribution whose mean is <span class="math notranslate nohighlight">\(\mu\)</span>. Hence <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>.</p>
 </div>
+</section>
+<section id="the-multilevel-variance">
+<h3>The Multilevel Variance<a class="headerlink" href="#the-multilevel-variance" title="Link to this heading">#</a></h3>
 <p>What about its variance? We can calculate this from the simulations</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -605,7 +614,7 @@
 </div>
 <p>Where does this come from? …</p>
 <div class="tip dropdown admonition">
-<p class="admonition-title">Formal version of this result</p>
+<p class="admonition-title">Formal Version of the Multilevel Variance</p>
 <p>Again, we can state this formally as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -619,6 +628,7 @@
 <p>where <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> disappears because it is a <em>fixed constant</em> and thus does not contribute to the variance. Technically, the third equality above is only valid if we assume <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>independent</em>. But this is usually reasonable, so long as the value of the subject mean does not somehow influence the distribution of the within-subject errors.</p>
 </div>
 <p>So, <em>both</em> the mean and the variance of the final data are a <em>combination</em> of both levels. Both levels <em>feed-in</em> to the data and thus we can understand complex data by separating it out into multiple levels of variation that combine to produce what we are actually measuring.</p>
+</section>
 </section>
 <section id="covariance-structure-of-the-simulated-data">
 <h2>Covariance Structure of the Simulated Data<a class="headerlink" href="#covariance-structure-of-the-simulated-data" title="Link to this heading">#</a></h2>
@@ -716,7 +726,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-mean">The Multilevel Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-variance">The Multilevel Variance</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
 </ul>
   </nav></div>
