@@ -89,7 +89,7 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="From Multilevel to Mixed-effects" href="3.multilevel-to-mixed.html" />
+    <link rel="next" title="Simulating a Multilevel Model" href="3.multilevel-simulation.html" />
     <link rel="prev" title="Introduction to Mixed-effects Models" href="1.intro-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -197,9 +197,9 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Multilevel Framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.implied-marginal-model.html">The Implied Marginal Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.advantages.html">Advantages of Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -402,7 +402,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -767,112 +766,30 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 </section>
 <section id="multilevel-visualisation">
 <h3>Multilevel Visualisation<a class="headerlink" href="#multilevel-visualisation" title="Link to this heading">#</a></h3>
-<p>To help further conceptualise the multilevel framework, <a class="reference internal" href="#multilevel-fig"><span class="std std-numref">Fig. 1</span></a> presents a diagrammatic representation of the model we have been working with so far. To navigate this, start from the <em>bottom</em> and work <em>upwards</em>. Two sampled datapoints are illustrated as <span class="math notranslate nohighlight">\(y_{i1}\)</span> and <span class="math notranslate nohighlight">\(y_{i2}\)</span>. These are measured values of the repeated measures conditions <span class="math notranslate nohighlight">\(j = 1\)</span> and <span class="math notranslate nohighlight">\(j = 2\)</span> for subject <span class="math notranslate nohighlight">\(i\)</span>. These are conceptualised as drawn from individual distributions for that specific subject. The means of these distributions are then a combination of the unique individual subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and the fixed effects of the two conditions, <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{2}\)</span>. The subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is itself conceptualised as a random drawn from the population-level distribution of subjects, with a fixed mean of <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
-<figure class="align-default" id="multilevel-fig">
-<a class="reference internal image-reference" href="_images/multilevel-diagram.png"><img alt="_images/multilevel-diagram.png" src="_images/multilevel-diagram.png" style="width: 500px;" /></a>
+<figure class="align-right" id="multilevel-fig">
+<a class="reference internal image-reference" href="_images/multilevel-diagram.png"><img alt="_images/multilevel-diagram.png" src="_images/multilevel-diagram.png" style="width: 425px;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 1 </span><span class="caption-text">An illustration of a basic two-level model.</span><a class="headerlink" href="#multilevel-fig" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<p>There are a few key takeaways from this illustration. Firstly, every term that contains the index <span class="math notranslate nohighlight">\(i\)</span> will change with each new subject. These are therefore all <em>random variables</em>. If we conceptualised drawing a new subject, think of every term that contains an <span class="math notranslate nohighlight">\(i\)</span> changing and every term that does <em>not</em> contain an <span class="math notranslate nohighlight">\(i\)</span> staying the same. Secondly, notice that the variance terms <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describe different kinds of variation. <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> describes variation <em>between</em> different subjects, whereas <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describes variation <em>within</em> a single subject. Finally, we can think of this model as a <em>generalisation</em> of everything we have done previously. When our data were independent, we were thinking only in terms of Level 2. So, all the models we were looking at last semester were all representations of Level 2. The addition of repeats for each experimental unit creates the additional level of variation. So, all our previous models were really <em>single-level</em> and we can think of them as <em>special cases</em> of a multilevel model. From that perspective, the multilevel model is really <em>the</em> framework that underlies everything.</p>
-</section>
-</section>
-<section id="simulating-a-multilevel-model-in-r">
-<h2>Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#simulating-a-multilevel-model-in-r" title="Link to this heading">#</a></h2>
-<p>As the final section in this part of the lesson, we will look at <em>simulating</em> the model above in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This will serve two purposes. Firstly, it can be useful in understanding the abstract representation above by seeing code that implements it. Secondly, there are some not-so-obvious consequences of the multilevel framework that make it particularly suited for repeated measurements. Although these consequences can just be stated, it will make them more concrete when we can actually <em>see</em> them via simulation.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
-
-<span class="n">n.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">50000</span>
-<span class="n">n.t</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
-<span class="n">y</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">)</span>
-
-<span class="c1"># fixed-effects</span>
-<span class="n">mu</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
-<span class="n">alpha</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)</span>
-
-<span class="c1"># variances</span>
-<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="c1"># Level 1 (within-subject)</span>
-<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="c1"># Level 2 (between-subjects)</span>
-
-<span class="c1"># Level 2</span>
-<span class="n">mu.i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
-
-<span class="c1"># Level 1</span>
-<span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.subs</span><span class="p">){</span>
-<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.t</span><span class="p">){</span>
-<span class="w">    </span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
-<span class="w">    </span><span class="n">idx</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">mu.i</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 2&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">y.t1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
-<span class="n">y.t2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
-<span class="n">y.t3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="nf">seq</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="n">n.subs</span><span class="o">*</span><span class="n">n.t</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
-
-<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y.t2</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 2)&#39;</span><span class="p">)</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y.t3</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 3)&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/b4a24282f88509bab14f6041d2a654eda7b57ba25260bdd2903a7300e48043a4.png" src="_images/b4a24282f88509bab14f6041d2a654eda7b57ba25260bdd2903a7300e48043a4.png" />
-</div>
-</div>
-<p>Now, for the party trick. Let us first combine together the simulated values of <code class="docutils literal notranslate"><span class="pre">y</span></code> for each time point into different columns of a matrix</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">y.t1</span><span class="p">,</span><span class="n">y.t2</span><span class="p">,</span><span class="n">y.t3</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Now, let us calculate the variance-covariance matrix of these data</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         y.t1     y.t2     y.t3
-y.t1 4.999452 2.009662 1.980636
-y.t2 2.009662 4.994427 1.994638
-y.t3 1.980636 1.994638 4.971735
-</pre></div>
-</div>
-</div>
-</div>
-<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. This is not necessarily surprising, except for the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given correlation structure anywhere in the code above. So where did the correlation come from? This is actually a <em>natural consequence</em> of the algebra of a multilevel model. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but we can see it clearly above.</p>
-<ul class="simple">
-<li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
-<li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
-<li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
-<li><p>This structure implies a compound-symmetric covariance matrix</p></li>
-</ul>
+<p>To help further conceptualise the multilevel framework, <a class="reference internal" href="#multilevel-fig"><span class="std std-numref">Fig. 1</span></a> presents a diagrammatic representation of the model we have been working with so far. To navigate this, start from the <em>bottom</em> and work <em>upwards</em>. Two sampled datapoints are illustrated as <span class="math notranslate nohighlight">\(y_{i1}\)</span> and <span class="math notranslate nohighlight">\(y_{i2}\)</span>. These are measured values of the repeated measures conditions <span class="math notranslate nohighlight">\(j = 1\)</span> and <span class="math notranslate nohighlight">\(j = 2\)</span> for subject <span class="math notranslate nohighlight">\(i\)</span>. These are conceptualised as drawn from individual distributions for that specific subject. The means of these distributions are then a combination of the unique individual subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and the fixed effects of the two conditions, <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{2}\)</span>. The subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is itself conceptualised as a random drawn from the population-level distribution of subjects, with a fixed mean of <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
+<p>There are a few key takeaways from this illustration. Firstly, every term that contains the index <span class="math notranslate nohighlight">\(i\)</span> will change with each new subject. These are therefore all <em>random variables</em>. If we conceptualised drawing a new subject, think of every term that contains an <span class="math notranslate nohighlight">\(i\)</span> changing and every term that does <em>not</em> contain an <span class="math notranslate nohighlight">\(i\)</span> staying the same. Secondly, notice that the terms <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describe different <em>kinds</em> of variation. <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> describes variation <em>between</em> different subjects, whereas <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describes variation <em>within</em> a single subject. Finally, we can think of this model as a <em>generalisation</em> of everything we have done previously. When our data were independent, we were thinking only in terms of Level 2. So, all the models we were looking at last semester were all representations of Level 2<a class="footnote-reference brackets" href="#levels-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The addition of repeats for each experimental unit creates the additional level of variation. So, all our previous models were really <em>single-level</em> and we can think of them as <em>special cases</em> of a multilevel model. From that perspective, the multilevel model is really <em>the</em> framework that underlies everything<a class="footnote-reference brackets" href="#gelman-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="xi-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>The Greek letter <em>xi</em>.</p>
 </aside>
+<aside class="footnote brackets" id="levels-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Level 2 in <em>this</em> model. In general, the levels of a multilevel model do not have any meaning outside of a given dataset or context. They are just labels for the levels the model happens to have. So, the normal linear model has just <em>one level</em> and it would not make sense to talk about this as “Level 2” outside of the current context of comparing it to the multilevel model described above.</p>
 </aside>
+<aside class="footnote brackets" id="gelman-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>This is exactly the perspective taken by Gelman &amp; Hill (2007) in their book <a class="reference external" href="https://sites.stat.columbia.edu/gelman/arm/"><em>Data Analysis Using Regresion and Multilevel/Hierarchical Models</em></a>. Everything is effectively a regression model with one or more levels.</p>
+</aside>
+</aside>
+</section>
 </section>
 </section>
 
@@ -916,11 +833,11 @@ y.t3 1.980636 1.994638 4.971735
       </div>
     </a>
     <a class="right-next"
-       href="3.multilevel-to-mixed.html"
+       href="3.multilevel-simulation.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">From Multilevel to Mixed-effects</p>
+        <p class="prev-next-title">Simulating a Multilevel Model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -950,7 +867,6 @@ y.t3 1.980636 1.994638 4.971735
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-a-multilevel-model-in-r">Simulating a Multilevel Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
   </nav></div>
 

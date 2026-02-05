@@ -6,7 +6,7 @@ root: 0.intro
 chapters:
 - file: 1.intro-mixed
 - file: 2.multilevel-framework
-- file: 3.multilevel-to-mixed
-- file: 4.implied-marginal-model
-- file: 5.advantages
+- file: 3.multilevel-simulation
+- file: 4.multilevel-to-mixed
+- file: 5.inference-mixed
 - file: summary

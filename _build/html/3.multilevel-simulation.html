@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Simulating a Multilevel Model &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
+    <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.multilevel-simulation';</script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="From Multilevel to Mixed-effects" href="4.multilevel-to-mixed.html" />
+    <link rel="prev" title="The Multilevel Framework" href="2.multilevel-framework.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Simulating a Multilevel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F3.multilevel-simulation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/3.multilevel-simulation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Simulating a Multilevel Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="simulating-a-multilevel-model">
+<h1>Simulating a Multilevel Model<a class="headerlink" href="#simulating-a-multilevel-model" title="Link to this heading">#</a></h1>
+<p>In the previous part of this lesson, we explored the multilevel framework from a purely theoretical and formal perspective. However, it can be tricky to wrap your head around all this, especially when you are not used to think in terms of multiple levels of variation. To try and help with this, we will explore <em>simulating</em> a multilevel model in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This will serve two purposes. Firstly, it can be useful to see some code when trying to understand an abstract representation of a model. Secondly, there are some not-so-obvious consequences of the multilevel framework that make it particularly suited for repeated measurements. Although we could just state these consequences, the hope is that they are more concrete when actually seen as an emergent property of the multilevel framework.</p>
+<section id="simulation-code">
+<h2>Simulation Code<a class="headerlink" href="#simulation-code" title="Link to this heading">#</a></h2>
+<p>The code for the simulations is given below. This is a direct implementation of the multilevel model visualised back in <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. You can spend time studying it and making the connections with the mathematical notation if you wish. However, the more important aspect is examining the <em>output</em>, so try not to get too side-tracked here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+
+<span class="c1">#================================================================#</span>
+<span class="c1"># Setup</span>
+<span class="c1">#================================================================#</span>
+
+<span class="c1"># simulation size</span>
+<span class="n">n.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span><span class="w">                     </span><span class="c1"># big N</span>
+<span class="n">n.t</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w">                         </span><span class="c1"># 3 repeated measures</span>
+
+<span class="c1"># fixed-effects</span>
+<span class="n">mu</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span><span class="w">                          </span><span class="c1"># group-level grand mean</span>
+<span class="n">alpha</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)</span><span class="w">                  </span><span class="c1"># repeated measures effects</span>
+
+<span class="c1"># variances</span>
+<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w">                       </span><span class="c1"># Level 1 (within-subject)</span>
+<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w">                       </span><span class="c1"># Level 2 (between-subjects)</span>
+
+<span class="c1"># empty matrix for y (N x T)</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="n">nrow</span><span class="o">=</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="n">n.t</span><span class="p">)</span>
+
+<span class="c1">#================================================================#</span>
+<span class="c1"># Run the simulations</span>
+<span class="c1">#================================================================#</span>
+
+<span class="c1">#----------------------------------------------------------------#</span>
+<span class="c1"># Level 2 </span>
+<span class="c1">#----------------------------------------------------------------#</span>
+<span class="c1"># mu[i] ~ N(mu,sigma2.2)</span>
+<span class="c1">#----------------------------------------------------------------#</span>
+
+<span class="n">mu.i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
+
+<span class="c1">#----------------------------------------------------------------#</span>
+<span class="c1"># Level 1 </span>
+<span class="c1">#----------------------------------------------------------------#</span>
+<span class="c1"># y[ij] ~ N(mu[i] + alpha[j], sigma2.1)</span>
+<span class="c1">#----------------------------------------------------------------#</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.subs</span><span class="p">){</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.t</span><span class="p">){</span>
+<span class="w">    </span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="level-2-distribution">
+<h2>Level 2 Distribution<a class="headerlink" href="#level-2-distribution" title="Link to this heading">#</a></h2>
+<p>To begin with, let us have a look at the simulated distribution of subject means. This is the Level 2 distribution, illustrated back in <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">mu.i</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/25eabbd0731d0f5b76c78845d5ca43637b9ff8e56b58ffc3bc284005549949cb.png" src="_images/25eabbd0731d0f5b76c78845d5ca43637b9ff8e56b58ffc3bc284005549949cb.png" />
+</div>
+</div>
+<p>This represents our <em>population</em> of subjects. Each values on the <span class="math notranslate nohighlight">\(x\)</span>-axis represents an average value of our outcome variable for each subject. If we sample from this distribution, we are sampling a <em>single</em> subject as a whole. The <em>width</em> of this distribution therefore represents variation <em>between</em> the subjects. It tells us how much we expect the subjects to differ from each other on average. In the simulations, we set <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = 2\)</span> and indeed we find that</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">mu.i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.999054
+</pre></div>
+</div>
+</div>
+</div>
+<p>which is basically 2. Importantly, the elements of this distribution are taken as <em>independent</em> because each subject is assumed not to influence the response given by any other subject. This is implicit in the simulations because the vector of subject means are created as <em>independent</em> random draws from a normal distribution. In reality, this is an <em>assumption</em>, though usually a fairly reasonable one.</p>
+</section>
+<section id="level-1-distributions">
+<h2>Level 1 Distributions<a class="headerlink" href="#level-1-distributions" title="Link to this heading">#</a></h2>
+<p>Next, let us focus on the Level 1 simulations. For this example, we only simulated <em>one value</em> per-subject and per-repeated measurement. Because of this, we have no way of <em>seeing</em> the Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. All we have is a single value from each one. So, what we can do instead is create these distributions for some random subjects by re-drawing a large number of simulated values. The results of doing this are shown in the plots below. Three example subjects are given in the columns, with the distributions for each repeated measurement condition shown in rows. These are the Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. In the illustration, we used <span class="math notranslate nohighlight">\(t = 2\)</span>, but in the simulations we have used <span class="math notranslate nohighlight">\(t = 3\)</span> just to show how the framework generalises to any number of repeated measurements.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">722</span><span class="p">,</span><span class="m">8927</span><span class="p">)</span><span class="w"> </span><span class="c1"># random subject numbers</span>
+<span class="n">n</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">subs</span><span class="p">)</span><span class="w">  </span><span class="c1"># number of subjects</span>
+
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">){</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">){</span>
+<span class="w">    </span><span class="n">sub</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="w">    </span><span class="n">mu.sub</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mu.i</span><span class="p">[</span><span class="n">sub</span><span class="p">]</span>
+<span class="w">    </span><span class="n">sub.dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">5000</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.sub</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span><span class="w"> </span><span class="c1"># 5000 draws from the Level 1 distribution</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nf">hist</span><span class="p">(</span><span class="n">sub.dist</span><span class="p">,</span><span class="w"> </span>
+<span class="w">         </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Subject &#39;</span><span class="p">,</span><span class="n">sub</span><span class="p">,</span><span class="s">&#39; (mu.i = &#39;</span><span class="p">,</span><span class="nf">round</span><span class="p">(</span><span class="n">mu.sub</span><span class="p">),</span><span class="s">&#39;)&#39;</span><span class="p">),</span>
+<span class="w">         </span><span class="n">xlab</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Time &#39;</span><span class="p">,</span><span class="n">j</span><span class="p">),</span>
+<span class="w">         </span><span class="n">breaks</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/ac2774da21f0c25e29181c4adb4f2f3e1485544c2d19faa3d039634a30875491.png" src="_images/ac2774da21f0c25e29181c4adb4f2f3e1485544c2d19faa3d039634a30875491.png" />
+</div>
+</div>
+<p>There are some key things to notice here. Firstly, each subject has a different scaling along the <span class="math notranslate nohighlight">\(x\)</span>-axis, even under the the same conditions. So these three subjects do differ in terms of their measurements, even at the same time-point. However, we conceptualise this as a combination of a <em>subject-specific mean</em> and a <em>universal effect of time</em>. For instance, notice that the mean of each distribution for Time 1 is always 2 below the mean of the subject. So, Subject 5 has <span class="math notranslate nohighlight">\(\mu_{i} = 2\)</span> and their average response in Time 1 is <span class="math notranslate nohighlight">\(2 - 2 = 0\)</span>. Similarly, Subject 722 has <span class="math notranslate nohighlight">\(\mu_{i} = 5\)</span> and their average response in Time 1 is <span class="math notranslate nohighlight">\(5 - 2 = 3\)</span>. So, no matter the subject, their response can be conceptualised as their own personal mean <em>plus</em> a constant effect of time. This captures the idea that, even though the subject responses all appear different, we can still learn about the effects of time by pooling information from across them.</p>
+</section>
+<section id="final-simulated-data">
+<h2>Final Simulated Data<a class="headerlink" href="#final-simulated-data" title="Link to this heading">#</a></h2>
+<p>Finally, let us have a look at the actual data that has been simulated <em>across</em> all the subjects. This has been generated as a <em>combination</em> of both levels and thus both levels will contribute to what we will see. The final distributions are what we imagine we are measuring for the whole experiment, as explained by the multilevel model visualised back in <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 2)&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">3</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 3)&#39;</span><span class="p">)</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f48e7f63bdd2fddad2960631604dcb5f3bed19c1caf9a5052b4d7b8b0366523b.png" src="_images/f48e7f63bdd2fddad2960631604dcb5f3bed19c1caf9a5052b4d7b8b0366523b.png" />
+</div>
+</div>
+<p>To understand these distributions, we will focus on <code class="docutils literal notranslate"><span class="pre">Level</span> <span class="pre">1</span> <span class="pre">(Time</span> <span class="pre">1)</span></code>, as shown in isolation below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" src="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" />
+</div>
+</div>
+<p>The mean of this distribution is</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3.051811
+</pre></div>
+</div>
+</div>
+</div>
+<p>Where does this come from? Well, on average we expect the subject means to be equal to <span class="math notranslate nohighlight">\(\mu\)</span>, because this is the mean of the Level 2 distribution. In the simulations we set <span class="math notranslate nohighlight">\(\mu = 5\)</span>, so the average subject from the population should have a mean equal to 5. Then, we set the fixed effect for Time 1 to be <span class="math notranslate nohighlight">\(\alpha_{1} = -2\)</span>. So the true deviation from the mean for Time 1 is equal to -2. So, on average a subject from this population will have a mean of 5, which will reduce by 2 during Time 1. So, our distribution for Time 1 has a mean of <span class="math notranslate nohighlight">\(5 + (-2) = 3\)</span>, which is exactly what we see. Importantly, this is a product of <em>both levels</em> of the data-generating process. Formally, we would state</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    E(y_{ij}) &amp;= \mu_{i}    + \alpha_{j} \\ 
+              &amp;= E(\mu_{i}) + \alpha_{j} \\ 
+              &amp;= \mu        + \alpha_{j},
+\end{alignat*}
+\end{split}\]</div>
+<p>because <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is a random variable with <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>.</p>
+<p>What about its variance? We can calculate this from the simulations</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 4.976936
+</pre></div>
+</div>
+</div>
+</div>
+<p>Where does this come from? …</p>
+<p>Again, we can state this formally as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Var}(y_{ij}) &amp;= \text{Var}(\mu_{i} + \alpha_{j} + \eta_{ij}) \\
+                       &amp;= \text{Var}(\mu_{i}) + \text{Var}(\eta_{ij})  \\
+                       &amp;= \sigma^{2}_{1} + \sigma^{2}_{2} 
+\end{alignat*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> disappears because it is a <em>fixed constant</em> and thus does not contribute to the variance. So, <em>both</em> the mean and the variance of the final data are a <em>combination</em> of both levels. Both levels <em>feed-in</em> to the data and thus we can understand complex data by separating it out into multiple levels of variation that combine to produce what we are actually measuring.</p>
+</section>
+<section id="covariance-structure-of-the-simulated-data">
+<h2>Covariance Structure of the Simulated Data<a class="headerlink" href="#covariance-structure-of-the-simulated-data" title="Link to this heading">#</a></h2>
+<p>Now, for the party trick. Let us calculate the variance-covariance matrix of the simulated repeated measurements</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]     [,2]     [,3]
+[1,] 4.976936 2.022251 2.014644
+[2,] 2.022251 5.005747 1.946399
+[3,] 2.014644 1.946399 5.018832
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. This is not necessarily surprising, except for the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given correlation structure anywhere in the code above. So where did the correlation come from? This is actually a <em>natural consequence</em> of the algebra of a multilevel model. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but we can see it clearly above.</p>
+<ul class="simple">
+<li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
+<li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
+<li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
+<li><p>This structure implies a compound-symmetric covariance matrix</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2.multilevel-framework.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Multilevel Framework</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4.multilevel-to-mixed.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">From Multilevel to Mixed-effects</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
