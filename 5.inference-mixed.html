@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The Implied Marginal Model &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>Inference in Mixed-effects Models &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
   
   
   
@@ -63,7 +63,7 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '4.implied-marginal-model';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.inference-mixed';</script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
@@ -87,8 +87,8 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Advantages of Mixed-effects Models" href="5.advantages.html" />
-    <link rel="prev" title="From Multilevel to Mixed-effects" href="3.multilevel-to-mixed.html" />
+    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="prev" title="From Multilevel to Mixed-effects" href="4.multilevel-to-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -195,9 +195,9 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Implied Marginal Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.advantages.html">Advantages of Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Inference in Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -275,7 +275,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F4.implied-marginal-model.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F5.inference-mixed.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -305,7 +305,7 @@
       
       
       
-      <li><a href="_sources/4.implied-marginal-model.ipynb" target="_blank"
+      <li><a href="_sources/5.inference-mixed.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -381,7 +381,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Implied Marginal Model</h1>
+    <h1>Inference in Mixed-effects Models</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -391,7 +391,6 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposing-the-covariance-srructure">Decomposing the Covariance Srructure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
             </nav>
@@ -404,12 +403,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-implied-marginal-model">
-<h1>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h1>
-<p>… Importantly, this means that estimation reduces to the <em>same idea</em> as GLS, where the implied covariance structure is removed from the data and a normal linear model fit on the result. So, from this perspective, we can conceptualise mixed-effects model in <em>exactly the same way</em> as GLS. This means that all the inferential problems we discussed last week <em>still apply</em> for mixed-effects models.</p>
-<section id="decomposing-the-covariance-srructure">
-<h2>Decomposing the Covariance Srructure<a class="headerlink" href="#decomposing-the-covariance-srructure" title="Link to this heading">#</a></h2>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="inference-in-mixed-effects-models">
+<h1>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h1>
+<p>…</p>
 <section id="kenward-rogers-degrees-of-freedom">
 <h2>Kenward-Rogers Degrees of Freedom<a class="headerlink" href="#kenward-rogers-degrees-of-freedom" title="Link to this heading">#</a></h2>
 <p>… The advantage is that mixed-effects models capture more <em>structure</em> than GLS models. This means that mixed-effects models embed <em>where</em> the correlation came from. Having that structure in terms of the random effects allows for slightly more sophisticated approaches to the problem of <em>effective degrees of freedom</em>. Because the covariance structure can be decomposed into the random effects, the data structure itself is part of the model of the covariance matrix. This means there is information available that can be used to construct more sophisticated faux degrees of freedom. This information is not there using GLS, because there is only a single big covariance structure that cannot be decomposed into anything related to the model.</p>
@@ -448,7 +444,7 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="3.multilevel-to-mixed.html"
+       href="4.multilevel-to-mixed.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -457,11 +453,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="5.advantages.html"
+       href="summary.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Advantages of Mixed-effects Models</p>
+        <p class="prev-next-title">Summary</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -482,7 +478,6 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposing-the-covariance-srructure">Decomposing the Covariance Srructure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
   </nav></div>
