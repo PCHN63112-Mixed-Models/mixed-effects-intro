@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The GLS Covariance Matrix &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>Introduction to Mixed-effects Workshop &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
   
   
   
@@ -63,8 +63,6 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro-mixed-workshop';</script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
@@ -383,7 +381,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The GLS Covariance Matrix</h1>
+    <h1>Introduction to Mixed-effects Workshop</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -393,12 +391,18 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The GLS Covariance Matrix</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-setting-correlation-to-1-what-happens">Try Setting Correlation to 1. What happens?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conceptualisation">Univariate Conceptualisation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-normal-distribution-with-2-conditions">Multivariate Normal Distribution with &gt; 2 Conditions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors-using-lme">Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors-using-lme">Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-marginal-covariance-matrix">Extracting the Marginal Covariance Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+</ul>
             </nav>
         </div>
     </div>
@@ -409,243 +413,29 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="the-gls-covariance-matrix">
-<h1>The GLS Covariance Matrix<a class="headerlink" href="#the-gls-covariance-matrix" title="Link to this heading">#</a></h1>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">gls.mod</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Marginal variance covariance matrix
-       [,1]   [,2]
-[1,] 653.17 348.30
-[2,] 348.30 653.17
-  Standard Deviations: 25.557 25.557 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span>
-
-<span class="n">gls_marginal_cov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nobs</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-
-<span class="w">  </span><span class="c1"># Correlation blocks (list) or single matrix if no grouping</span>
-<span class="w">  </span><span class="n">cs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">modelStruct</span><span class="o">$</span><span class="n">corStruct</span>
-<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">cs</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1"># No correlation structure: R = I</span>
-<span class="w">    </span><span class="n">Rlist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">Matrix</span><span class="o">::</span><span class="nf">Diagonal</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="w">    </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">))</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Rlist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">corMatrix</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
-<span class="w">    </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getGroups</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">))</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="c1"># Variance weights (if no varStruct, all 1s)</span>
-<span class="w">  </span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">modelStruct</span><span class="o">$</span><span class="n">varStruct</span>
-<span class="w">  </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.null</span><span class="p">(</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="nf">varWeights</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
-
-<span class="w">  </span><span class="c1"># Indices per group, aligned to the same order as used in the fit</span>
-<span class="w">  </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">split</span><span class="p">(</span><span class="nf">seq_along</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="w"> </span><span class="n">g</span><span class="p">)</span>
-
-<span class="w">  </span><span class="n">sig2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span>
-
-<span class="w">  </span><span class="c1"># Build block covariance matrices: Sigma_g = sig2 * D^(1/2) R D^(1/2)</span>
-<span class="w">  </span><span class="c1"># In nlme, varWeights are (typically) inverse-SD-type weights, so Var(e_i) = sig2 / w_i^2.</span>
-<span class="w">  </span><span class="n">Sig_blocks</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">Map</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">ii</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Dhalf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">Diagonal</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
-<span class="w">    </span><span class="n">sig2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">Dhalf</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">Dhalf</span><span class="p">)</span>
-<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="n">Rlist</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span>
-
-<span class="w">  </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">bdiag</span><span class="p">(</span><span class="n">Sig_blocks</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>We just print the first 8 rows to show the structure for the first 4 subjects.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gls_marginal_cov</span><span class="p">(</span><span class="n">gls.mod</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">8</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">8</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8 x 8 sparse Matrix of class &quot;dgCMatrix&quot;
-                                                                            
-[1,] 653.1733 348.3042   .        .        .        .        .        .     
-[2,] 348.3042 653.1733   .        .        .        .        .        .     
-[3,]   .        .      653.1733 348.3042   .        .        .        .     
-[4,]   .        .      348.3042 653.1733   .        .        .        .     
-[5,]   .        .        .        .      653.1733 348.3042   .        .     
-[6,]   .        .        .        .      348.3042 653.1733   .        .     
-[7,]   .        .        .        .        .        .      653.1733 348.3042
-[8,]   .        .        .        .        .        .      348.3042 653.1733
-</pre></div>
-</div>
-</div>
-</div>
-<p>A more general approach is to create an <em>image</em> of <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, either as a whole</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">image</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" src="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" />
-</div>
-</div>
-<p>Or subsetted to show the general structure more clearly</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">image</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">])</span><span class="w"> </span><span class="c1"># first 10 subjects</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" src="_images/832a0ee5b07831a665eca0cd9ffe01ad213444ef7c10726cf907aa5ceda2befe.png" />
-</div>
-</div>
-<p>These visualisations also help to make sense of the syntax used for defining the correlation structure. For instance, if we were to specify <code class="docutils literal notranslate"><span class="pre">form=~1|cond</span></code>, this would imply a constant correlation for each level of the repeated measures condition. What would this look like? Let us see</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">gls.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gls</span><span class="p">(</span><span class="n">y.long</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">cond</span><span class="p">,</span><span class="w"> </span><span class="n">correlation</span><span class="o">=</span><span class="nf">corCompSymm</span><span class="p">(</span><span class="n">form</span><span class="o">=~</span><span class="m">1</span><span class="o">|</span><span class="n">cond</span><span class="p">))</span>
-<span class="nf">image</span><span class="p">(</span><span class="nf">gls_marginal_cov</span><span class="p">((</span><span class="n">gls.mod</span><span class="p">)))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">Error</span>:
-
-<span class="o">!</span><span class="w"> </span>object<span class="w"> </span><span class="s1">&#39;cond&#39;</span><span class="w"> </span>not<span class="w"> </span>found
-
-    <span class="err">▆</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">1</span><span class="o">.</span> <span class="err">└─</span><span class="n">nlme</span><span class="p">::</span><span class="n">gls</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">2</span><span class="o">.</span>   <span class="err">├─</span><span class="n">base</span><span class="p">::</span><span class="n">do</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">mfArgs</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">3</span><span class="o">.</span>   <span class="err">├─</span><span class="n">stats</span> <span class="p">(</span><span class="n">local</span><span class="p">)</span> <span class="err">`</span><span class="o">&lt;</span><span class="n">fn</span><span class="o">&gt;</span><span class="err">`</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">4</span><span class="o">.</span>   <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">5</span><span class="o">.</span>     <span class="err">└─</span><span class="n">base</span><span class="p">::</span><span class="nb">eval</span><span class="p">(</span><span class="n">predvars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">6</span><span class="o">.</span>       <span class="err">└─</span><span class="n">base</span><span class="p">::</span><span class="nb">eval</span><span class="p">(</span><span class="n">predvars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>The data are now organised by whatever term is on the <em>right</em> of <code class="docutils literal notranslate"><span class="pre">|</span></code>, so the first 50 rows represent all the data from condition 1 and the final 50 rows represents all the data from condition 2. So we can see that this structure implies that all the data from condition 1 are correlated across subjects, and all the data from condition 2 are correlated across subjects. This is not particularly sensible or meaningful, but hopefully it makes it clear how the syntax works.</p>
-<p>Notice, however, that GLS is ignoring the structure in the data in terms of the subjects, because it has no knowledge of them.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span>
-<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span><span class="w"> </span><span class="c1"># For reproducibility</span>
-
-<span class="c1"># Dependent covariance matrix</span>
-<span class="n">var1</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">             </span>
-<span class="n">var2</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">             </span>
-<span class="n">rho</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-0.8</span><span class="w">          </span>
-<span class="n">covar</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rho</span><span class="o">*</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var1</span><span class="p">)</span><span class="o">*</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var2</span><span class="p">)</span>
-<span class="n">Sigma_dep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span><span class="n">covar</span><span class="p">,</span><span class="n">covar</span><span class="p">,</span><span class="n">var2</span><span class="p">),</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">)</span>
-
-<span class="c1"># Independent covariance matric</span>
-<span class="n">rho</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">             </span>
-<span class="n">covar</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rho</span><span class="o">*</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var1</span><span class="p">)</span><span class="o">*</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var2</span><span class="p">)</span>
-<span class="n">Sigma_indep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span><span class="n">covar</span><span class="p">,</span><span class="n">covar</span><span class="p">,</span><span class="n">var2</span><span class="p">),</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">)</span>
-
-<span class="c1"># Sample data</span>
-<span class="n">y_dep</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">Sigma</span><span class="o">=</span><span class="n">Sigma_dep</span><span class="p">)</span>
-<span class="n">y_indep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">Sigma</span><span class="o">=</span><span class="n">Sigma_indep</span><span class="p">)</span>
-
-<span class="c1"># Differences</span>
-<span class="n">y_diff_dep</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y_dep</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">   </span><span class="o">-</span><span class="w"> </span><span class="n">y_dep</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span>
-<span class="n">y_diff_indep</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y_indep</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_indep</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span>
-
-<span class="c1"># Plot histograms of differences</span>
-<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y_diff_dep</span><span class="p">,</span><span class="w">   </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-7</span><span class="p">,</span><span class="m">7</span><span class="p">),</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&#39;Condition Difference&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Correlated&#39;</span><span class="p">)</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y_diff_indep</span><span class="p">,</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-7</span><span class="p">,</span><span class="m">7</span><span class="p">),</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&#39;Condition Difference&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Uncorrelated&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/580ecc622665d926f2c7f7281a7cebeb86f539542160bff7ba34ed6e781077e4.png"><img alt="_images/580ecc622665d926f2c7f7281a7cebeb86f539542160bff7ba34ed6e781077e4.png" src="_images/580ecc622665d926f2c7f7281a7cebeb86f539542160bff7ba34ed6e781077e4.png" style="width: 420px; height: 420px;" /></a>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">SE_dep_theory</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="p">(</span><span class="m">-0.8</span><span class="p">))</span><span class="w"> </span><span class="c1"># Theoretical SE</span>
-<span class="n">SE_dep_est</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sd</span><span class="p">(</span><span class="n">y_diff_dep</span><span class="p">)</span><span class="w">         </span><span class="c1"># Estimated SE from simulation</span>
-
-<span class="nf">round</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">SE_dep_theory</span><span class="p">,</span><span class="w"> </span><span class="n">SE_dep_est</span><span class="p">),</span><span class="w"> </span><span class="n">digits</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><style>
-.list-inline {list-style: none; margin:0; padding: 0}
-.list-inline>li {display: inline-block}
-.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
-</style>
-<ol class=list-inline><li>1.897</li><li>1.867</li></ol>
-</div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">SE_indep_theory</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># Theoretical SE</span>
-<span class="n">SE_indep_est</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sd</span><span class="p">(</span><span class="n">y_diff_indep</span><span class="p">)</span><span class="w">  </span><span class="c1"># Estimated SE from simulation</span>
-
-<span class="nf">round</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">SE_indep_theory</span><span class="p">,</span><span class="w"> </span><span class="n">SE_indep_est</span><span class="p">),</span><span class="w"> </span><span class="n">digits</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><style>
-.list-inline {list-style: none; margin:0; padding: 0}
-.list-inline>li {display: inline-block}
-.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
-</style>
-<ol class=list-inline><li>1.414</li><li>1.364</li></ol>
-</div></div>
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-mixed-effects-workshop">
+<h1>Introduction to Mixed-effects Workshop<a class="headerlink" href="#introduction-to-mixed-effects-workshop" title="Link to this heading">#</a></h1>
+<section id="multiple-within-subject-factors-using-lme">
+<h2>Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#multiple-within-subject-factors-using-lme" title="Link to this heading">#</a></h2>
+<section id="multilevel-conceptualisation">
+<h3>Multilevel Conceptualisation<a class="headerlink" href="#multilevel-conceptualisation" title="Link to this heading">#</a></h3>
 </section>
-<section id="try-setting-correlation-to-1-what-happens">
-<h1>Try Setting Correlation to 1. What happens?<a class="headerlink" href="#try-setting-correlation-to-1-what-happens" title="Link to this heading">#</a></h1>
 </section>
-<section id="univariate-conceptualisation">
-<h1>Univariate Conceptualisation<a class="headerlink" href="#univariate-conceptualisation" title="Link to this heading">#</a></h1>
-<p>IS THIS CONUFSING?</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span>
-
-<span class="n">Sigma.Big</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="nf">bdiag</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="n">Sigma</span><span class="p">,</span><span class="n">Sigma</span><span class="p">))</span>
-<span class="n">Mu.Big</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">Mu</span><span class="p">,</span><span class="n">Mu</span><span class="p">,</span><span class="n">Mu</span><span class="p">)</span>
-
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="o">=</span><span class="n">Mu.Big</span><span class="p">,</span><span class="w"> </span><span class="n">Sigma</span><span class="o">=</span><span class="n">Sigma.Big</span><span class="p">)</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.6597696 2.2942266 0.5825903 2.7284908 0.4218907 1.6509818
-</pre></div>
-</div>
-</div>
-</div>
+<section id="within-subject-and-between-subject-factors-using-lme">
+<h2>Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#within-subject-and-between-subject-factors-using-lme" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Multilevel Conceptualisation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 </section>
-<section id="multivariate-normal-distribution-with-2-conditions">
-<h1>Multivariate Normal Distribution with &gt; 2 Conditions<a class="headerlink" href="#multivariate-normal-distribution-with-2-conditions" title="Link to this heading">#</a></h1>
+</section>
+<section id="including-a-weights-structure-in-lme">
+<h2>Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#including-a-weights-structure-in-lme" title="Link to this heading">#</a></h2>
+</section>
+<section id="extracting-the-marginal-covariance-matrix">
+<h2>Extracting the Marginal Covariance Matrix<a class="headerlink" href="#extracting-the-marginal-covariance-matrix" title="Link to this heading">#</a></h2>
+</section>
+<section id="checking-assumptions">
+<h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -695,12 +485,18 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The GLS Covariance Matrix</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-setting-correlation-to-1-what-happens">Try Setting Correlation to 1. What happens?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conceptualisation">Univariate Conceptualisation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-normal-distribution-with-2-conditions">Multivariate Normal Distribution with &gt; 2 Conditions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors-using-lme">Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors-using-lme">Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-marginal-covariance-matrix">Extracting the Marginal Covariance Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+</ul>
   </nav></div>
 
 </div></div>
