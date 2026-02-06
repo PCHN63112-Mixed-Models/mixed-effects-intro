@@ -633,7 +633,7 @@ y_{ij} | \mu_{i} \sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}),
 </div>
 </div>
 </div>
-<p>Where does this value come from? Well, the <em>conditional</em> mean for time-point 1 is given by</p>
+<p>Where does this value come from? Well, the <em>conditional</em> mean for <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> is given by</p>
 <div class="math notranslate nohighlight">
 \[
 E(y_{i1}|\mu_{i}) = \mu_{i} + \alpha_{1},
@@ -648,7 +648,7 @@ E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
 \[
 \mu_{i} \sim \mathcal{N}\left(\mu,\sigma^{2}_{2}\right).
 \]</div>
-<p>So <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>, which is the mean of the Level 2 distribution. Each subject mean is a draw from this distribution and so, on average, these should be equal to <span class="math notranslate nohighlight">\(\mu\)</span>. If we average-over all the subjects, we expect the average value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> to be <span class="math notranslate nohighlight">\(\mu\)</span>. Because of this, the average value for data from time-point 1 should be <span class="math notranslate nohighlight">\(\mu + \alpha_{1}\)</span>. This is the grand mean of all the subjects plus the fixed-effect of time-point 1.</p>
+<p>So <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>, which is the mean of the Level 2 distribution. Each subject mean is a draw from this distribution and so, on average, these should be equal to <span class="math notranslate nohighlight">\(\mu\)</span>. If we average-over all the subjects, we expect the average value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> to be <span class="math notranslate nohighlight">\(\mu\)</span>. Because of this, the average value for data from time-point 1 should be <span class="math notranslate nohighlight">\(\mu + \alpha_{1}\)</span>. This is the grand mean of all the subjects plus the fixed-effect of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code>.</p>
 <p>In the simulations, we set <span class="math notranslate nohighlight">\(\mu = 5\)</span> and <span class="math notranslate nohighlight">\(\alpha_{1} = -2\)</span>. So, on average, a subject from this population will have a mean of 5, which will reduce by 2 during <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code>. So, our distribution for <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> therefore a mean of <span class="math notranslate nohighlight">\(5 + (-2) = 3\)</span>, which is exactly what we see. This is also true of the other time-points. We set <span class="math notranslate nohighlight">\(\alpha_{2} = 1\)</span> and so our expectation across subjects is that the distribution of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">2</span></code> will have a mean of <span class="math notranslate nohighlight">\(5 + 1 = 6\)</span>, which is what we see. Similarly, we set <span class="math notranslate nohighlight">\(\alpha_{3} = 3\)</span> and so our expectation across subjects is that the distribution of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">3</span></code> will have a mean of <span class="math notranslate nohighlight">\(5 + 3 = 8\)</span>, which is again what we see. Importantly, these values are all products of <em>both levels</em> of the data-generating process. This demonstrates how the data are formed from Level 1 <em>and</em> Level 2 combined.</p>
 </section>
 <section id="the-marginal-variance">
@@ -666,42 +666,54 @@ E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
 </div>
 </div>
 </div>
-<p>Where does this come from? …</p>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Formal Version of the Multilevel Variance</p>
-<p>Again, we can state this formally as</p>
+<p>Where does this value come from? Well, the <em>conditional</em> variance for <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> is given by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{2}
-    \text{Var}(y_{ij}) &amp;= \text{Var}(\mu_{i} + \alpha_{j} + \eta_{ij}) \\
-                       &amp;= \text{Var}(\mu_{i} + \eta_{ij}) \\
-                       &amp;= \text{Var}(\mu_{i}) + \text{Var}(\eta_{ij}) &amp;\quad\text{(assuming independence)}  \\
+    \text{Var}(y_{i1}|\mu_{i}) &amp;= \text{Var}(\mu_{i} + \alpha_{1} + \eta_{i1}) \\
+                               &amp;= \text{Var}(\eta_{i1}) \\
+                               &amp;= \sigma^{2}_{1} 
+\end{alignat*}
+\end{split}\]</div>
+<p>because our model says <span class="math notranslate nohighlight">\(\eta_{i1} \sim \mathcal{N}\left(0,\sigma^{2}_{1}\right)\)</span>. Why do both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> disappear? Well, <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> is a <em>population constant</em> and so its value never changes. As such, it is <em>not</em> a random variable and therefore has <em>0 variance</em>. In terms of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, that <em>is</em> a random variable. However, when we calculate the <em>conditional</em> distribution, we are doing that based on <em>one</em> specific subject. This means we <em>fix</em> <span class="math notranslate nohighlight">\(\mu_{i}\)</span> to a specific value and it no longer acts like a random variable. As such, <em>conditionally</em> <span class="math notranslate nohighlight">\(\mu_{i}\)</span> does not vary and thus also has <em>0 variance</em>. We saw this already because the conditional distributions for the example subjects above were based on fixing the value of <code class="docutils literal notranslate"><span class="pre">mu.i</span></code> to one specific value. When we did that, their variance was exactly <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span>.</p>
+<p>Now, what happens when we collapse across subjects? Well, at that point we are not longer fixing the value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. Thus, it still behaves like a <em>random variable</em> and thus contributes its variance to the data. This means that <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> will still drop-out, but <em><span class="math notranslate nohighlight">\(\mu_{i}\)</span> will not</em>. This results in</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    \text{Var}(y_{i1}) &amp;= \text{Var}(\mu_{i} + \alpha_{1} + \eta_{i1}) \\
+                       &amp;= \text{Var}(\mu_{i}) + \text{Var}(\eta_{i1}) \\
+                       &amp;= \text{Var}(\xi_{i}) + \text{Var}(\eta_{i1}) \\
                        &amp;= \sigma^{2}_{1} + \sigma^{2}_{2} 
 \end{alignat*}
 \end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> disappears because it is a <em>fixed constant</em> and thus does not contribute to the variance. Technically, the third equality above is only valid if we assume <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are <em>independent</em>. But this is usually reasonable, so long as the value of the subject mean does not somehow influence the distribution of the within-subject errors.</p>
-</div>
-<p>So, <em>both</em> the mean and the variance of the final data are a <em>combination</em> of both levels. Both levels <em>feed-in</em> to the data and thus we can understand complex data by separating it out into multiple levels of variation that combine to produce what we are actually measuring.</p>
+<p>So, the variance of the marginal distribution is <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2}\)</span>. This means that <em>both</em> levels of the data are contributing to the variance we see in our data. This is <em>exactly</em> what we see in the simulations. There we set <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = 3\)</span>. So we expect that variance of the data will be <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span>. Which is <em>exactly</em> what we saw above.</p>
+<p>More generally, if we think of these as the <em>within-subject</em> variance <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{w}\right)\)</span> and the <em>between-subjects</em> variance <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{b}\right)\)</span> then the variance of our data is a <em>combination</em> of both these sources. So, <span class="math notranslate nohighlight">\(\text{Var}\left(y_{ij}\right) = \sigma^{2}_{w} + \sigma^{2}_{b}\)</span>. The multilevel model simply decomposes <em>where</em> these variance come from. The <em>within-subject</em> variation comes from the conditional distribution of each subject (Level 1), whereas the <em>between-subjects</em> comes from the population distribution (Level 2). So, both the <em>mean</em> and the <em>variance</em> of our measured data are <em>combinations</em> of both levels. This framework therefore allows us to understand complex data by modelling its structure layer-by-layer. Each layer can be very simple, but combined they can capture quite complex patterns in the data.</p>
 </section>
 <section id="the-marginal-covariance-structure">
 <h3>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h3>
-<p>Now, for the party trick. Let us calculate the variance-covariance matrix of the simulated repeated measurements</p>
+<p>Now, for the party trick. During this section of the unit we have spend a lot of time thinking of the covariance structure of the data, yet this has been suspiciously absent so far in this lesson. Now we can start to join-the-dots. To see how, let us calculate and visualise the variance-covariance matrix of the simulated repeated measurements.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span>
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]     [,2]     [,3]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]     [,2]     [,3]
 [1,] 5.007147 3.024842 3.016017
 [2,] 3.024842 5.001325 2.958006
 [3,] 3.016017 2.958006 5.002542
 </pre></div>
 </div>
+<img alt="_images/ff49ca10e467ac7d9ea8951faf589ada79dc749d5be9b4016dce21f9655705a4.png" src="_images/ff49ca10e467ac7d9ea8951faf589ada79dc749d5be9b4016dce21f9655705a4.png" />
 </div>
 </div>
-<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. This is not necessarily surprising, except for the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given correlation structure anywhere in the code above. So where did the correlation come from? This is actually a <em>natural consequence</em> of the algebra of a multilevel model. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but we can see it clearly above.</p>
+<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. Now, this is not necessarily surprising, given that these are repeated measurements. <em>However</em>, consider for a moment the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given covariance structure <em>anywhere</em> in the simulation code. In fact, no value for any correlation was specified. So where did this come from?</p>
+<p>This covariance is, in fact, a <em>natural consequence</em> of how a multilevel model is constructed. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but is one of the big advantages of a multilevel model. We do not need to explicitly model dependence like we did with GLS. Instead, if we specify the structure of the model in terms of its layers, the covariance structure is taken into account <em>automatically</em>. Instead of thinking in terms of covariance structures, we can instead think about data structures. So long as we get the structure right, the correlation will be there as an emergent property of the model. In fact, we do not even need to think about correlation. This is particularly advantageous when we have complex data with more than two levels of variation. So long as we model the levels correctly, a complex covariance structure can simply fall-out of the model automatically.</p>
+<p>The other familiar element here is that this structure is <em>compound symmetric</em>. So the covariance structure that emerges from this model is one of <em>identical</em> variances and <em>identical</em> covariances.</p>
 <ul class="simple">
 <li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
 <li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
