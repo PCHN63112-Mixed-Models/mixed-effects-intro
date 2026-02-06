@@ -395,13 +395,13 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-mean">The Multilevel Mean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-variance">The Multilevel Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-conditional-distributions">Level 1 Conditional Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-distribution-of-the-data">The Marginal Distribution of the Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-mean">The Marginal Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-variance">The Marginal Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
 </ul>
             </nav>
         </div>
@@ -436,8 +436,8 @@
 <span class="n">alpha</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)</span><span class="w">                  </span><span class="c1"># repeated measures effects</span>
 
 <span class="c1"># variances</span>
-<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w">                       </span><span class="c1"># Level 1 (within-subject)</span>
-<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w">                       </span><span class="c1"># Level 2 (between-subjects)</span>
+<span class="n">sigma2.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w">                       </span><span class="c1"># Level 1 (within-subject)</span>
+<span class="n">sigma2.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span><span class="w">                       </span><span class="c1"># Level 2 (between-subjects)</span>
 
 <span class="c1"># empty matrix for y (N x T)</span>
 <span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="n">nrow</span><span class="o">=</span><span class="n">n.subs</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="n">n.t</span><span class="p">)</span>
@@ -469,6 +469,39 @@
 </div>
 </div>
 </div>
+<p>In terms of running the code above, the main outputs are the subject means <code class="docutils literal notranslate"><span class="pre">mu.i</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">mu.i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 6.304773 8.488965 4.384889 8.512890 1.160261 6.313581
+</pre></div>
+</div>
+</div>
+</div>
+<p>and repeated measurement data itself <code class="docutils literal notranslate"><span class="pre">y</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          [,1]     [,2]      [,3]
+[1,]  4.888774 6.123403 10.577235
+[2,]  6.363783 8.602728 11.434999
+[3,]  3.351801 8.032131  8.484494
+[4,]  7.631690 7.439201 12.534746
+[5,] -2.930792 2.173460  4.901289
+[6,]  4.878890 8.034805  9.735553
+</pre></div>
+</div>
+</div>
+</div>
+<p>where each <em>row</em> is a subject and each <em>column</em> is one of the repeated measurement conditions. For simplicity, we will continue to refer to this condition as <code class="docutils literal notranslate"><span class="pre">time</span></code>, but it could of course be anything. Of importance is that we only have <em>one</em> measurement per-subject and per-repeat, so there are no replications here. We can see this in the Level 1 code <code class="docutils literal notranslate"><span class="pre">y[i,j]</span> <span class="pre">&lt;-</span> <span class="pre">rnorm(n=1,</span> <span class="pre">...)</span></code>. This is partly a <em>practical</em> decision to not complicate the indexing, but it does have some ramifications for visualising the model, as we will see below.</p>
 </section>
 <section id="level-2-distribution">
 <h2>Level 2 Distribution<a class="headerlink" href="#level-2-distribution" title="Link to this heading">#</a></h2>
@@ -480,10 +513,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/25eabbd0731d0f5b76c78845d5ca43637b9ff8e56b58ffc3bc284005549949cb.png" src="_images/25eabbd0731d0f5b76c78845d5ca43637b9ff8e56b58ffc3bc284005549949cb.png" />
+<img alt="_images/7a2694199e203d8787921d87ca633f07795694c8908f46976412686af3b0e404.png" src="_images/7a2694199e203d8787921d87ca633f07795694c8908f46976412686af3b0e404.png" />
 </div>
 </div>
-<p>This represents our <em>population</em> of subjects. Each values on the <span class="math notranslate nohighlight">\(x\)</span>-axis represents an average value of our outcome variable for each subject. If we take one value from this distribution, we are sampling a <em>single</em> subject as a whole. The <em>width</em> of this distribution therefore represents variation <em>between</em> the subjects. It tells us how much we expect the subjects to differ from each other on average. In the simulations, we set <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = 2\)</span> and indeed we find that</p>
+<p>This represents our <em>population</em> of subjects. Each values on the <span class="math notranslate nohighlight">\(x\)</span>-axis represents an average value of our outcome variable for each subject. If we take one value from this distribution, we are sampling a <em>single</em> subject as a whole. The <em>width</em> of this distribution therefore represents variation <em>between</em> the subjects. It tells us how much we expect the subjects to differ from each other on average. In the simulations, we set <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = 3\)</span> and indeed we find that</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">mu.i</span><span class="p">)</span>
@@ -491,16 +524,22 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.999054
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 2.998582
 </pre></div>
 </div>
 </div>
 </div>
-<p>which is basically 2. Importantly, the elements of this distribution are taken as <em>independent</em> because each subject is assumed not to influence the response given by any other subject. This is implicit in the simulations because the vector of subject means are created as <em>independent</em> random draws from a normal distribution. In reality, this is an <em>assumption</em>, though usually a fairly reasonable one.</p>
+<p>which is basically 3. Importantly, the elements of this distribution are taken as <em>independent</em> because each subject is assumed not to influence the response given by any other subject. This is implicit in the simulations because the vector of subject means are created as <em>independent</em> random draws from a normal distribution. In reality, this is an <em>assumption</em>, though usually a fairly reasonable one.</p>
 </section>
-<section id="level-1-distributions">
-<h2>Level 1 Distributions<a class="headerlink" href="#level-1-distributions" title="Link to this heading">#</a></h2>
-<p>Next, let us focus on the Level 1 simulations. For this example, we only simulated <em>one value</em> per-subject and per-repeated measurement. Because of this, we have no way of <em>seeing</em> the Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. All we have is a single value from each one. So, what we can do instead is create some examples of these distributions by re-drawing a large number of simulated values. In the code below, we choose some random subject indices and then, for each of these subject, simulate 5,000 values from their distribution for each time-point. The results of doing this are shown in the plots below. The three example subjects are given in the columns, with the distributions for time-point shown in rows. These are now examples of the the Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. In that illustration, we used <span class="math notranslate nohighlight">\(t = 2\)</span>, but in the simulations we have used <span class="math notranslate nohighlight">\(t = 3\)</span> just to show how the framework generalises to any number of repeated measurements.</p>
+<section id="level-1-conditional-distributions">
+<h2>Level 1 Conditional Distributions<a class="headerlink" href="#level-1-conditional-distributions" title="Link to this heading">#</a></h2>
+<p>Next, let us focus on the Level 1 simulations. Remember that, for this example, we only simulated <em>one value</em> per-subject and per-repeated measurement. Because of this, we have no way of <em>seeing</em> the Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>. Remember, these distributions are <em>subject-specific</em>. Every subject at every level of <code class="docutils literal notranslate"><span class="pre">time</span></code> has a distribution with a <em>unique</em> mean value. Formally, these are known as <em>conditional</em> distributions because they depend upon a specific subject. We would write</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} | \mu_{i} \sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}),
+\]</div>
+<p>which expresses the idea that this is the distribution of <span class="math notranslate nohighlight">\(y_{ij}\)</span>, but <em>only</em> for subject <span class="math notranslate nohighlight">\(i\)</span> with a mean of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. Unfortunately, for these simulations, all we have is a <em>single</em> value from each one of these distributions. So we could <em>try</em> and plot them, but histograms drawn using a single datapoint do not tend to be particularly useful.</p>
+<p>So, what we can do instead is run some additional simulations on specific subjects to generate enough values for visualisation. In the code below, we choose some random subject indices and then, for each of these subject, simulate 5,000 values from their distribution for each time-point. The results of doing this are then shown in the plots below. The three example subjects are given in the columns, with the distributions for time-point shown in rows. These are now examples of the conditional Level 1 distributions from <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -520,11 +559,12 @@
 <span class="w">    </span><span class="c1"># subject index</span>
 <span class="w">    </span><span class="n">sub.idx</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<span class="w">    </span><span class="c1"># Level 1 distribution</span>
-<span class="w">    </span><span class="n">sub.dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">5000</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">sub.idx</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.2</span><span class="p">))</span>
+<span class="w">    </span><span class="c1"># Level 1 distribution (n=5000 now rather than n=1)</span>
+<span class="w">    </span><span class="n">sub.dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">5000</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.i</span><span class="p">[</span><span class="n">sub.idx</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2.1</span><span class="p">))</span>
 <span class="w">    </span>
 <span class="w">    </span><span class="c1"># plot the distribution</span>
-<span class="w">    </span><span class="nf">hist</span><span class="p">(</span><span class="n">sub.dist</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Subject &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sub.idx</span><span class="p">,</span><span class="w"> </span><span class="s">&#39; (mu.i = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">mu.i</span><span class="p">[</span><span class="n">sub.idx</span><span class="p">]),</span><span class="w"> </span><span class="s">&#39;)&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="nf">hist</span><span class="p">(</span><span class="n">sub.dist</span><span class="p">,</span><span class="w"> </span>
+<span class="w">         </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Sub &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sub.idx</span><span class="p">,</span><span class="w"> </span><span class="s">&#39; (mu.i=&#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">mu.i</span><span class="p">[</span><span class="n">sub.idx</span><span class="p">]),</span><span class="w"> </span><span class="s">&#39;)\nmean=&#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">sub.dist</span><span class="p">)),</span><span class="w"> </span><span class="s">&#39; var=&#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="n">sub.dist</span><span class="p">))</span><span class="w"> </span><span class="p">),</span>
 <span class="w">         </span><span class="n">xlab</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Time &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">),</span><span class="w"> </span><span class="n">breaks</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -533,42 +573,54 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="_images/ac2774da21f0c25e29181c4adb4f2f3e1485544c2d19faa3d039634a30875491.png" src="_images/ac2774da21f0c25e29181c4adb4f2f3e1485544c2d19faa3d039634a30875491.png" />
+<img alt="_images/782cddb580bbfc31a4a02ab19825e129ab4eff8a312377f20d1575ecfcea496f.png" src="_images/782cddb580bbfc31a4a02ab19825e129ab4eff8a312377f20d1575ecfcea496f.png" />
 </div>
 </div>
-<p>There are some key things to notice here. Firstly, each subject has a different scaling along the <span class="math notranslate nohighlight">\(x\)</span>-axis, even under the the same conditions. So these three subjects do differ in terms of their measurements, even at the same time-point. However, we conceptualise this as a combination of a <em>subject-specific mean</em> and a <em>universal effect of time</em>. For instance, notice that the mean of each distribution for Time 1 is always 2 below the mean of the subject. So, Subject 5 has <span class="math notranslate nohighlight">\(\mu_{i} = 2\)</span> and their average response in Time 1 is <span class="math notranslate nohighlight">\(2 - 2 = 0\)</span>. Similarly, Subject 722 has <span class="math notranslate nohighlight">\(\mu_{i} = 5\)</span> and their average response in Time 1 is <span class="math notranslate nohighlight">\(5 - 2 = 3\)</span>. So, no matter the subject, their response can be conceptualised as their own personal mean <em>plus</em> a constant effect of time. This captures the idea that, even though the subject responses all appear different, we can still learn about the effects of time by pooling information from across them.</p>
+<p>Notice that each one of these distributions has a <em>different mean</em> (indicated by <code class="docutils literal notranslate"><span class="pre">mean=</span></code> in the histogram titles). Even if they are from the <em>same subject</em> or from the <em>same time-point</em>. This is the essence of <em>conditional</em> distributions, because the mean depends upon <em>both</em> the time-point and the subject in question. For any one of the subjects and time-points, the distribution is given by</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} | \mu_{i} \sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}),
+\]</div>
+<p>so the <em>variance</em> is always the same, but the <em>mean</em> is a combination of something specific to that subject <span class="math notranslate nohighlight">\(\left(\mu_{i}\right)\)</span> and something <em>universal</em> across measurements from the same time-point <span class="math notranslate nohighlight">\(\left(\alpha_{j}\right)\)</span>. In the simulations, we set <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span> and that is indeed what we see above (indicated by <code class="docutils literal notranslate"><span class="pre">var=</span></code> in the histogram titles). So this is the meaning of the <em>within-subject</em> variance, capturing the variability in measurements from <em>within a single subject</em>.</p>
+<p>In terms of the means, notice that each distribution for <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> has a mean that is always 2 below the mean of the subject. So, Subject 5 has <code class="docutils literal notranslate"><span class="pre">mu.i=1</span></code> and their average response in Time 1 is <span class="math notranslate nohighlight">\(1 - 2 = -1\)</span>. Similarly, Subject 722 has <code class="docutils literal notranslate"><span class="pre">mu.i=5</span></code> and their average response in Time 1 is <span class="math notranslate nohighlight">\(5 - 2 = 3\)</span>. This is not a surprise, because in the simulations we set <code class="docutils literal notranslate"><span class="pre">alpha[1]</span> <span class="pre">&lt;-</span> <span class="pre">-2</span></code>. So, no matter the subject, the average effect of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> is always the same. What changes is the individual subject’s mean. This dictates the <em>scaling</em> of the measurements for that subject. Some people will just have lower values in general, whereas some people will just have higher values in general. We imagine that, on average, <code class="docutils literal notranslate"><span class="pre">time</span></code> affects every person in the same way, they just all start in a different place.</p>
 </section>
-<section id="final-simulated-data">
-<h2>Final Simulated Data<a class="headerlink" href="#final-simulated-data" title="Link to this heading">#</a></h2>
-<p>Finally, let us have a look at the actual data that has been simulated <em>across</em> all the subjects. This has been generated as a <em>combination</em> of both levels and thus both levels will contribute to what we will see. The final distributions are what we imagine we are measuring in our experiment, so they can be thought of as the distributions we are sampling from within each cell of our design. Using the code above, this results in 10,000 simulated values for each time-point, as shown in the histograms below.</p>
-<div class="cell docutils container">
+<section id="the-marginal-distribution-of-the-data">
+<h2>The Marginal Distribution of the Data<a class="headerlink" href="#the-marginal-distribution-of-the-data" title="Link to this heading">#</a></h2>
+<p>Finally, let us have a look at the actual data that has been simulated <em>across</em> all the subjects. Here, we are not focussing on any single subject. Instead we have <em>collapsed</em> over all subjects. Formally, this is referred to as the <em>marginal</em> distribution, because we are looking at values averaged across all the subjects<a class="footnote-reference brackets" href="#marginal-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. In general, the multilevel model works by decomposing the marginal distribution into a conditional distribution (Level 1) and a population distribution (Level 2). As such, the marginal distribution of the data is a combination of <em>both</em> Level 1 and Level 2. We can examine the results of the simulations to see how this has happened.</p>
+<p>To begin with, we can plot the marginal distributions of each time-point from the simulations. Remember, these show the values of <em>all</em> subjects within each of the time-points. This is effectively the data for each <em>cell</em> of the design.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 2)&#39;</span><span class="p">)</span>
-<span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">3</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 3)&#39;</span><span class="p">)</span>
-<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">){</span>
+<span class="w">  </span><span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Time &#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s">&#39;\nmean=&#39;</span><span class="p">,</span><span class="nf">round</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="n">i</span><span class="p">])),</span><span class="s">&#39; var=&#39;</span><span class="p">,</span><span class="nf">round</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="n">i</span><span class="p">]))))</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<img alt="_images/f48e7f63bdd2fddad2960631604dcb5f3bed19c1caf9a5052b4d7b8b0366523b.png" src="_images/f48e7f63bdd2fddad2960631604dcb5f3bed19c1caf9a5052b4d7b8b0366523b.png" />
+<img alt="_images/615eef42ad231cd948d7fa6db26989eb4bb9545ebaa6328eaba5301da92aaa9e.png" src="_images/615eef42ad231cd948d7fa6db26989eb4bb9545ebaa6328eaba5301da92aaa9e.png" />
 </div>
 </div>
-<p>To understand these distributions, we will focus on <code class="docutils literal notranslate"><span class="pre">Level</span> <span class="pre">1</span> <span class="pre">(Time</span> <span class="pre">1)</span></code>, which is shown in isolation below.</p>
+<p>To understand what these distributions are telling us about the multilevel model, we will focus on <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code>, which is shown in isolation below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Level 1 (Time 1)&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">hist</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Time 1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" src="_images/816713400959eb20d15fa25fc47031fc761e1389ca96e2d845f940067d76d64b.png" />
+<img alt="_images/aea8e851e809a5cb0d62a7392d0ac4d82fe395b148782d2d8118d3c8b3304aec.png" src="_images/aea8e851e809a5cb0d62a7392d0ac4d82fe395b148782d2d8118d3c8b3304aec.png" />
 </div>
 </div>
-<section id="the-multilevel-mean">
-<h3>The Multilevel Mean<a class="headerlink" href="#the-multilevel-mean" title="Link to this heading">#</a></h3>
-<p>The mean of this distribution is</p>
+<section id="the-marginal-mean">
+<h3>The Marginal Mean<a class="headerlink" href="#the-marginal-mean" title="Link to this heading">#</a></h3>
+<p>We will start by understanding the <em>mean</em> of this distribution. This is given by</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span>
@@ -576,30 +628,32 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3.051811
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3.051084
 </pre></div>
 </div>
 </div>
 </div>
-<p>Where does this value come from? Well, on average we expect the subject means to be equal to <span class="math notranslate nohighlight">\(\mu\)</span>, because this is the mean of the Level 2 distribution. In the simulations we set <span class="math notranslate nohighlight">\(\mu = 5\)</span>, so the average subject from the population should have a mean equal to 5. Then, we set the fixed effect for Time 1 to be <span class="math notranslate nohighlight">\(\alpha_{1} = -2\)</span>. So the true deviation from the mean for Time 1 is equal to -2. So, on average a subject from this population will have a mean of 5, which will reduce by 2 during Time 1. So, our distribution for Time 1 has a mean of <span class="math notranslate nohighlight">\(5 + (-2) = 3\)</span>, which is exactly what we see. Importantly, this is a product of <em>both levels</em> of the data-generating process. This is how the data are formed from Level 1 <em>and</em> Level 2 combined.</p>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Formal Version of the Multilevel Mean</p>
-<p>We can also see this formally, rather than relying on simulation. If we work out the expected value of our data, given our model, we get</p>
+<p>Where does this value come from? Well, the <em>conditional</em> mean for time-point 1 is given by</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-    E(y_{ij}) &amp;= E(\mu_{i}  + \alpha_{j} + \eta_{ij}) \\ 
-              &amp;= E(\mu_{i}) + E(\alpha_{j}) + E(\eta_{ij}) \\
-              &amp;= E(\mu_{i}) + \alpha_{j} \\ 
-              &amp;= \mu        + \alpha_{j}.
-\end{alignat*}
-\end{split}\]</div>
-<p>Because <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>, its expected value is just equal to itself. Its value never changes, so its average over repeated sampling is just equal to its original value. <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is error with <span class="math notranslate nohighlight">\(E(\eta_{ij}) = 0\)</span>, so it falls-out. This only leaves the expected value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>, which comes from the Level 2 distribution whose mean is <span class="math notranslate nohighlight">\(\mu\)</span>. Hence <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>.</p>
-</div>
+\[
+E(y_{i1}|\mu_{i}) = \mu_{i} + \alpha_{1},
+\]</div>
+<p>so this will jump around from subject-to-subject because the value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> will keep changing. However, if we collapse across subjects, we get</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
+\]</div>
+<p>Why? Because on average we expect the subject means to be equal to <span class="math notranslate nohighlight">\(\mu\)</span>. Why? Because our model says</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{i} \sim \mathcal{N}\left(\mu,\sigma^{2}_{2}\right).
+\]</div>
+<p>So <span class="math notranslate nohighlight">\(E(\mu_{i}) = \mu\)</span>, which is the mean of the Level 2 distribution. Each subject mean is a draw from this distribution and so, on average, these should be equal to <span class="math notranslate nohighlight">\(\mu\)</span>. If we average-over all the subjects, we expect the average value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> to be <span class="math notranslate nohighlight">\(\mu\)</span>. Because of this, the average value for data from time-point 1 should be <span class="math notranslate nohighlight">\(\mu + \alpha_{1}\)</span>. This is the grand mean of all the subjects plus the fixed-effect of time-point 1.</p>
+<p>In the simulations, we set <span class="math notranslate nohighlight">\(\mu = 5\)</span> and <span class="math notranslate nohighlight">\(\alpha_{1} = -2\)</span>. So, on average, a subject from this population will have a mean of 5, which will reduce by 2 during <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code>. So, our distribution for <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">1</span></code> therefore a mean of <span class="math notranslate nohighlight">\(5 + (-2) = 3\)</span>, which is exactly what we see. This is also true of the other time-points. We set <span class="math notranslate nohighlight">\(\alpha_{2} = 1\)</span> and so our expectation across subjects is that the distribution of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">2</span></code> will have a mean of <span class="math notranslate nohighlight">\(5 + 1 = 6\)</span>, which is what we see. Similarly, we set <span class="math notranslate nohighlight">\(\alpha_{3} = 3\)</span> and so our expectation across subjects is that the distribution of <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">3</span></code> will have a mean of <span class="math notranslate nohighlight">\(5 + 3 = 8\)</span>, which is again what we see. Importantly, these values are all products of <em>both levels</em> of the data-generating process. This demonstrates how the data are formed from Level 1 <em>and</em> Level 2 combined.</p>
 </section>
-<section id="the-multilevel-variance">
-<h3>The Multilevel Variance<a class="headerlink" href="#the-multilevel-variance" title="Link to this heading">#</a></h3>
-<p>What about its variance? We can calculate this from the simulations</p>
+<section id="the-marginal-variance">
+<h3>The Marginal Variance<a class="headerlink" href="#the-marginal-variance" title="Link to this heading">#</a></h3>
+<p>What about the <em>variance</em> of the marginal distribution? Again, we can calculate this from the simulations</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="n">y</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span>
@@ -607,7 +661,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 4.976936
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5.007147
 </pre></div>
 </div>
 </div>
@@ -629,9 +683,8 @@
 </div>
 <p>So, <em>both</em> the mean and the variance of the final data are a <em>combination</em> of both levels. Both levels <em>feed-in</em> to the data and thus we can understand complex data by separating it out into multiple levels of variation that combine to produce what we are actually measuring.</p>
 </section>
-</section>
-<section id="covariance-structure-of-the-simulated-data">
-<h2>Covariance Structure of the Simulated Data<a class="headerlink" href="#covariance-structure-of-the-simulated-data" title="Link to this heading">#</a></h2>
+<section id="the-marginal-covariance-structure">
+<h3>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h3>
 <p>Now, for the party trick. Let us calculate the variance-covariance matrix of the simulated repeated measurements</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -641,9 +694,9 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]     [,2]     [,3]
-[1,] 4.976936 2.022251 2.014644
-[2,] 2.022251 5.005747 1.946399
-[3,] 2.014644 1.946399 5.018832
+[1,] 5.007147 3.024842 3.016017
+[2,] 3.024842 5.001325 2.958006
+[3,] 3.016017 2.958006 5.002542
 </pre></div>
 </div>
 </div>
@@ -655,6 +708,14 @@
 <li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
 <li><p>This structure implies a compound-symmetric covariance matrix</p></li>
 </ul>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="marginal-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The origin of this term is the same as <em>marginal means</em> in ANOVA tables. We are effectively <em>collapsing</em> over a specific dimension which, traditionally, would be performed by writing totals in the <em>margins</em> of a table.</p>
+</aside>
+</aside>
+</section>
 </section>
 </section>
 
@@ -725,13 +786,13 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-distributions">Level 1 Distributions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-simulated-data">Final Simulated Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-mean">The Multilevel Mean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multilevel-variance">The Multilevel Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-conditional-distributions">Level 1 Conditional Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-distribution-of-the-data">The Marginal Distribution of the Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-mean">The Marginal Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-variance">The Marginal Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-structure-of-the-simulated-data">Covariance Structure of the Simulated Data</a></li>
 </ul>
   </nav></div>
 
