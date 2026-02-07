@@ -394,12 +394,13 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-population-distribution">Level 2 Population Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-conditional-distributions">Level 1 Conditional Distributions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-distribution-of-the-data">The Marginal Distribution of the Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-mean">The Marginal Mean</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-variance">The Marginal Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-the-between-subjects-variance-also-the-covariance">Why is the Between-subjects Variance also the Covariance?</a></li>
 </ul>
 </li>
 </ul>
@@ -503,8 +504,8 @@
 </div>
 <p>where each <em>row</em> is a subject and each <em>column</em> is one of the repeated measurement conditions. For simplicity, we will continue to refer to this condition as <code class="docutils literal notranslate"><span class="pre">time</span></code>, but it could of course be anything. Of importance is that we only have <em>one</em> measurement per-subject and per-repeat, so there are no replications here. We can see this in the Level 1 code <code class="docutils literal notranslate"><span class="pre">y[i,j]</span> <span class="pre">&lt;-</span> <span class="pre">rnorm(n=1,</span> <span class="pre">...)</span></code>. This is partly a <em>practical</em> decision to not complicate the indexing, but it does have some ramifications for visualising the model, as we will see below.</p>
 </section>
-<section id="level-2-distribution">
-<h2>Level 2 Distribution<a class="headerlink" href="#level-2-distribution" title="Link to this heading">#</a></h2>
+<section id="level-2-population-distribution">
+<h2>Level 2 Population Distribution<a class="headerlink" href="#level-2-population-distribution" title="Link to this heading">#</a></h2>
 <p>To begin with, let us have a look at the simulated distribution of subject means. This is the Level 2 distribution, illustrated back in <a class="reference internal" href="2.multilevel-framework.html#multilevel-fig"><span class="std std-numref">Fig. 1</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -688,10 +689,15 @@ E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
 \end{split}\]</div>
 <p>So, the variance of the marginal distribution is <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2}\)</span>. This means that <em>both</em> levels of the data are contributing to the variance we see in our data. This is <em>exactly</em> what we see in the simulations. There we set <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = 3\)</span>. So we expect that variance of the data will be <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span>. Which is <em>exactly</em> what we saw above.</p>
 <p>More generally, if we think of these as the <em>within-subject</em> variance <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{w}\right)\)</span> and the <em>between-subjects</em> variance <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{b}\right)\)</span> then the variance of our data is a <em>combination</em> of both these sources. So, <span class="math notranslate nohighlight">\(\text{Var}\left(y_{ij}\right) = \sigma^{2}_{w} + \sigma^{2}_{b}\)</span>. The multilevel model simply decomposes <em>where</em> these variance come from. The <em>within-subject</em> variation comes from the conditional distribution of each subject (Level 1), whereas the <em>between-subjects</em> comes from the population distribution (Level 2). So, both the <em>mean</em> and the <em>variance</em> of our measured data are <em>combinations</em> of both levels. This framework therefore allows us to understand complex data by modelling its structure layer-by-layer. Each layer can be very simple, but combined they can capture quite complex patterns in the data.</p>
+<div class="tip admonition">
+<p class="admonition-title">Intuition About Sources of Variance</p>
+<p>Although the information given above is dressed up very formally, the insight itself is actually very simple and intuitive. If you take a friend and measure them several times, do you expect the response to be <em>identical</em> each time? Probably not, because there are random factors at play that will shift the response each time. The measurements may be very <em>similar</em> but they will not be <em>identical</em>. Now imagine that you do the same with another friend. Again, the measurements will differ, no matter how subtly, every time they are taken. Now collapse those two sets of measurements together. The data you have now contains <em>two</em> sources of variation. The first is the variation you have already noticed in terms of repeated measurements within each of your friends. However, you have also introduced a <em>second</em> source by collapsing the data together. The fact that these measurements were taken from <em>two</em> different people will also be a clear source of variation. Perhaps one friend consistently measures <em>lower</em> than the other? So now you have variation caused by inconsistencies <em>within</em> each of your friends, but also inconsistencies <em>between</em> each of your friends as well.</p>
+</div>
 </section>
 <section id="the-marginal-covariance-structure">
 <h3>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h3>
-<p>Now, for the party trick. During this section of the unit we have spend a lot of time thinking of the covariance structure of the data, yet this has been suspiciously absent so far in this lesson. Now we can start to join-the-dots. To see how, let us calculate and visualise the variance-covariance matrix of the simulated repeated measurements.</p>
+<p>Now, for the party trick.</p>
+<p>During this section of the unit, we have spent a lot of time discussing the covariance structure of the data. Yet this has been suspiciously absent so far in this lesson. Now we can start to join-the-dots. To see how, let us calculate and visualise the variance-covariance matrix of our simulated repeated measurements.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span>
@@ -711,15 +717,49 @@ E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
 <img alt="_images/ff49ca10e467ac7d9ea8951faf589ada79dc749d5be9b4016dce21f9655705a4.png" src="_images/ff49ca10e467ac7d9ea8951faf589ada79dc749d5be9b4016dce21f9655705a4.png" />
 </div>
 </div>
-<p>Notice anything familiar here? For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. Now, this is not necessarily surprising, given that these are repeated measurements. <em>However</em>, consider for a moment the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given covariance structure <em>anywhere</em> in the simulation code. In fact, no value for any correlation was specified. So where did this come from?</p>
+<p>Does this look familiar?</p>
+<p>For starters, the simulated values of <code class="docutils literal notranslate"><span class="pre">time</span></code> are <em>correlated</em>. Now, this is not necessarily surprising, given that these are repeated measurements. <em>However</em>, consider for a moment the fact that <em>we did not simulate any correlation</em>. There is no multivariate normal distribution with a given covariance structure <em>anywhere</em> in the simulation code. In fact, no value for any correlation was specified. So where did this come from?</p>
 <p>This covariance is, in fact, a <em>natural consequence</em> of how a multilevel model is constructed. We do not need to specify correlation because it happens <em>automatically</em> as part of the connection between the levels of the model. This feels a bit like a magic trick, but is one of the big advantages of a multilevel model. We do not need to explicitly model dependence like we did with GLS. Instead, if we specify the structure of the model in terms of its layers, the covariance structure is taken into account <em>automatically</em>. Instead of thinking in terms of covariance structures, we can instead think about data structures. So long as we get the structure right, the correlation will be there as an emergent property of the model. In fact, we do not even need to think about correlation. This is particularly advantageous when we have complex data with more than two levels of variation. So long as we model the levels correctly, a complex covariance structure can simply fall-out of the model automatically.</p>
-<p>The other familiar element here is that this structure is <em>compound symmetric</em>. So the covariance structure that emerges from this model is one of <em>identical</em> variances and <em>identical</em> covariances.</p>
+<p>The other familiar element here is that this structure is <em>compound symmetric</em>. So, the covariance structure that emerges from this model is one of <em>identical</em> variances and <em>identical</em> covariances. The variances themselves, along the diagonal, are all <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 5\)</span>. This fits with what we saw in the histograms of the marginal distributions of the data above. The variance of our data is a <em>combination</em> of the variances at the two-levels of the model. In other words, the sum of the <em>within-subject</em> and the <em>between-subjects</em> variance.</p>
+<p>What about the <em>covariances</em> on the off-diagonal? Well, these all have a value of approximately 3. What did we set to 3 in the simulations? This is the value of <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span>. In other words, the <em>between-subjects</em> variance. So, given what the simulations have shown us, we can conclude that</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Cov}\left(y_{ij},y_{ij^{\prime}}\right) = \sigma^{2}_{2} = \sigma^{2}_{b}.
+\]</div>
+<p>This can also be derived formally, but the simulations make it much clearer that this is <em>exactly</em> what happens.</p>
+</section>
+<section id="why-is-the-between-subjects-variance-also-the-covariance">
+<h3>Why is the Between-subjects Variance also the Covariance?<a class="headerlink" href="#why-is-the-between-subjects-variance-also-the-covariance" title="Link to this heading">#</a></h3>
+<p>The result that the covariance between the repeated measures <em>is</em> the between-subjects variance may not be immediately intuitive. In order to see this, remember that the element that <em>connects</em> the measurements from within a single subject is the subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. This is the element that shifts the responses for a single subject up or down in one go. So, the only reason why the measures are correlated is because of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. The more the values of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> shift, the larger the correlation. This implies that it is the <em>variance</em> of <span class="math notranslate nohighlight">\(\mu_{i}\)</span> that controls the degree of correlation. So what is the variance of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>? Well, according to our model <span class="math notranslate nohighlight">\(\mu_{i} \sim \mathcal{N}(\mu,\sigma^{2}_{2})\)</span>. So therefore, the correlation is directly controlled by <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span>. In other words, <em>the between-subjects variance</em>.</p>
+<p>This can be confusing to wrap your head around, so the plot below shows an example of both <em>large</em> between-subject variance and <em>small</em> between-subject variance and how this affects correlation. The plots on the <em>left</em> show each subject along the <span class="math notranslate nohighlight">\(x\)</span>-axis, with their mean response (black circles) and two repeated measurements (white circles) illustrated. The plots on the <em>right</em> then show the correlation pattern between these two repeats across subjects.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/42ff834faf3e0559f9705febe433d5a813e517ba2971d1b05cd50e6a79363fb7.png" src="_images/42ff834faf3e0559f9705febe433d5a813e517ba2971d1b05cd50e6a79363fb7.png" />
+</div>
+</div>
+<p>So we can see that <em>high between-subjects variance</em> is directly associated with <em>strong correlation</em> and <em>low between-subjects variance</em> is directly associated with <em>weak correlation</em>. Indeed, the <em>correlation</em> between two measurements from the same subject is given by</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Corr}\left(y_{ij},y_{ij^{\prime}}\right) = \frac{\sigma^{2}_{2}}{\sigma^{2}_{1} + \sigma^{2}_{2}} = \frac{\sigma^{2}_{b}}{\sigma^{2}_{b} + \sigma^{2}_{w}}.
+\]</div>
+<p>This is also known as the <em>intraclass correlation coefficient</em> (ICC) and depends directly upon <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>.</p>
+<p>Another way to look at this is ordering the subjects by their mean value. This results in the plots below.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/d48e96bfe6c99049485813ab5bb0491ce20644d7650acbb2631fa125144b09d8.png" src="_images/d48e96bfe6c99049485813ab5bb0491ce20644d7650acbb2631fa125144b09d8.png" />
+</div>
+</div>
+<p>Now, consider our ability to predict one repeated measurement based on the other. Looking at the <em>left</em> plot, if the first measurement is <em>high</em> then we can predict with reasonable certainty that the second measurement will also be <em>high</em>. The same is true of <em>low</em> values and <em>middle</em> values. So when the subjects are <em>spread-out</em>, we can much more easily predict one measurement from the other. This is the <em>definition</em> of high correlation. Looking at the <em>right</em> plot, if the first measurement is <em>high</em> then our ability to accurately predict the second is diminished. Yes, some of the <em>high</em> values are associated with other <em>high</em> values, but some are associated with <em>low</em> values. Although there is <em>some</em> pattern here, because the subjects are so squashed together, this is much less certain than in the the <em>left</em> plot. This is the <em>definition</em> of low correlation.</p>
+<p>So, we can see here that the <em>spread</em> of the subjects directly impacts our ability to predict one value from the other and therefore is <em>directly</em> related to the correlation between the repeated measurements. Hence it is the variability in the subject means that dictates the degree of correlation between our measurements. The simulations have told us this <em>explicitly</em> and so it <em>must</em> be true. It is just up to us to understand <em>why</em> this is the case, even if it feels unintuitive.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored … . After reading this section, you should have a good sense of :</p>
 <ul class="simple">
-<li><p>Multilevel structure creates correlation naturally, without specifying any form of variance-covariance matrix</p></li>
-<li><p>Diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} + \sigma^{2}_{2} = 2 + 3 = 5\)</span></p></li>
-<li><p>Off-diagonal elements are <span class="math notranslate nohighlight">\(\sigma^{2}_{1} = 2\)</span></p></li>
-<li><p>This structure implies a compound-symmetric covariance matrix</p></li>
+<li><p>…</p></li>
+<li><p>…</p></li>
+<li><p>…</p></li>
 </ul>
+</aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="marginal-foot" role="note">
@@ -797,12 +837,13 @@ E(y_{i1}) = E(\mu_{i}) + \alpha_{1} = \mu + \alpha_{1}.
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-code">Simulation Code</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-distribution">Level 2 Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2-population-distribution">Level 2 Population Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1-conditional-distributions">Level 1 Conditional Distributions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-distribution-of-the-data">The Marginal Distribution of the Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-mean">The Marginal Mean</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-variance">The Marginal Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-the-between-subjects-variance-also-the-covariance">Why is the Between-subjects Variance also the Covariance?</a></li>
 </ul>
 </li>
 </ul>
