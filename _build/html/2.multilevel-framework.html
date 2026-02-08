@@ -725,8 +725,8 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 \begin{alignat*}{2}
     y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}             &amp;\quad\text{Level 1} \\
     \mu_{i}   &amp;= \mu + \xi_{i}                                &amp;\quad\text{Level 2} \\
-    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right)  &amp;\\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right), &amp;\\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right), &amp;\\
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right)  &amp;\\
 \end{alignat*}
 \end{split}\]</div>
 <p>where we have added a new error term <span class="math notranslate nohighlight">\(\xi_{i}\)</span><a class="footnote-reference brackets" href="#xi-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> at Level 2. When written this way, we can see that actually what we have is two models containing <em>two error terms</em>. Each of these error terms captures a different form of <em>random deviation</em> and thus a different <em>source of variance</em>. We can understand this more by discussing each level in turn.</p>

@@ -393,11 +393,15 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-our-hierarchy">Why Collapse Our Hierarchy?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">From Multilevel to Mixed-effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-a-multilevel-models-into-a-mixed-effects-model">Turning a Multilevel Models into a Mixed-effects Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-existing-multilevel-model">The Existing Multilevel Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mixed-effects-trick">The Mixed-effects Trick</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioned-errors-perspective">Partitioned Errors Perspective</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-the-hierarchy">Why Collapse the Hierarchy?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-nlme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme4">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
@@ -418,43 +422,101 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="from-multilevel-to-mixed-effects">
 <h1>From Multilevel to Mixed-effects<a class="headerlink" href="#from-multilevel-to-mixed-effects" title="Link to this heading">#</a></h1>
-<p>…</p>
-<section id="why-collapse-our-hierarchy">
-<h2>Why Collapse Our Hierarchy?<a class="headerlink" href="#why-collapse-our-hierarchy" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>The model is always estimated as a single unit, with the levels informing each other</p></li>
-<li><p>Multilevel implies that we can estimate each level separately, which loses the whole advantage of this framework (this is known as a <em>summary statistics</em> approach)</p></li>
-<li><p>Software is harder to write in a multilevel fashion (though it does exist e.g. MLM, MLwin), whereas a single function call for a single model fits happily inside the usual <code class="docutils literal notranslate"><span class="pre">R</span></code> approach</p></li>
-</ul>
-<p>So we can think, very broadly, that the hierarchical perspective is useful <em>intuitively</em>, but the mixed-effects perspective is useful <em>practically</em>.</p>
-</section>
-<section id="id1">
-<h2>From Multilevel to Mixed-effects<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<p>… So, the key here is recognising that we can collapse the two equations</p>
+<p>In the previous parts of this lesson we focussed on the multilevel framework. The argument was that this is more intuitive because we can break complex complex data structures into different levels of variation. This allows us to think hierarchically about where data comes from, building up our complexity layer-by-layer. We saw this when we focussed on modelling just a single subject as our experimental unit of interest. We then built in more subjects and expanded the model logically until we came to the multilevel representation. Importantly, this was all based on capturing the <em>data structure</em>, rather than thinking in terms of the <em>covariance structure</em>. Unlike GLS, where we had to reason about the form of the variance-covariance matrix, the covariance structure in the multilevel model was an emergent property of its structure. In a way, we did not need to worry about correlation, as it was taken into account <em>automatically</em>. All we needed to think about was the data structure and the rest followed.</p>
+<p>Although this focus on <em>data structure</em> can be more intuitive, it is not how these types of models are typically fit in practice. Now, this is not so much a <em>technical</em> limitation as it is a decision about <em>perspective</em>. Software for explicitly fitting multilevel models does exist. For instance, <a class="reference external" href="https://www.bristol.ac.uk/cmm/software/mlwin/">MLwin</a> developed by the Centre for Multilevel Modelling at the University of Bristol is designed <em>specifically</em> for fitting models from this perspective. As shown in the screenshot below, models are fit by writing the multilevel equations which are then estimated from the given data. This provides a <em>direct</em> connection between the theory and the application of these models to complex datasets.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/mlwin-screenshot-lge.gif"><img alt="_images/mlwin-screenshot-lge.gif" src="_images/mlwin-screenshot-lge.gif" style="width: 600px;" /></a>
+</figure>
+<p>Another example of this approach is the <a class="reference external" href="https://ssilive.com/license/hlm">HLM</a> software which, as shown below, also specifies these types of models explicitly in terms of equations for the different levels. This illustrates that it <em>is</em> possible to apply the multilevel perspective in practice. It also illustrates why understanding the theory is so important, especially when faced with software that requires you to write the theoretical model down in order to use it.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/hlm-screenshot.png"><img alt="_images/hlm-screenshot.png" src="_images/hlm-screenshot.png" style="width: 600px;" /></a>
+</figure>
+<p>However, this multilevel perspective is not the typical method used in <code class="docutils literal notranslate"><span class="pre">R</span></code> (or <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code> or <code class="docutils literal notranslate"><span class="pre">SAS</span></code>) for these types of models. Instead, these software packages use an <em>equivalent</em> approach in the form of <em>mixed-effects models</em>. In this part of the lesson, we will connect these two perspectives together and then show how these forms of models can be fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> using both the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package (familiar from the use of <code class="docutils literal notranslate"><span class="pre">gls()</span></code>) and the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package.</p>
+<section id="turning-a-multilevel-models-into-a-mixed-effects-model">
+<h2>Turning a Multilevel Models into a Mixed-effects Model<a class="headerlink" href="#turning-a-multilevel-models-into-a-mixed-effects-model" title="Link to this heading">#</a></h2>
+<p>To start understanding the equivalence between <em>multilevel</em> models and <em>mixed-effects</em> models, we will start with our multilevel model from the previous part of this lesson. We will then walk through the steps of turning it into a mixed-effects model.</p>
+<section id="the-existing-multilevel-model">
+<h3>The Existing Multilevel Model<a class="headerlink" href="#the-existing-multilevel-model" title="Link to this heading">#</a></h3>
+<p>To review, we previously finished modelling our simple repeated measures data using the following multilevel specification</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{1}
-    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}  \\
-    \mu_{i}   &amp;= \mu + S_{i}                       \\
-\end{alignat*}
-\end{split}\]</div>
-<p>After all, we can see exactly what <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is equal to. So let us replace <span class="math notranslate nohighlight">\(\mu_{i}\)</span> in the first equation with the equality in the second equation. If we do so, we get</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-    y_{ij} &amp;= (\mu + S_{i}) + \alpha_{j} + \eta_{ij} \\
-           &amp;= \mu + \alpha_{j} + S_{i} + \eta_{ij}
+\begin{alignat*}{2}
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}             &amp;\quad\text{Level 1} \\
+    \mu_{i}   &amp;= \mu + \xi_{i}                                &amp;\quad\text{Level 2}
 \end{alignat*}
 \end{split}\]</div>
 <p>with</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{1}
-    S_{i}     &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+\begin{alignat*}{2}
     \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right).
 \end{alignat*}
 \end{split}\]</div>
-<p>This is <em>exactly the partitioned error model we saw last week</em>.</p>
+<p>We conceptualised the <em>Level 1</em> model as capturing variation associated with <em>individual</em> subjects, where the error term <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> can be used to capture the <em>within-subject</em> variance term <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>. We then conceptualised the <em>Level 2</em> model as capturing variation associated with the <em>group</em> of subjects, where the error term <span class="math notranslate nohighlight">\(\xi_{i}\)</span> can be used to capture the <em>between-subjects</em> variance term <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>. We also saw, via simulations, that this structure implied a compound symmetric variance-covariance matrix where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Var}(y_{ij})                 &amp;= \sigma^{2}_{b} + \sigma^{2}_{w} \\
+    \text{Cov}(y_{ij},y_{ij^{\prime}}) &amp;= \sigma^{2}_{b}.
+\end{alignat*}
+\end{split}\]</div>
+</section>
+<section id="the-mixed-effects-trick">
+<h3>The Mixed-effects Trick<a class="headerlink" href="#the-mixed-effects-trick" title="Link to this heading">#</a></h3>
+<p>Turning this model into a mixed-effects model only requires one step, where we <em>collapse</em> the levels together and then work with a <em>single</em> equation. Notice above that the Level 1 equation is given as</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij},
+\]</div>
+<p>with a separate Level 2 equation telling us what <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is equal to</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{i} = \mu + \xi_{i}.
+\]</div>
+<p>Given that we know that <span class="math notranslate nohighlight">\(\mu_{i}\)</span> has a wider definition than given in the Level 1 equation, we can simply insert the equality from Level 2 into Level 1. This gives us</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \overbrace{\mu + \xi_{i}}^{\mu_{i}} + \alpha_{j} + \eta_{ij}.
+\]</div>
+<p>Now, we have a single equation that contains two constants <span class="math notranslate nohighlight">\((\mu,\alpha_{j})\)</span> and two random error-terms <span class="math notranslate nohighlight">\((\xi_{i},\eta_{ij})\)</span>. The constants are termed the <em>fixed-effects</em> and the errors are termed the <em>random-effects</em>. In addition, we would usually arrange like-terms together, so the more typical way of writing this would be</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta_{ij}}^{\text{random}}
+\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)
+\end{alignat*}
+\end{split}\]</div>
+<p>which is the same as the multilevel model. So, what we have done here is <em>collapsed</em> our data hierarchy into a <em>single level</em>. Now we have <em>one</em> equation with <em>two</em> error terms.</p>
+</section>
+<section id="partitioned-errors-perspective">
+<h3>Partitioned Errors Perspective<a class="headerlink" href="#partitioned-errors-perspective" title="Link to this heading">#</a></h3>
+<p>All of the above may be starting to sound very familiar from our discussion of the <em>repeated measures ANOVA</em> a couple of weeks ago. In fact, the repeated measures ANOVA <em>is a simple mixed-effects model</em>. This is perhaps one of the most important facts of this lesson to understand. It is not uncommon to hear people recommend a mixed-effects model over the repeated measures ANOVA, but this is something of a confusion because a repeated measures ANOVA <em>is already</em> a mixed-effects model. The differences are largely in terms of the mechanics of how this model is estimated and used. Because this is an <em>older</em> approach, it is not part of a larger or more-general framework for mixed-effects. Instead, it is an application of mixed-effects, within a more restrictive traditional framework.</p>
+<p>However, the key thing to recognise here is <em>because</em> the repeated measures ANOVA <em>is</em> a mixed-effects model, modelling the <em>same</em> data in the <em>same</em> way using a mixed-effects approach can be <em>no better than the repeated measures ANOVA</em>. In fact, in some ways, it can be <em>worse</em>. So, moving to mixed-effects is not a guarantee of a better model than the repeated measures ANOVA. The framework is more flexible, yes. The estimation methods is more flexible, yes. However, the results can be <em>no better</em>. In practice, this is not always well understood.</p>
+</section>
+</section>
+<section id="why-collapse-the-hierarchy">
+<h2>Why Collapse the Hierarchy?<a class="headerlink" href="#why-collapse-the-hierarchy" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The model is always estimated as a single unit, with the levels informing each other</p></li>
+<li><p>Multilevel implies that we can estimate each level separately, which loses the whole advantage of this framework (this is known as a <em>summary statistics</em> approach)</p></li>
+<li><p>Software is harder to write in a multilevel fashion (though it does exist e.g. MLM, MLwin), whereas a single function call for a single model fits happily inside the usual <code class="docutils literal notranslate"><span class="pre">R</span></code> approach</p></li>
+</ul>
+<p>However, this does have a distinct disadvantage in terms of intuition. Although both perspectives are <em>mathematically equivalent</em>, the model</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}    &amp;=    \mu + \alpha_{j} + \xi_{i} + \eta_{ij}   \\
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)
+\end{alignat*}
+\end{split}\]</div>
+<p>tells us <em>very little</em> about the data structure. We do not get the same hierarchical intuition about the data-generating process when written this way. Indeed, it just looks like we have stuck an additional error term into the normal linear model. Although mathematically that <em>is</em> all that has happened, intuitively there is less of a clear sense of <em>why</em> this happened and what it implies. This is why we spent so long with the multilevel model, because jumping over the multilevel perspective straight into mixed-effects is a recipe for confusion. Indeed, this is exactly what many applied researchers do when told to use mixed-effects models. However, this can lead to a conceptual gap where mixed-effects models are just not understood as well as they could be, if the route through multilevel level models was taken instead. So we can think, very broadly, that the hierarchical perspective is the most useful <em>intuitively</em>, but the mixed-effects perspective is the most useful <em>practically</em>.</p>
 </section>
 <section id="mixed-effects-using-nlme">
 <h2>Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#mixed-effects-using-nlme" title="Link to this heading">#</a></h2>
@@ -485,14 +547,6 @@
 </section>
 <section id="mixed-effects-using-lme4">
 <h2>Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code><a class="headerlink" href="#mixed-effects-using-lme4" title="Link to this heading">#</a></h2>
-</section>
-<section id="the-implied-marginal-model">
-<h2>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h2>
-<p>… From this perspective, a mixed-effects model is simply GLS, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important consequences:</p>
-<ol class="arabic simple">
-<li><p>The inferential issues around GLS are <em>identical</em> for mixed-effects</p></li>
-<li><p>The covariance structure is <em>more restricted</em> under mixed-effects, because it is constrained by the random effects themselves</p></li>
-</ol>
 </section>
 <section id="advantages-of-mixed-effects">
 <h2>Advantages of Mixed-effects<a class="headerlink" href="#advantages-of-mixed-effects" title="Link to this heading">#</a></h2>
@@ -579,11 +633,15 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-our-hierarchy">Why Collapse Our Hierarchy?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">From Multilevel to Mixed-effects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-a-multilevel-models-into-a-mixed-effects-model">Turning a Multilevel Models into a Mixed-effects Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-existing-multilevel-model">The Existing Multilevel Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mixed-effects-trick">The Mixed-effects Trick</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioned-errors-perspective">Partitioned Errors Perspective</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-the-hierarchy">Why Collapse the Hierarchy?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-nlme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme4">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
