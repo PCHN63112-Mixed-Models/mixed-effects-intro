@@ -391,6 +391,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
             </nav>
@@ -406,6 +407,15 @@
   <section class="tex2jax_ignore mathjax_ignore" id="inference-in-mixed-effects-models">
 <h1>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h1>
 <p>…</p>
+<section id="the-implied-marginal-model">
+<h2>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h2>
+<p>… From this perspective, a mixed-effects model is simply GLS, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important consequences:</p>
+<ol class="arabic simple">
+<li><p>The inferential issues around GLS are <em>identical</em> for mixed-effects</p></li>
+<li><p>The covariance structure is <em>more restricted</em> under mixed-effects, because it is constrained by the random effects themselves</p></li>
+</ol>
+<p>… The advantages of GLS are still there. For instance, the correct error term for each test can be automatically generated from the covariance structure. So while the model itself may be no better than the repeated measures ANOVA, it is infinitely <em>more practical</em> because we do not need to mess around manually assigning error terms to different tests (and worrying about getting this wrong).</p>
+</section>
 <section id="kenward-rogers-degrees-of-freedom">
 <h2>Kenward-Rogers Degrees of Freedom<a class="headerlink" href="#kenward-rogers-degrees-of-freedom" title="Link to this heading">#</a></h2>
 <p>… The advantage is that mixed-effects models capture more <em>structure</em> than GLS models. This means that mixed-effects models embed <em>where</em> the correlation came from. Having that structure in terms of the random effects allows for slightly more sophisticated approaches to the problem of <em>effective degrees of freedom</em>. Because the covariance structure can be decomposed into the random effects, the data structure itself is part of the model of the covariance matrix. This means there is information available that can be used to construct more sophisticated faux degrees of freedom. This information is not there using GLS, because there is only a single big covariance structure that cannot be decomposed into anything related to the model.</p>
@@ -478,6 +488,7 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
   </nav></div>
