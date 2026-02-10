@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Mixed-effects Models in R &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>Mixed-effects Models in R &#8212; An Introduction to Linear Mixed-effects Models</title>
   
   
   
@@ -63,7 +63,7 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '5.lme-R';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.mixed-R';</script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
@@ -87,6 +87,8 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="prev" title="From Multilevel to Mixed-effects" href="4.multilevel-to-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -138,8 +140,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -170,8 +170,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
@@ -192,12 +192,12 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.intro-mixed.html">Introduction to Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -275,7 +275,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F5.lme-R.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-intro/issues/new?title=Issue%20on%20page%20%2F5.mixed-R.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -305,7 +305,7 @@
       
       
       
-      <li><a href="_sources/5.lme-R.ipynb" target="_blank"
+      <li><a href="_sources/5.mixed-R.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -391,11 +391,15 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lmer-package">The <code class="docutils literal notranslate"><span class="pre">lmer</span></code> Package</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-from-lme">Inference from <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-mixed-effects-models-with-nlme">Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-mixed-effects-models-with-lme4">Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-in-mixed-effects-models">Inference in Mixed-effects Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lme4-package">The <code class="docutils literal notranslate"><span class="pre">lme4</span></code> Package</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-lme4">Inference Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -410,15 +414,35 @@
   <section class="tex2jax_ignore mathjax_ignore" id="mixed-effects-models-in-r">
 <h1>Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#mixed-effects-models-in-r" title="Link to this heading">#</a></h1>
 <p>…</p>
-<section id="the-lmer-package">
-<h2>The <code class="docutils literal notranslate"><span class="pre">lmer</span></code> Package<a class="headerlink" href="#the-lmer-package" title="Link to this heading">#</a></h2>
-<section id="inference-from-lme">
-<h3>Inference from <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#inference-from-lme" title="Link to this heading">#</a></h3>
-<p>… So this is very much in the “effective degrees of freedom” camp of solutions. However, the method used is not very sophisticated (as described in <a class="reference external" href="https://books.google.com/books?id=y54QDUTmvDcC&amp;amp;lpg=PR1&amp;amp;pg=PA91#v=onepage&amp;amp;q&amp;amp;f=false">Pinheiro &amp; Bates (2000, p.91)</a>).</p>
+<section id="fitting-mixed-effects-models-with-nlme">
+<h2>Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#fitting-mixed-effects-models-with-nlme" title="Link to this heading">#</a></h2>
+</section>
+<section id="fitting-mixed-effects-models-with-lme4">
+<h2>Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">lme4</span></code><a class="headerlink" href="#fitting-mixed-effects-models-with-lme4" title="Link to this heading">#</a></h2>
+</section>
+<section id="inference-in-mixed-effects-models">
+<h2>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h2>
+<section id="the-implied-marginal-model">
+<h3>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h3>
+<p>… From this perspective, a mixed-effects model is simply GLS, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important consequences:</p>
+<ol class="arabic simple">
+<li><p>The inferential issues around GLS are <em>identical</em> for mixed-effects</p></li>
+<li><p>The covariance structure is <em>more restricted</em> under mixed-effects, because it is constrained by the random effects themselves</p></li>
+</ol>
+<p>… The advantages of GLS are still there. For instance, the correct error term for each test can be automatically generated from the covariance structure. So while the model itself may be no better than the repeated measures ANOVA, it is infinitely <em>more practical</em> because we do not need to mess around manually assigning error terms to different tests (and worrying about getting this wrong).</p>
+</section>
+<section id="kenward-rogers-degrees-of-freedom">
+<h3>Kenward-Rogers Degrees of Freedom<a class="headerlink" href="#kenward-rogers-degrees-of-freedom" title="Link to this heading">#</a></h3>
+<p>… The advantage is that mixed-effects models capture more <em>structure</em> than GLS models. This means that mixed-effects models embed <em>where</em> the correlation came from. Having that structure in terms of the random effects allows for slightly more sophisticated approaches to the problem of <em>effective degrees of freedom</em>. Because the covariance structure can be decomposed into the random effects, the data structure itself is part of the model of the covariance matrix. This means there is information available that can be used to construct more sophisticated faux degrees of freedom. This information is not there using GLS, because there is only a single big covariance structure that cannot be decomposed into anything related to the model.</p>
+<p>Now, of course, this is only an advantage if you agree with the notion of effective degrees of freedom. If you do not, then this new information is still not useful.</p>
 </section>
 </section>
-<section id="the-lme4-package">
-<h2>The <code class="docutils literal notranslate"><span class="pre">lme4</span></code> Package<a class="headerlink" href="#the-lme4-package" title="Link to this heading">#</a></h2>
+<section id="inference-using-nlme">
+<h2>Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#inference-using-nlme" title="Link to this heading">#</a></h2>
+</section>
+<section id="inference-using-lme4">
+<h2>Inference Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code><a class="headerlink" href="#inference-using-lme4" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> package</p>
 </section>
 </section>
 
@@ -452,6 +476,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="4.multilevel-to-mixed.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">From Multilevel to Mixed-effects</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="summary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -469,11 +511,15 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lmer-package">The <code class="docutils literal notranslate"><span class="pre">lmer</span></code> Package</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-from-lme">Inference from <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-mixed-effects-models-with-nlme">Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-mixed-effects-models-with-lme4">Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-in-mixed-effects-models">Inference in Mixed-effects Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kenward-rogers-degrees-of-freedom">Kenward-Rogers Degrees of Freedom</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lme4-package">The <code class="docutils literal notranslate"><span class="pre">lme4</span></code> Package</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-lme4">Inference Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
 </ul>
   </nav></div>
 

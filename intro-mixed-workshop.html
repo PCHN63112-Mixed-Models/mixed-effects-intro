@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to Mixed-effects Workshop &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>Introduction to Mixed-effects Workshop &#8212; An Introduction to Linear Mixed-effects Models</title>
   
   
   
@@ -170,8 +170,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
@@ -197,7 +197,7 @@
 <li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.mixed-R.html">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -391,17 +391,17 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors-using-lme">Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors">Multiple Within-subject Factors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors-using-lme">Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors">Within-subject and Between-subject Factors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-marginal-covariance-matrix">Extracting the Marginal Covariance Matrix</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-on-pooling-and-shrinkage">More on Pooling and Shrinkage</a></li>
 </ul>
             </nav>
         </div>
@@ -415,14 +415,14 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-mixed-effects-workshop">
 <h1>Introduction to Mixed-effects Workshop<a class="headerlink" href="#introduction-to-mixed-effects-workshop" title="Link to this heading">#</a></h1>
-<section id="multiple-within-subject-factors-using-lme">
-<h2>Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#multiple-within-subject-factors-using-lme" title="Link to this heading">#</a></h2>
+<section id="multiple-within-subject-factors">
+<h2>Multiple Within-subject Factors<a class="headerlink" href="#multiple-within-subject-factors" title="Link to this heading">#</a></h2>
 <section id="multilevel-conceptualisation">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#multilevel-conceptualisation" title="Link to this heading">#</a></h3>
 </section>
 </section>
-<section id="within-subject-and-between-subject-factors-using-lme">
-<h2>Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#within-subject-and-between-subject-factors-using-lme" title="Link to this heading">#</a></h2>
+<section id="within-subject-and-between-subject-factors">
+<h2>Within-subject and Between-subject Factors<a class="headerlink" href="#within-subject-and-between-subject-factors" title="Link to this heading">#</a></h2>
 <section id="id1">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 </section>
@@ -433,8 +433,8 @@
 <section id="extracting-the-marginal-covariance-matrix">
 <h2>Extracting the Marginal Covariance Matrix<a class="headerlink" href="#extracting-the-marginal-covariance-matrix" title="Link to this heading">#</a></h2>
 </section>
-<section id="checking-assumptions">
-<h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
+<section id="more-on-pooling-and-shrinkage">
+<h2>More on Pooling and Shrinkage<a class="headerlink" href="#more-on-pooling-and-shrinkage" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -485,17 +485,17 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors-using-lme">Multiple Within-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors">Multiple Within-subject Factors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors-using-lme">Within-subject and Between-subject Factors Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors">Within-subject and Between-subject Factors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-marginal-covariance-matrix">Extracting the Marginal Covariance Matrix</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-on-pooling-and-shrinkage">More on Pooling and Shrinkage</a></li>
 </ul>
   </nav></div>
 
