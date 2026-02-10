@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Summary &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>Summary &#8212; An Introduction to Linear Mixed-effects Models</title>
   
   
   
@@ -87,7 +87,7 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Inference in Mixed-effects Models" href="5.inference-mixed.html" />
+    <link rel="prev" title="Mixed-effects Models in R" href="5.mixed-R.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -169,8 +169,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
@@ -196,7 +196,7 @@
 <li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.multilevel-to-mixed.html">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.mixed-R.html">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Summary</a></li>
 </ul>
 
@@ -367,7 +367,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -383,6 +385,14 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -394,6 +404,15 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<section id="have-we-made-any-progress">
+<h2>Have We Made Any Progress?<a class="headerlink" href="#have-we-made-any-progress" title="Link to this heading">#</a></h2>
+<p>Given all the above, it might be natural to wonder whether we have actually made any progress over the repeated measures ANOVA? Although we have an estimation framework that is more general, and we have removed the awkwardness of having to manually construct inferential tests via multiple ANOVA tables, the lack of sphericity correction means that we are tied-in to compound symmetry.</p>
+<ul class="simple">
+<li><p>Sphericity is misleading in practice?</p></li>
+<li><p>The data do not support more complex estimation, but it could if we had replications</p></li>
+</ul>
+<p>However, the true of the matter is that there are some situations where a GLS model may be superior, for our purposes…</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -427,12 +446,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="5.inference-mixed.html"
+       href="5.mixed-R.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Inference in Mixed-effects Models</p>
+        <p class="prev-next-title">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></p>
       </div>
     </a>
 </div>
@@ -441,6 +460,22 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

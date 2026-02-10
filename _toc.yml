@@ -8,5 +8,5 @@ chapters:
 - file: 2.multilevel-framework
 - file: 3.multilevel-simulation
 - file: 4.multilevel-to-mixed
-- file: 5.inference-mixed
+- file: 5.mixed-R
 - file: summary

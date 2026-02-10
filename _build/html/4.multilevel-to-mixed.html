@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>From Multilevel to Mixed-effects &#8212; Estimating Covariance Structures and Generalised Least Squares</title>
+    <title>From Multilevel to Mixed-effects &#8212; An Introduction to Linear Mixed-effects Models</title>
   
   
   
@@ -89,7 +89,7 @@
     <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Inference in Mixed-effects Models" href="5.inference-mixed.html" />
+    <link rel="next" title="Mixed-effects Models in R" href="5.mixed-R.html" />
     <link rel="prev" title="Simulating a Multilevel Model" href="3.multilevel-simulation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -172,8 +172,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Estimating Covariance Structures and Generalised Least Squares - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
@@ -199,7 +199,7 @@
 <li class="toctree-l1"><a class="reference internal" href="2.multilevel-framework.html">The Multilevel Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.multilevel-simulation.html">Simulating a Multilevel Model</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">From Multilevel to Mixed-effects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.inference-mixed.html">Inference in Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.mixed-R.html">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -395,14 +395,11 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-a-multilevel-models-into-a-mixed-effects-model">Turning a Multilevel Models into a Mixed-effects Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-existing-multilevel-model">The Existing Multilevel Model</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mixed-effects-trick">The Mixed-effects Trick</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioned-errors-perspective">Partitioned Errors Perspective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lme-trick">The LME Trick</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-the-hierarchy">Why Collapse the Hierarchy?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-nlme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme4">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-multilevel-lme-models">Advantages of Multilevel/LME Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
@@ -431,10 +428,10 @@
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/hlm-screenshot.png"><img alt="_images/hlm-screenshot.png" src="_images/hlm-screenshot.png" style="width: 600px;" /></a>
 </figure>
-<p>However, this multilevel perspective is not the typical method used in <code class="docutils literal notranslate"><span class="pre">R</span></code> (or <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code> or <code class="docutils literal notranslate"><span class="pre">SAS</span></code>) for these types of models. Instead, these software packages use an <em>equivalent</em> approach in the form of <em>mixed-effects models</em>. In this part of the lesson, we will connect these two perspectives together and then show how these forms of models can be fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> using both the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package (familiar from the use of <code class="docutils literal notranslate"><span class="pre">gls()</span></code>) and the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package.</p>
+<p>However, this multilevel perspective is not the typical method used in <code class="docutils literal notranslate"><span class="pre">R</span></code> (or <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code> or <code class="docutils literal notranslate"><span class="pre">SAS</span></code>) for these types of models. Instead, these software packages use an <em>equivalent</em> approach in the form of <em>linear mixed-effects</em> (LME) models. In this part of the lesson, we will connect these two perspectives together and then show how these forms of models can be fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> using both the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package (familiar from the use of <code class="docutils literal notranslate"><span class="pre">gls()</span></code>) and the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package.</p>
 <section id="turning-a-multilevel-models-into-a-mixed-effects-model">
 <h2>Turning a Multilevel Models into a Mixed-effects Model<a class="headerlink" href="#turning-a-multilevel-models-into-a-mixed-effects-model" title="Link to this heading">#</a></h2>
-<p>To start understanding the equivalence between <em>multilevel</em> models and <em>mixed-effects</em> models, we will start with our multilevel model from the previous part of this lesson. We will then walk through the steps of turning it into a mixed-effects model.</p>
+<p>To start understanding the equivalence between <em>multilevel</em> models and LME models, we will start with our multilevel model from the previous part of this lesson. We will then walk through the steps of turning it into an LME model.</p>
 <section id="the-existing-multilevel-model">
 <h3>The Existing Multilevel Model<a class="headerlink" href="#the-existing-multilevel-model" title="Link to this heading">#</a></h3>
 <p>To review, we previously finished modelling our simple repeated measures data using the following multilevel specification</p>
@@ -462,9 +459,9 @@
 \end{alignat*}
 \end{split}\]</div>
 </section>
-<section id="the-mixed-effects-trick">
-<h3>The Mixed-effects Trick<a class="headerlink" href="#the-mixed-effects-trick" title="Link to this heading">#</a></h3>
-<p>Turning this model into a mixed-effects model only requires one step, where we <em>collapse</em> the levels together and then work with a <em>single</em> equation. Notice above that the Level 1 equation is given as</p>
+<section id="the-lme-trick">
+<h3>The LME Trick<a class="headerlink" href="#the-lme-trick" title="Link to this heading">#</a></h3>
+<p>Turning this model into an LME model only requires a single step. ALl we do is <em>collapse</em> the levels together and then work with a <em>single</em> equation. To see how to do this, notice above that the Level 1 equation is given as</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij},
@@ -474,12 +471,12 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij},
 \[
 \mu_{i} = \mu + \xi_{i}.
 \]</div>
-<p>Given that we know that <span class="math notranslate nohighlight">\(\mu_{i}\)</span> has a wider definition than given in the Level 1 equation, we can simply insert the equality from Level 2 into Level 1. This gives us</p>
+<p>Given that we know that <span class="math notranslate nohighlight">\(\mu_{i}\)</span> has a wider definition than given in the Level 1 equation, we can simply insert the equality from Level 2 into Level 1 to give</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \overbrace{\mu + \xi_{i}}^{\mu_{i}} + \alpha_{j} + \eta_{ij}.
 \]</div>
-<p>Now, we have a single equation that contains two constants <span class="math notranslate nohighlight">\((\mu,\alpha_{j})\)</span> and two random error-terms <span class="math notranslate nohighlight">\((\xi_{i},\eta_{ij})\)</span>. The constants are termed the <em>fixed-effects</em> and the errors are termed the <em>random-effects</em>. In addition, we would usually arrange like-terms together, so the more typical way of writing this would be</p>
+<p>Now, we have a single equation that contains two constants <span class="math notranslate nohighlight">\((\mu,\alpha_{j})\)</span> and two random error-terms <span class="math notranslate nohighlight">\((\xi_{i},\eta_{ij})\)</span>. The constants are termed the <em>fixed-effects</em> and the errors are termed the <em>random-effects</em>. We would usually arrange like-terms together, so the more typical way of writing this would be</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta_{ij}}^{\text{random}}
@@ -489,25 +486,33 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
 \[\begin{split}
 \begin{alignat*}{2}
     \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right) \\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right).
 \end{alignat*}
 \end{split}\]</div>
-<p>which is the same as the multilevel model. So, what we have done here is <em>collapsed</em> our data hierarchy into a <em>single level</em>. Now we have <em>one</em> equation with <em>two</em> error terms.</p>
-</section>
-<section id="partitioned-errors-perspective">
-<h3>Partitioned Errors Perspective<a class="headerlink" href="#partitioned-errors-perspective" title="Link to this heading">#</a></h3>
-<p>All of the above may be starting to sound very familiar from our discussion of the <em>repeated measures ANOVA</em> a couple of weeks ago. In fact, the repeated measures ANOVA <em>is a simple mixed-effects model</em>. This is perhaps one of the most important facts of this lesson to understand. It is not uncommon to hear people recommend a mixed-effects model over the repeated measures ANOVA, but this is something of a confusion because a repeated measures ANOVA <em>is already</em> a mixed-effects model. The differences are largely in terms of the mechanics of how this model is estimated and used. Because this is an <em>older</em> approach, it is not part of a larger or more-general framework for mixed-effects. Instead, it is an application of mixed-effects, within a more restrictive traditional framework.</p>
-<p>However, the key thing to recognise here is <em>because</em> the repeated measures ANOVA <em>is</em> a mixed-effects model, modelling the <em>same</em> data in the <em>same</em> way using a mixed-effects approach can be <em>no better than the repeated measures ANOVA</em>. In fact, in some ways, it can be <em>worse</em>. So, moving to mixed-effects is not a guarantee of a better model than the repeated measures ANOVA. The framework is more flexible, yes. The estimation methods is more flexible, yes. However, the results can be <em>no better</em>. In practice, this is not always well understood.</p>
+<p>So, what we have done here is <em>collapsed</em> our data hierarchy into a <em>single level</em>. This gives us <em>one</em> equation with <em>two</em> error terms.</p>
+<div class="tip admonition">
+<p class="admonition-title">Partitioned Errors Perspective</p>
+<p>All of the above may be starting to sound very familiar from our discussion of the <em>repeated measures ANOVA</em> a couple of weeks ago. In fact, the repeated measures ANOVA <em>is a simple LME model</em>. This is perhaps one of the most important facts of this lesson to understand. It is not uncommon to hear people recommend a mixed-effects model over the repeated measures ANOVA, but this is something of a confusion because a repeated measures ANOVA <em>is already</em> a mixed-effects model. The differences are largely in terms of the mechanics of how this model is estimated and used. Because the repeated measures ANOVA is an <em>older</em> approach, it is not part of a larger or more-general framework for mixed-effects. Instead, it is an application of mixed-effects, within a more restrictive traditional framework.</p>
+<p>This fits with everything we know already. We saw how we could make the repeated measures ANOVA work using <code class="docutils literal notranslate"><span class="pre">lm()</span></code>, but only by including the random effects in the model equation as a way of <em>forcing</em> the error to be split. We then had to ignore the tests on the individual coefficients and construct the ANOVA table manually so that the correct terms were treated as error (i.e. the random effects) and the other terms were treated as effects (i.e. the fixed effects). This all aligns with trying to fit the model given above, but within a framework that only has a single error term.</p>
+<p>Aligning the multilevel/LME models with the repeated measures ANOVA also gives another useful perspective in terms of <em>partitioned errors</em>. We could rewrite the model above as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}        &amp;= \mu + \alpha_{j} + \epsilon_{ij} \\
+    \epsilon_{ij} &amp;= \xi_{i} + \eta_{ij}
+\end{alignat*}
+\end{split}\]</div>
+<p>where we think just in terms of a normal linear model, but with a more structured error term that can be split into multiple sources<a class="footnote-reference brackets" href="#error-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The split is exactly what the repeated measures ANOVA is trying to do. This can be helpful because it highlights that the <em>mean function</em> is no different to a normal linear model and the element that changes in a mixed-effects model is the <em>variance function</em>. We saw this previously when discussing the repeated measures ANOVA and now we see it crop-up again because the repeated measures ANOVA <em>is</em> a partitioned error model and thus <em>is</em> a mixed-effects models.</p>
+<p>Perhaps the key thing to recognise from all of this is that, because of this equivalence, modelling the <em>same</em> data in the <em>same</em> way using a mixed-effects approach can be <em>no better than the repeated measures ANOVA</em>. In fact, in some ways, it can be <em>worse</em>. We have already seen that the most basic mixed-effects model implies a compound symmetric covariance structure, so this does not fix this issue with the repeated measures ANOVA. So, moving to mixed-effects is not a guarantee of a better model. The framework is more flexible, yes. The estimation method is more flexible, yes. However, the results can be <em>no better</em>. In practice, this is not always well understood by applied researchers.</p>
+</div>
 </section>
 </section>
 <section id="why-collapse-the-hierarchy">
 <h2>Why Collapse the Hierarchy?<a class="headerlink" href="#why-collapse-the-hierarchy" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>The model is always estimated as a single unit, with the levels informing each other</p></li>
-<li><p>Multilevel implies that we can estimate each level separately, which loses the whole advantage of this framework (this is known as a <em>summary statistics</em> approach)</p></li>
-<li><p>Software is harder to write in a multilevel fashion (though it does exist e.g. MLM, MLwin), whereas a single function call for a single model fits happily inside the usual <code class="docutils literal notranslate"><span class="pre">R</span></code> approach</p></li>
-</ul>
-<p>However, this does have a distinct disadvantage in terms of intuition. Although both perspectives are <em>mathematically equivalent</em>, the model</p>
+<p>As demonstrated above, the LME model comes from collapsing the different levels of our hierarchy into a single model equation. So, why would we want to do this? Beyond the practical reasons around software implementations, are there are any other advantages to thinking in terms of mixed-effects, rather than multiple levels?</p>
+<p>There are some arguments in favour of this, not least that you may actually find the LME perspective more intuitive than thinking in levels of variation. This is something of a personal preference and you will need to decide for yourself how you want to think about all this. The preference in this lesson is for <em>thinking</em> in a hierarchical fashion and then <em>translating</em> that into mixed-effects. However, you may find it more appealing to just jump into mixed-effects and think about linear models with multiple error terms. The choice is yours.</p>
+<p>Conceptually, the LME perspective is useful because it makes it clear that these models are always estimated as a <em>single unit</em>, with all the levels informing each other. The multilevel perspective can give the impression that the levels are <em>separate entities</em>, rather than a part of the same whole. When it comes to estimating these models using ML/REML, they will always be expressed in a collapsed fashion. This also prevents the confusion that the levels could be estimated <em>separately</em>. This is possible, and is known more generally as a <em>summary statistics</em> approach<a class="footnote-reference brackets" href="#summarystat-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, but is not a <em>true</em> multilevel model because it prevents the levels from informing each other. This simplifies the process down to a selection of separate regression models, which is <em>not</em> how these methods typically work.</p>
+<p>The argument in this lesson is that collapsing the hierarchy has a distinct <em>disadvantage</em> in terms of intuition. Although both perspectives are <em>mathematically equivalent</em>, the model</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -516,54 +521,48 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
     \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)
 \end{alignat*}
 \end{split}\]</div>
-<p>tells us <em>very little</em> about the data structure. We do not get the same hierarchical intuition about the data-generating process when written this way. Indeed, it just looks like we have stuck an additional error term into the normal linear model. Although mathematically that <em>is</em> all that has happened, intuitively there is less of a clear sense of <em>why</em> this happened and what it implies. This is why we spent so long with the multilevel model, because jumping over the multilevel perspective straight into mixed-effects is a recipe for confusion. Indeed, this is exactly what many applied researchers do when told to use mixed-effects models. However, this can lead to a conceptual gap where mixed-effects models are just not understood as well as they could be, if the route through multilevel level models was taken instead. So we can think, very broadly, that the hierarchical perspective is the most useful <em>intuitively</em>, but the mixed-effects perspective is the most useful <em>practically</em>.</p>
+<p>tells us <em>very little</em> about the data structure. We do not get the same intuition about the data-generating process when written this way. Indeed, it just looks like we have stuck an additional error term into the normal linear model. Although mathematically that <em>is</em> all that has happened, intuitively there is less of a clear sense of <em>why</em> this happened and what it implies. This is why we spent so long with the multilevel model, because jumping over the multilevel perspective straight into mixed-effects is a recipe for confusion. Indeed, this is exactly what many applied researchers do when told to use mixed-effects models. However, this can lead to a conceptual gap where mixed-effects models are just not understood as well as they could be, if the route through multilevel level models was taken instead. So we can think, very broadly, that the hierarchical perspective is the most useful <em>intuitively</em>, but the mixed-effects perspective is the most useful <em>practically</em>.</p>
 </section>
-<section id="mixed-effects-using-nlme">
-<h2>Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#mixed-effects-using-nlme" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="s">&#39;reshape2&#39;</span><span class="p">)</span>
-
-<span class="nf">data</span><span class="p">(</span><span class="s">&#39;selfesteem&#39;</span><span class="p">)</span>
-
-<span class="c1"># repeats and number of subjects</span>
-<span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
-<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dim</span><span class="p">(</span><span class="n">selfesteem</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span>
-
-<span class="c1"># reshape wide -&gt; long</span>
-<span class="n">selfesteem.long</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">melt</span><span class="p">(</span><span class="n">selfesteem</span><span class="p">,</span><span class="w">            </span><span class="c1"># wide data frame</span>
-<span class="w">                        </span><span class="n">id.vars</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="w">          </span><span class="c1"># what stays fixed?</span>
-<span class="w">                        </span><span class="n">variable.name</span><span class="o">=</span><span class="s">&quot;time&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># name for the new predictor</span>
-<span class="w">                        </span><span class="n">value.name</span><span class="o">=</span><span class="s">&quot;score&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1"># name for the new outcome</span>
-
-<span class="n">selfesteem.long</span><span class="w">           </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selfesteem.long</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="p">),]</span><span class="w"> </span><span class="c1"># order by ID</span>
-<span class="nf">rownames</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w">                                  </span><span class="c1"># fix row names</span>
-<span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">selfesteem.long</span><span class="o">$</span><span class="n">id</span><span class="p">)</span><span class="w">               </span><span class="c1"># convert ID to factor</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="mixed-effects-using-lme4">
-<h2>Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code><a class="headerlink" href="#mixed-effects-using-lme4" title="Link to this heading">#</a></h2>
-</section>
-<section id="advantages-of-mixed-effects">
-<h2>Advantages of Mixed-effects<a class="headerlink" href="#advantages-of-mixed-effects" title="Link to this heading">#</a></h2>
+<section id="advantages-of-multilevel-lme-models">
+<h2>Advantages of Multilevel/LME Models<a class="headerlink" href="#advantages-of-multilevel-lme-models" title="Link to this heading">#</a></h2>
+<p>Before we move on to the <em>practical</em> topic of actually fitting these models in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we turn to a brief discussion of the advantages of LME models. Although we have spent a good deal of time discussing the multilevel/LME framework, you may still be wondering <em>why</em> we are going to all this effort, especially when GLS appears to solve our problems more readily than anything we have discussed in this lesson. Below, we will outline the main reasons to push forward with this approach. We will only summaries these at this stage, but will provide clearer demonstrations of some of these ideas a little later.</p>
 <section id="modelling-data-structure">
 <h3>Modelling Data Structure<a class="headerlink" href="#modelling-data-structure" title="Link to this heading">#</a></h3>
-<p>… In our previous discussion, GLS was used as a method to get around the presence of correlation within repeated measurement data. We impose a structure for GLS to remove. What LME models do instead is get us to model the <em>structure</em> of the data. We do not worry about dependence because this is accommodated <em>automatically</em> as a consequence of the structure. As long as we get the structure right, everything else follows. So this is an entirely different perspective. We are not trying to model correlation, we are trying to get the structure correct. Once we do, everything gets worked out for us, correlation and all.</p>
+<p>In our previous discussion, GLS was used as a method to get around the presence of correlation within repeated measurement data. We did this by imposing a structure for GLS to remove. This has the distinct disadvantage of requiring us to <em>know</em> what that structure is in order for this to work. If we do not know this, we simply have to guess. However, if we get this <em>wrong</em> then the removal we impose will be <em>imperfect</em>. We saw this already in terms of small samples, but think more carefully about the asymptotic assumptions. We said previously that we can take <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\Sigma}} = \boldsymbol{\Sigma}\)</span> as the sample size gets larger. However, this is only true if we assume that the structure is correct. If we have assumed compound symmetry then the asymptotic tests (indeed, any tests in GLS) are predicated on assuming that the <em>form</em> of the covariance matrix is correct. The uncertainty lies in the values within that structure, not around its general form. So if we are <em>wrong</em> everything falls apart.</p>
+<p>Furthermore, for repeated measurements, the correlation is a product of the <em>structure</em> of the data, yet GLS has no knowledge of this structure. It simply removes what we tell it to because GLS is entirely covariance-focussed. It does not care <em>where</em> the correlation comes from, it just treats it as a nuisance to be removed. While this may not be an issue for some types of data, for others using LME models to embedding the structure of the data buys us many advantages. One such advantage is that we do not need to reason about what covariance structure is appropriate when we have complex data with multiple sources of dependency. As we will see next week, LME models can be applied to situations with many levels to the hierarchy. Because the covariance structure is an emergent property of the structure, so long as the structure is captured correctly the most appropriate covariance structure will always just fall out of the model. This changes our focus from <em>capturing covariance</em> to <em>capturing structure</em>. Once we get our head around doing this we are at an advantage because <em>structure</em> is more readily defensible. There is no argument against repeated measurements being collected <em>within</em> subjects, that is a fact of the data. However, there are plenty of arguments around compound symmetry vs sphericity vs unconstrained covariance matrices.</p>
 </section>
 <section id="pooling-and-shrinkage">
 <h3>Pooling and Shrinkage<a class="headerlink" href="#pooling-and-shrinkage" title="Link to this heading">#</a></h3>
-<p>…</p>
+<p>Another advantage of LME models is that, by embedding the structure of the data within the model, they can actually <em>use</em> that structure to their advantage. Two phenomena that emerge from the LME framework that are <em>not</em> seen in GLS are <em>pooling</em> and <em>shrinkage</em>. In an LME model, unit-specific effects (such as subject means) are estimated using <em>both</em> the data from that unit and information about the population as a whole. This is known as <em>partial pooling</em>. Units with little data inherently provide <em>noisy estimates</em> on their own. In an LME model, this is automatically taken into account by pulling their estimates toward the population average. On the other hand, units with lots of data are allowed to differ from the population average more strongly. This pulling toward the population mean is called <em>shrinkage</em>. So, subjects with missing data or fewer observations are less likely to bias the estimates because their lack of information is automatically accommodated. Extreme values are only allowed if there is <em>a lot</em> of data supporting them. Importantly, this is an inherent property of estimation within the LME framework. It is not specified by the analyst <em>a priori</em>, it is just something that happens. This is why LME models can be so useful in the real-world because missing data is not problematic, it is something the model will automatically accommodate. This is <em>not</em> true of GLS, where <em>no pooling</em> takes place. GLS makes no adjustments for noisy or uncertain data so estimates are never <em>shrunk</em> towards a population average. Indeed, GLS knows nothing about <em>units</em> or <em>subjects</em> and so this lack of structure means this cannot happen. Subjects with missing data just contribute less to the estimation of the covariance structure, but there is no inherent weighting that uses this lack of information to balance the estimates.</p>
 </section>
 <section id="the-bias-variance-tradeoff">
 <h3>The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Link to this heading">#</a></h3>
-<p>… So, from this perspective, LME models provide a solution to this issue via pooling and shrinkage. GLS provides <em>no pooling</em> ….</p>
+<p>A key concept within statistical modelling is the <em>bias-variance</em> tradeoff. Here, <em>bias</em> refers to a model being <em>systematically wrong</em>. Even with more data, the model predictions are off from the true values by some amount. In other words, the model keeps <em>missing</em> in some consistent way. <em>Variance</em> then refers to <em>instability</em>. With each new sample the model estimates differ <em>wildly</em>, with no consistency from sample to sample. These are two ends of a spectrum. <em>Bias</em> comes from a model that is too <em>rigid</em>, so irrespective of the data it keeps making the same mistakes. <em>Variance</em> comes from a model that is too <em>flexible</em>. It over-reacts to new data, shifting itself around constantly. A model with <em>high bias</em> will give similar answers with new data, so it is <em>consistent</em> and <em>reliable</em>, but <em>inflexible</em> and may not fit the data very well. A model with <em>high variance</em> will keep changing its answers with new data, so it is <em>inconsistent</em> and <em>unreliable</em>, but <em>flexible</em> and may fit the data much better. The <em>trade-off</em> is that we cannot minimise <em>both</em>. We either keep our model <em>simple</em> and <em>rigid</em>, which reduces variance and increases bias, or we make our model <em>complex</em> and <em>flexible</em>, which increases variance but reduces bias. We cannot do <em>both</em>.</p>
+<p>Where an LME model is useful is because it provides one particular “solution” to this issue. By applying <em>partial pooling</em> and <em>shrinking</em> values towards the population average the model is able to introduce a small amount of <em>bias</em>. By not allowing the estimates to be solely governed by the noisy data of any particular individual, the model becomes more rigid and less reactive to the data. This is a principled way of introducing a little bit of sensible bias, which then allows for a substantial reduction in variance. By applying partial pooling, new data from the same population will not dramatically shift the model estimates. The model is not so rigid that it will not change for new data, but that change has been regulated by balancing the information provided by noisy subjects and using the population <em>as a whole</em> to determine sensible estimates. This is a balancing of information that provides a sensible compromise, yet the analyst does not need to do anything. This is all automatic and built-in to the framework. A GLS model does not, indeed <em>cannot</em>, do this.</p>
 </section>
 <section id="regularisation">
 <h3>Regularisation<a class="headerlink" href="#regularisation" title="Link to this heading">#</a></h3>
+<p>Another perspective on <em>partial pooling</em> is as a form of <em>regularisation</em>. Regularisation is a broader concept in mathematics, but we can think of it as the use of some sort of <em>penalty</em> or <em>restriction</em> that forces our model to give us <em>sensible answers</em>. This is key because ultimately any mathematical model simply produces numbers based on some other numbers. In order for this to be useful, we need to introduce constraints in terms of what numbers the model can spit out. If it gives us values that are way off the scale of what we are measuring, or is predicting responses that are implausible, then it is not a very good model. The introduction of <em>penalties</em> or <em>restrictions</em> is known as <em>regularising the solution</em>. These penalties are not usually all-or-nothing. We do not make certain values <em>impossible</em>, rather the penalty scales with plausibility <em>and</em> the amount of data. The model is therefore allowed to consider extreme values, but <em>only</em> when these are overwhelmingly supported by the data. Bayesian methods embed this in their overarching framework. Frequentist methods do not always do this, but the behaviour of an LME model does allow this to a degree. Pooling and shrinkage are a <em>form</em> of regularisation. A subject is only allowed to have a mean that is <em>extreme</em>, in terms of its distance from the population average, if they also have <em>a lot</em> of data supporting this value. If they do not, their mean will be <em>shrunk</em> towards the population average in order to <em>regularise</em> the solution. This keeps the model <em>sensible</em> and balances the structure we have imposed with what the data is telling us.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored … . After reading this section, you should have a good sense of :</p>
+<ul class="simple">
+<li><p>…</p></li>
+<li><p>…</p></li>
+<li><p>…</p></li>
+</ul>
+</aside>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="error-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>This also explains why we did not use the usual symbol of <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span> for the errors until now.</p>
+</aside>
+<aside class="footnote brackets" id="summarystat-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>In the wild, you find summary statistic approaches applied to problems such as <em>meta-analyses</em>, where the effect sizes from each study are taken as the summaries, or in <em>fMRI</em>, where estimates of signal change from each subject are taken as the summaries.</p>
+</aside>
+</aside>
 </section>
 </section>
 </section>
@@ -608,11 +607,11 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
       </div>
     </a>
     <a class="right-next"
-       href="5.inference-mixed.html"
+       href="5.mixed-R.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Inference in Mixed-effects Models</p>
+        <p class="prev-next-title">Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -635,14 +634,11 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-a-multilevel-models-into-a-mixed-effects-model">Turning a Multilevel Models into a Mixed-effects Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-existing-multilevel-model">The Existing Multilevel Model</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mixed-effects-trick">The Mixed-effects Trick</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioned-errors-perspective">Partitioned Errors Perspective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lme-trick">The LME Trick</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-collapse-the-hierarchy">Why Collapse the Hierarchy?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-nlme">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-using-lme4">Mixed-effects Using <code class="docutils literal notranslate"><span class="pre">lme4</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-mixed-effects">Advantages of Mixed-effects</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-multilevel-lme-models">Advantages of Multilevel/LME Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-data-structure">Modelling Data Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-shrinkage">Pooling and Shrinkage</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
