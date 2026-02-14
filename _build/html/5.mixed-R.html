@@ -416,10 +416,10 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="mixed-effects-models-in-r">
 <h1>Mixed-effects Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#mixed-effects-models-in-r" title="Link to this heading">#</a></h1>
-<p>As the final part of this lesson, we turn to the process of fitting LME models using <code class="docutils literal notranslate"><span class="pre">R</span></code>, as well as options around inference. These examples will all be fairly basic, but we will see more variety in the workshop this week. In addition, we will see that there are <em>two</em> main options in <code class="docutils literal notranslate"><span class="pre">R</span></code> for fitting LME models. The first is the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package and the second is the <code class="docutils literal notranslate"><span class="pre">lmer()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package. We will discuss both below, as well as their advantages and disadvantages.</p>
+<p>As the final part of this lesson, we turn to the process of fitting LME models using <code class="docutils literal notranslate"><span class="pre">R</span></code>, as well as options around inference. These examples will all be fairly basic, but we will see more variety in the workshop this week. In addition, our focus will be on the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package to keep things simple. In reality, there are <em>two</em> <code class="docutils literal notranslate"><span class="pre">R</span></code> packages that are used frequently in practice: <code class="docutils literal notranslate"><span class="pre">nlme</span></code> and <code class="docutils literal notranslate"><span class="pre">lme4</span></code>. Both have their advantages and disadvantages, however, they are so similar that knowing one would easily allow you to use the other. For our purpose, the advantages of <code class="docutils literal notranslate"><span class="pre">lme4</span></code> are few at present and so we stick with <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to reduce confusion.</p>
 <section id="fitting-mixed-effects-models-with-nlme">
 <h2>Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#fitting-mixed-effects-models-with-nlme" title="Link to this heading">#</a></h2>
-<p>We will start with the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package, both because it is the <em>older</em> of the two and because it is already familiar from the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function. To fit a LME model, we use the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function, which has a syntax very similar to the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function, but with the addition of a <code class="docutils literal notranslate"><span class="pre">random=</span></code> option for specifying the random effects. To understand how to use this, we will return to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>.</p>
+<p>To fit an LME model using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, we use the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function, which has a syntax very similar to the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function. To understand how to use this, we will return to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">anxiety.long</span><span class="p">)</span>
@@ -470,7 +470,9 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
 \]</div>
 <p>so the <em>fixed-effects</em> part just appears in the model equation as <code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">time</span></code>. The <em>random-effects</em> part consists of <span class="math notranslate nohighlight">\(\xi_{i} + \eta_{ij}\)</span>, but we do not need to specify <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because that is the residual error term that is <em>always</em> included in a linear model. We know this already from <code class="docutils literal notranslate"><span class="pre">lm()</span></code> as we never have to ask for residuals, they are always there. So, the only thing that differentiates the model above from something we could fit with <code class="docutils literal notranslate"><span class="pre">lm()</span></code> is the term <span class="math notranslate nohighlight">\(\xi_{i}\)</span>. This is <em>precisely</em> what we specify using the <code class="docutils literal notranslate"><span class="pre">random=</span></code> argument.</p>
 <p>So what is <span class="math notranslate nohighlight">\(\xi_{i}\)</span>? Well, if we look at its index, it is a value that changes with <em>each subject</em>. It is therefore <em>constant</em> within a subject, but different between subjects. So how do we specify a value that is only constant <em>within</em> each subject? Well, we represent it as a constant using a <code class="docutils literal notranslate"><span class="pre">1</span></code> but make it <em>conditional</em> on the subject by using <code class="docutils literal notranslate"><span class="pre">|id</span></code>. So <code class="docutils literal notranslate"><span class="pre">1|id</span></code> can be read as <em>a constant per-subject</em>.</p>
-<p>Alternatively, we can go back to the multilevel conceptualisation and think of this as describing the model that we fit to each individual subject. We will use some pseudo-code below to get the idea across, just be aware that most of this is not valid <code class="docutils literal notranslate"><span class="pre">lme()</span></code> syntax (but the ideas are hopefully clear). As described earlier, when we have <em>no replications</em> within each level of the repeated measures, the best we can do with the data from <em>one</em> subject is fit a constant. So our model for one subject would be something like</p>
+<div class="tip admonition">
+<p class="admonition-title">Multilevel Conceptualisation</p>
+<p>Alternatively, we can built the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> syntax from the multilevel conceptualisation. We can then think of the <code class="docutils literal notranslate"><span class="pre">random=</span></code> argument as describing elements of the model that we fit to each individual subject. We will use some pseudo-code below to get the idea across, just be aware that most of this is not valid <code class="docutils literal notranslate"><span class="pre">lme()</span></code> syntax (but the ideas are hopefully clear). As described earlier, when we have <em>no replications</em> within each level of the repeated measures, the best we can do with the data from <em>one</em> subject is fit a constant. So our model for one subject would be something like</p>
 <p><code class="docutils literal notranslate"><span class="pre">score[id</span> <span class="pre">==</span> <span class="pre">1]</span> <span class="pre">~</span> <span class="pre">1</span></code></p>
 <p>If we wanted this to work for <em>all</em> subjects, we would need to indicate that we want a <em>different</em> constant for each subject, which would give something like</p>
 <p><code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">1|id</span></code></p>
@@ -479,10 +481,11 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
 <p><code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">1|id</span> <span class="pre">+</span> <span class="pre">time</span></code>.</p>
 <p>However, this is <em>not</em> how <code class="docutils literal notranslate"><span class="pre">lme()</span></code> works. Instead, in order to clearly differentiate the random-effects from the fixed-effects, <code class="docutils literal notranslate"><span class="pre">lme()</span></code> requires that we move anything random out of the model equation and put it in a separate argument. So this gives the final <em>real</em> specification of</p>
 <p><code class="docutils literal notranslate"><span class="pre">lme(score</span> <span class="pre">~</span> <span class="pre">time,</span> <span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id)</span></code></p>
+</div>
 </section>
 <section id="exploring-the-lme-output">
 <h3>Exploring the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> Output<a class="headerlink" href="#exploring-the-lme-output" title="Link to this heading">#</a></h3>
-<p>Before we get into the hairy topic of <em>inference</em>, let us explore a bit more around the model we have just fit. We can print the estimates and other details by calling</p>
+<p>Before we get into the hairy topic of <em>inference</em>, let us explore the model we have just fit. We can print the estimates and other details by calling</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">)</span>
@@ -510,7 +513,7 @@ Number of Groups: 15
 </div>
 <p>Where we can see some fitting details, such as the estimation method (restricted maximum likelihood, or REML), the number of data points and the number of grouping structures we used (in this case, 15 subjects). We can also see the estimates of the <em>fixed-effects</em> as well as the variance terms calculated from the random effects (given as standard deviations).</p>
 <p>The <em>fixed-effects</em> are interpreted in the same way as with <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. Because <code class="docutils literal notranslate"><span class="pre">time</span></code> is categorical, <code class="docutils literal notranslate"><span class="pre">R</span></code> has converted it to a dummy variable. To make the model identifiable, <code class="docutils literal notranslate"><span class="pre">time1</span></code> has been dropped, so we have a dummy for <code class="docutils literal notranslate"><span class="pre">time2</span></code> and a dummy for <code class="docutils literal notranslate"><span class="pre">time3</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> parameter is therefore the mean value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for <code class="docutils literal notranslate"><span class="pre">time1</span></code>, the <code class="docutils literal notranslate"><span class="pre">time2</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time2</span> <span class="pre">-</span> <span class="pre">time1</span></code>, and the <code class="docutils literal notranslate"><span class="pre">time3</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time3</span> <span class="pre">-</span> <span class="pre">time1</span></code>. This is exactly the same as we have seen previously with any linear model containing a categorical predictor variable. The <em>fixed-effects</em> therefore give us our predictions for the <em>marginal</em> means. In other words, when we <em>average across</em> the subjects. These are the model predictions for the population-level effects, in the same way that they would from a usual call to <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
-<p>The difference of course is that we now also have the <em>random-effects</em>. We can think of these as <em>error-terms</em>, either using an LME model conceptualisation of a model with <em>multiple</em> errors, or using a multilevel model conceptualisation of different errors at each <em>level</em> of the hierarchy. Importantly, what the random-effects add to the model is not any change to the mean function, rather they create <em>additional variance terms</em>. The two random elements are</p>
+<p>The difference of course is that we now also have the <em>random-effects</em>. We can think of these as <em>error-terms</em>, either using an LME conceptualisation of a model with <em>multiple</em> errors, or using a multilevel conceptualisation of different errors at each <em>level</em> of the data hierarchy. Importantly, what the random-effects add to the model is not any change to the mean function, rather they create <em>additional variance terms</em>. The two random elements are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -518,8 +521,8 @@ Number of Groups: 15
     \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right),
 \end{alignat*}
 \end{split}\]</div>
-<p>so estimating their expected value would be silly anyway, because it would be 0 in both cases. Instead, we want to <em>use</em> the random effects to estimate <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>. This is no different to the errors in a normal linear model, which are used to estimate <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. The difference now is that this overall variance has been <em>partitioned</em> into <span class="math notranslate nohighlight">\(\sigma^{2} = \sigma^{2}_{b} + \sigma^{2}_{w}\)</span>.</p>
-<p>The estimated variance components are given in the output above under <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> term corresponds to <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b} = 1.34^{2}\)</span>. The <code class="docutils literal notranslate"><span class="pre">Residual</span></code> term corresponds to <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{w} = 0.30^{2}\)</span>. As expected, the within-subject variance is much smaller than the between-subject, as people tend to be <em>internally consistent</em> but can differ wildly from others.</p>
+<p>so estimating their expected value would be silly anyway, as it is 0 in both cases. Instead, we want to <em>use</em> the random effects to estimate <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>. This is no different to the errors in a normal linear model, which are used to estimate <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. The difference now is that this overall variance has been <em>partitioned</em> into <span class="math notranslate nohighlight">\(\sigma^{2} = \sigma^{2}_{b} + \sigma^{2}_{w}\)</span>.</p>
+<p>The estimated variance components are given in the output above under <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> term corresponds to <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b} = 1.34^{2} = 1.80\)</span>. The <code class="docutils literal notranslate"><span class="pre">Residual</span></code> term corresponds to <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{w} = 0.30^{2} = 0.09\)</span>. As expected, the within-subject variance is much smaller than the between-subject, as people tend to be <em>internally consistent</em> but can differ wildly from others.</p>
 <p>We can also have a look at the realised values of the random effects, using the <code class="docutils literal notranslate"><span class="pre">random.effects()</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -548,7 +551,7 @@ Number of Groups: 15
 </div>
 </div>
 </div>
-<p>So, these are the values of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> in this model. These can be interpreted as <em>subject-specific</em> deflections from the population mean. For instance, <span class="math notranslate nohighlight">\(\xi_{1} = -2.06\)</span>. This means that irrespective of the value of <code class="docutils literal notranslate"><span class="pre">time</span></code>, subject 1 is predicted to sit <em>below</em> the population average by 2.06 points on the self-esteem <code class="docutils literal notranslate"><span class="pre">score</span></code>. So, the predicted population mean for <code class="docutils literal notranslate"><span class="pre">time1</span></code> in this model is given by</p>
+<p>These are the estimated values of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> in this model and can be interpreted as <em>subject-specific</em> deflections from the population mean. For instance, <span class="math notranslate nohighlight">\(\xi_{1} = -2.06\)</span>. This means that irrespective of the value of <code class="docutils literal notranslate"><span class="pre">time</span></code>, subject 1 is predicted to sit <em>below</em> the population average by 2.06 points on the self-esteem scale. So, the predicted population mean for <code class="docutils literal notranslate"><span class="pre">time1</span></code> in this model is given by</p>
 <div class="math notranslate nohighlight">
 \[
 \hat{y}_{i1} = \hat{\mu} + \hat{\alpha}_{1} = \hat{\mu} = 17.01,
@@ -572,7 +575,7 @@ Number of Groups: 15
 </div>
 </div>
 </div>
-<p>As we can see, this is effectively 0, which is no different from the residuals of a normal linear model. So, instead, what we want to know is how much the subject-specific deflections <em>vary</em>. Their <em>spread</em> tells us how much the subjects differ from each other and thus provides an estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>, which is the variance of the distribution we imagine the random effects are drawn from. So, we can instead calculate</p>
+<p>As we can see, this is effectively 0. Instead, what we want to know is how much the subject-specific deflections <em>vary</em>. Their <em>spread</em> tells us how much the subjects differ from each other and thus provides an estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span>. So, we can instead calculate</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">var</span><span class="p">(</span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">)[,</span><span class="m">1</span><span class="p">])</span>
@@ -585,7 +588,7 @@ Number of Groups: 15
 </div>
 </div>
 </div>
-<p>Which is exactly what the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> model is reporting above: the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span> using the spread of the realised values of the random effects. The same is true of the residual errors, which are mean 0 and used to estimate <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>.</p>
+<p>The same is true of the residual errors, which are also mean 0 and can be used to estimate <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>.</p>
 <p>We can look at both of these effects side-by-side by plotting their distributions. Remember, the theory states that</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -624,11 +627,12 @@ Number of Groups: 15
 <img alt="_images/2bb570d785d5c55987fdadf56777cbb23dde912208ac59ff16565f8757fa9631.png" src="_images/2bb570d785d5c55987fdadf56777cbb23dde912208ac59ff16565f8757fa9631.png" />
 </div>
 </div>
-<p>Although the amount of data in this example makes the distributional form harder to verify, the key elements to notice here are that both distributions are centred on 0. So the expected values of both <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are 0. This is why the expected population effect is driven purely by the fixed-effects because, on average, the errors are 0. Secondly, the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> is <em>much wider</em> than the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>. This is because the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> reflects measurements from <em>different subjects</em> and the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> reflects measurements from the <em>same subject</em>.</p>
 </section>
 </section>
 <section id="inference-in-mixed-effects-models">
 <h2>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h2>
+<p>Although the amount of data in this example makes the distributional form harder to verify, the key elements to notice here are that both distributions are centred on 0. So the expected values of both <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> are 0. This is why the expected population effect is driven purely by the fixed-effects because, on average, the errors are 0. Secondly, the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> is <em>much wider</em> than the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>. This is because the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> reflects measurements from <em>different subjects</em> and the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> reflects measurements from the <em>same subject</em>.</p>
+<p>We can also see the fundamental assumption behind treating <code class="docutils literal notranslate"><span class="pre">id</span></code> as a <em>random-effect</em>. When we do this, we conceptualise each level of <code class="docutils literal notranslate"><span class="pre">id</span></code> as a random draw from a larger population of subjects. We therefore assume some distributional form for the <em>subject</em> effects and estimate its variance. This is the distribution we see in the plot above. If we instead treated <code class="docutils literal notranslate"><span class="pre">id</span></code> as a <em>fixed-effect</em>, we assume that each of its levels represents some population-level constant that we want to estimate. There would be no distribution and no variance to estimate. We would be effectively saying that we are only interested in <em>these subjects</em> and no one else. We want to <em>precisely</em> know the mean of <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">'32'</span></code> and make comparisons and inference on <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">32</span></code> compared to <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">42</span></code> or <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">44</span></code> or between any pairs of subjects. It would be like treating the levels of <code class="docutils literal notranslate"><span class="pre">id</span></code> in the same way as the levels of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Although there may be cases where the subjects that you have are <em>special</em> and each one is <em>meaningful</em> on their own, this is not our usual aim when we collect a sample. So, for most experiments, the subjects <em>have</em> to be treated as a <em>random-effect</em> in order to make sense.</p>
 <section id="the-implied-marginal-model">
 <h3>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h3>
 <p>… From this perspective, a mixed-effects model is simply GLS, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important consequences:</p>
@@ -637,6 +641,71 @@ Number of Groups: 15
 <li><p>The covariance structure is <em>more restricted</em> under mixed-effects, because it is constrained by the random effects themselves</p></li>
 </ol>
 <p>… The advantages of GLS are still there. For instance, the correct error term for each test can be automatically generated from the covariance structure. So while the model itself may be no better than the repeated measures ANOVA, it is infinitely <em>more practical</em> because we do not need to mess around manually assigning error terms to different tests (and worrying about getting this wrong).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
+
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;31&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span>
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">Sigma</span><span class="o">$</span><span class="n">`31`</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         1        2        3
+1 1.899778 1.807698 1.807698
+2 1.807698 1.899778 1.807698
+3 1.807698 1.807698 1.899778
+</pre></div>
+</div>
+<img alt="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" src="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" />
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
+
+<span class="n">fullVarCov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">grouping_var_name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">fit</span><span class="o">$</span><span class="n">groups</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="c1"># get grouping variable name (e.g &quot;id&quot;)</span>
+<span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">data</span><span class="p">[[</span><span class="n">grouping_var_name</span><span class="p">]]</span><span class="w">   </span><span class="c1"># use name to get grouping variable</span>
+<span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">groups</span><span class="p">))</span><span class="w">    </span><span class="c1"># reduce grouping variable to unique values</span>
+
+<span class="w">  </span><span class="c1"># for each unique grouping variable value, extract the covariance matrices</span>
+<span class="w">  </span><span class="n">blocks</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">gi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gi</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;marginal&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">is.list</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="p">[[</span><span class="n">gi</span><span class="p">]]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+<span class="w">  </span><span class="p">})</span>
+
+<span class="w">  </span><span class="c1"># put the covariance matrices into blocks</span>
+<span class="w">  </span><span class="n">V</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">bdiag</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+<span class="w">  </span><span class="n">V</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Big.Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fullVarCov</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="n">Big.Sigma</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" src="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" />
+</div>
+</div>
 </section>
 </section>
 <section id="inference-using-nlme">
@@ -686,6 +755,9 @@ Number of Groups: 15
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+</pre></div>
+</div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
 
 Response: score
