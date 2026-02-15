@@ -400,9 +400,16 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-in-mixed-effects-models">Inference in Mixed-effects Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#anova-tables-and-follow-up-tests">ANOVA Tables and Follow-up Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-anova">Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-emmeans">Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -522,7 +529,7 @@ Number of Groups: 15
 \end{alignat*}
 \end{split}\]</div>
 <p>so estimating their expected value would be silly anyway, as it is 0 in both cases. Instead, we want to <em>use</em> the random effects to estimate <span class="math notranslate nohighlight">\(\sigma^{2}_{b}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{w}\)</span>. This is no different to the errors in a normal linear model, which are used to estimate <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. The difference now is that this overall variance has been <em>partitioned</em> into <span class="math notranslate nohighlight">\(\sigma^{2} = \sigma^{2}_{b} + \sigma^{2}_{w}\)</span>.</p>
-<p>The estimated variance components are given in the output above under <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> term corresponds to <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b} = 1.34^{2} = 1.80\)</span>. The <code class="docutils literal notranslate"><span class="pre">Residual</span></code> term corresponds to <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{w} = 0.30^{2} = 0.09\)</span>. As expected, the within-subject variance is much smaller than the between-subject, as people tend to be <em>internally consistent</em> but can differ wildly from others.</p>
+<p>The estimated variance components are given in the output above under <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> term corresponds to <span class="math notranslate nohighlight">\(\xi_{i}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{b} = 1.34^{2} = 1.80\)</span>. The <code class="docutils literal notranslate"><span class="pre">Residual</span></code> term corresponds to <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> and thus the estimate of <span class="math notranslate nohighlight">\(\sigma^{2}_{w} = 0.30^{2} = 0.09\)</span>. As expected, the within-subject variance is much smaller than the between-subject, as people tend to exhibit a degree of <em>internally consistency</em> but can differ wildly from others.</p>
 <p>We can also have a look at the realised values of the random effects, using the <code class="docutils literal notranslate"><span class="pre">random.effects()</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -633,14 +640,38 @@ Number of Groups: 15
 </section>
 <section id="inference-in-mixed-effects-models">
 <h2>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h2>
+<p>As a final topic in this lesson, we return to the controversial subject of <em>inference</em>. As we know from previous lessons, assuming a more general form for the covariance structure <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> causes problems for the classical inferential framework. This is precisely because the distributions of the variance terms are no longer known. Traditionally, the variance has a scaled <span class="math notranslate nohighlight">\(\chi^{2}\)</span> distribution, whose width is parameterised by the degrees of freedom. Without this, the null distribution of the tests statics are unknown and the whole concept of error degrees of freedom disappears from our testing framework. Recall as well that there were then 3 possible solutions to this problem:</p>
+<ul class="simple">
+<li><p>Assume we know <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> and carry on as usual</p></li>
+<li><p>Assume we know <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, but only because we have enough data and can use <em>asymptotic</em> results</p></li>
+<li><p>Compensate by calculating <em>effective</em> degrees of freedom</p></li>
+</ul>
+<p>To begin with, we will briefly explore why all this remains relevant for mixed-effects models, by showing that a mixed-effects model is <em>equivalent</em> to a GLS model.</p>
 <section id="the-implied-marginal-model">
 <h3>The Implied Marginal Model<a class="headerlink" href="#the-implied-marginal-model" title="Link to this heading">#</a></h3>
-<p>… From this perspective, a mixed-effects model is simply GLS, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important consequences:</p>
+<p>Although we have been working on the basis that a hierarchical/LME model does not require direct consideration of the covariance structure, the covariance structure <em>still exists</em>. Unlike GLS, this structure is <em>implied</em> rather than directly specified. Nonetheless, we saw earlier in our simulations that a given covariance structure will emerge as a property of the random effects. Because of this, we can think of an LME model as <em>implying</em> the following <em>marginal</em> model of the data</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{y}_{i} \sim \mathcal{N}\left(\boldsymbol{\mu},\boldsymbol{\Sigma}_{i}\right),
+\]</div>
+<p>where we are assuming that <span class="math notranslate nohighlight">\(\mathbf{y}_{i}\)</span> is the vector of repeated measurements from subject <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(\boldsymbol{\mu}\)</span> is the vector of population means for the repeated measures and <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}_{i}\)</span> is block <span class="math notranslate nohighlight">\(i\)</span> from the full covariance structure. Remember, this is <em>marginal</em> because the mean structure is the average across <em>all subjects</em>, rather than <em>conditional</em> on this specific subject. Of importance, is that <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}_{i}\)</span> can be formed <em>directly</em> from the random-effects. The way this is done requires more explanation of how LME models can be expressed using matrix notation and so is somewhat beyond our current score. Nevertheless, we can understand this from what we have seen previously where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Var}\left(y_{ij}\right) &amp;= \sigma^{2}_{b} + \sigma^{2}_{w} \\
+    \text{Cov}\left(y_{ij},y_{ij^{\prime}}\right) &amp;= \sigma^{2}_{b} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>which implies a compound symmetric structure based on the random effects alone. The big-picture conclusion here is that an LME model <em>is the same as GLS</em>, but with a more sophisticated way of constructing the variance-covariance matrix using the random effects. This leads to some important conclusions:</p>
 <ol class="arabic simple">
-<li><p>The inferential issues around GLS are <em>identical</em> for mixed-effects</p></li>
-<li><p>The covariance structure is <em>more restricted</em> under mixed-effects, because it is constrained by the random effects themselves</p></li>
+<li><p>The concept of <em>removing</em> the covariance structure and then estimating the fixed-effects remains the <em>same</em> under an LME model.</p></li>
+<li><p>The inferential issues around GLS are <em>identical</em> for LME models.</p></li>
+<li><p>The covariance structure is <em>more restricted</em> under LME models, because it is constrained by the random effects themselves.</p></li>
 </ol>
-<p>… The advantages of GLS are still there. For instance, the correct error term for each test can be automatically generated from the covariance structure. So while the model itself may be no better than the repeated measures ANOVA, it is infinitely <em>more practical</em> because we do not need to mess around manually assigning error terms to different tests (and worrying about getting this wrong).</p>
+</section>
+<section id="the-marginal-covariance-structure">
+<h3>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h3>
+<p>We can see all this visually using our model fit with <code class="docutils literal notranslate"><span class="pre">lme()</span></code>. In the code below, we use the <code class="docutils literal notranslate"><span class="pre">getVarCov()</span></code> function to again extract the marginal covariance matrix for a particular value of <code class="docutils literal notranslate"><span class="pre">id</span></code> and then visualise it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
@@ -663,6 +694,7 @@ Number of Groups: 15
 <img alt="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" src="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" />
 </div>
 </div>
+<p>As expected, this is <em>compound symmetric</em>, though this is now <em>implied</em> by the random-effects, rather than specified directly as we did with GLS. We can also use the function defined in the drop-down below to construct the <em>full</em> covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, using the details about the model structure in the model object returned by <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -706,10 +738,13 @@ Number of Groups: 15
 <img alt="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" src="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" />
 </div>
 </div>
-</section>
+<p>So we can see that this is indeed block-diagonal, with a compound symmetric structure per-subject and zeros everywhere else.</p>
+<p>Although we are somewhat focusing on shared <em>disadvantages</em>, it is important to recognise that all the <em>advantages</em> of GLS are also still here. For instance, the correct error term for each test can be automatically generated from the covariance structure. So while a model may be no better than the repeated measures ANOVA in its covariance assumptions, it is infinitely <em>more practical</em> because we do not need to mess around manually assigning error terms to different tests (and worrying about getting this wrong).</p>
+<p>Additionally, the connection between the random-effects and the covariance structure implies that <em>more complex</em> random-effect specifications will lead to different covariance structures. Indeed, this is exactly the case. Where this is useful is when we have more complex data structures. Because the random-effects are a direct consequence of the structure of the data, the structure drives the covariance pattern. This means we do not have to reason about what pattern we want and whether we can express this to a function like <code class="docutils literal notranslate"><span class="pre">gls()</span></code>. Instead, we supply the data structure through the random-effects and the covariance is built for us, no matter its complexity. This is something that will become clearer when we start exploring more complex data structures <em>next week</em>.</p>
 </section>
 <section id="inference-using-nlme">
-<h2>Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#inference-using-nlme" title="Link to this heading">#</a></h2>
+<h3>Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#inference-using-nlme" title="Link to this heading">#</a></h3>
+<p>Now, let us get back to the <em>practical</em> topic of inference using LME models in <code class="docutils literal notranslate"><span class="pre">R</span></code>. To begin, we can call <code class="docutils literal notranslate"><span class="pre">summary()</span></code> on the model object returned by <code class="docutils literal notranslate"><span class="pre">lme()</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">)</span>
@@ -747,6 +782,40 @@ Number of Groups: 15
 </div>
 </div>
 </div>
+<p>As we can see, this returns an output very similar to what we have seen before from <code class="docutils literal notranslate"><span class="pre">lm()</span></code> and <code class="docutils literal notranslate"><span class="pre">gls()</span></code>. The main additional information we have compared to simply printing the model (as we did earlier) is the table of coefficients associated with the <em>fixed-effects</em>. However, notice two important details from the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> output</p>
+<ol class="arabic simple">
+<li><p>Degrees of freedom and <span class="math notranslate nohighlight">\(t\)</span>-statistics are given, so this is <em>not</em> using and asymptotic approximation</p></li>
+<li><p>The degrees of freedom are <em>not</em> based on assuming that <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span> is known as they are <em>smaller</em> than those reported by <code class="docutils literal notranslate"><span class="pre">gls()</span></code>.</p></li>
+</ol>
+<p>So, what is this output doing? It is using <em>effective</em> degrees of freedom to specify the tests, using the <em>structure</em> built-in to the LME model. Now, the method used is fairly basic and is given by a heuristic described more fully in <a class="reference external" href="https://www.google.co.uk/books/edition/Mixed_Effects_Models_in_S_and_S_PLUS/y54QDUTmvDcC?hl=en&amp;amp;gbpv=1&amp;amp;dq=pinheiro+and+bates+2000&amp;amp;printsec=frontcover">Pinheiro and Bates (2000, pg.91)</a>. Nevertheless, this tells us something important about LME models. Because the data structure is embedded in the model specification, we can more readily use this structure to make better approximations to the uncertainty around the variance terms. A GLS model has <em>no knowledge</em> of the structure. It just see a single covariance matrix of any structure that it can remove. So even though the heuristic used by <code class="docutils literal notranslate"><span class="pre">lme()</span></code> is a very basic approximation, it does agree with the classical specification of degrees of freedom in a repeated measures ANOVA. So, at the <em>very least</em> we are back in familiar territory.</p>
+</section>
+</section>
+<section id="anova-tables-and-follow-up-tests">
+<h2>ANOVA Tables and Follow-up Tests<a class="headerlink" href="#anova-tables-and-follow-up-tests" title="Link to this heading">#</a></h2>
+<section id="using-anova">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code><a class="headerlink" href="#using-anova" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;sequential&#39;</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            numDF denDF   F-value p-value
+(Intercept)     1    28 1884.0239  &lt;.0001
+time            2    28  489.7321  &lt;.0001
+            numDF denDF   F-value p-value
+(Intercept)     1    28 2285.4266  &lt;.0001
+time            2    28  489.7321  &lt;.0001
+</pre></div>
+</div>
+</div>
+</div>
+<p>What about Type II? Well, there’s no direct equivalence built-in to the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function with an <code class="docutils literal notranslate"><span class="pre">lme()</span></code> model. You <em>could</em> do this manually with model comparisons (which will be covered in the workshop). However, for ease we probably just want to stick with the old faithful <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> function from <code class="docutils literal notranslate"><span class="pre">car</span></code>.</p>
+</section>
+<section id="id1">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
@@ -754,31 +823,18 @@ Number of Groups: 15
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-</pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
-
-Response: score
-      Chisq Df Pr(&gt;Chisq)    
-time 979.46  2  &lt; 2.2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Tests Using lme4</p>
+<p>So, even though we have not discussed <code class="docutils literal notranslate"><span class="pre">lme4</span></code>, this is one particular advantage of this package, because <code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> allows us to use effective degrees of freedom consistently. However, this package does have some disadvantages that make it <em>less practical</em> for general use and so we will leave it to one side for now.</p>
 </div>
-</div>
-</div>
+</section>
+</section>
+<section id="using-emmeans">
+<h2>Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#using-emmeans" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">emmeans</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to emmeans.
-Caution: You lose important information if you filter this package&#39;s results.
-See &#39;? untidy&#39;
 </pre></div>
 </div>
 </div>
@@ -858,9 +914,16 @@ See &#39;? untidy&#39;
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-in-mixed-effects-models">Inference in Mixed-effects Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-implied-marginal-model">The Implied Marginal Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-using-nlme">Inference Using <code class="docutils literal notranslate"><span class="pre">nlme</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#anova-tables-and-follow-up-tests">ANOVA Tables and Follow-up Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-anova">Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-emmeans">Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
   </nav></div>
 
