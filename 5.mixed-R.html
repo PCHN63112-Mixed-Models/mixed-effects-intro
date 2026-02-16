@@ -405,11 +405,10 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#anova-tables-and-follow-up-tests">ANOVA Tables and Follow-up Tests</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-anova">Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnibus-tests-from-anova">Omnibus Tests From <code class="docutils literal notranslate"><span class="pre">Anova()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-tests-from-emmeans">Follow-up Tests From <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-emmeans">Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -519,7 +518,7 @@ Number of Groups: 15
 </div>
 </div>
 <p>Where we can see some fitting details, such as the estimation method (restricted maximum likelihood, or REML), the number of data points and the number of grouping structures we used (in this case, 15 subjects). We can also see the estimates of the <em>fixed-effects</em> as well as the variance terms calculated from the random effects (given as standard deviations).</p>
-<p>The <em>fixed-effects</em> are interpreted in the same way as with <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. Because <code class="docutils literal notranslate"><span class="pre">time</span></code> is categorical, <code class="docutils literal notranslate"><span class="pre">R</span></code> has converted it to a dummy variable. To make the model identifiable, <code class="docutils literal notranslate"><span class="pre">time1</span></code> has been dropped, so we have a dummy for <code class="docutils literal notranslate"><span class="pre">time2</span></code> and a dummy for <code class="docutils literal notranslate"><span class="pre">time3</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> parameter is therefore the mean value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for <code class="docutils literal notranslate"><span class="pre">time1</span></code>, the <code class="docutils literal notranslate"><span class="pre">time2</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time2</span> <span class="pre">-</span> <span class="pre">time1</span></code>, and the <code class="docutils literal notranslate"><span class="pre">time3</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time3</span> <span class="pre">-</span> <span class="pre">time1</span></code>. This is exactly the same as we have seen previously with any linear model containing a categorical predictor variable. The <em>fixed-effects</em> therefore give us our predictions for the <em>marginal</em> means. In other words, when we <em>average across</em> the subjects. These are the model predictions for the population-level effects, in the same way that they would from a usual call to <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
+<p>The <em>fixed-effects</em> are interpreted in the same way as with <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. Because <code class="docutils literal notranslate"><span class="pre">time</span></code> is categorical, <code class="docutils literal notranslate"><span class="pre">R</span></code> has converted it to a dummy variable. To make the model identifiable, <code class="docutils literal notranslate"><span class="pre">time1</span></code> has been dropped (<span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>), so we have a dummy for <code class="docutils literal notranslate"><span class="pre">time2</span></code> and a dummy for <code class="docutils literal notranslate"><span class="pre">time3</span></code>. The <code class="docutils literal notranslate"><span class="pre">(Intercept)</span></code> parameter is therefore the mean value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for <code class="docutils literal notranslate"><span class="pre">time1</span></code>, the <code class="docutils literal notranslate"><span class="pre">time2</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time2</span> <span class="pre">-</span> <span class="pre">time1</span></code>, and the <code class="docutils literal notranslate"><span class="pre">time3</span></code> parameter is the difference <code class="docutils literal notranslate"><span class="pre">time3</span> <span class="pre">-</span> <span class="pre">time1</span></code>. This is exactly the same as we have seen previously with any linear model containing a categorical predictor variable. The <em>fixed-effects</em> therefore give us our predictions for the <em>marginal</em> means. In other words, when we <em>average across</em> the subjects. These are the model predictions for the population-level effects, in the same way that they would from a usual call to <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
 <p>The difference of course is that we now also have the <em>random-effects</em>. We can think of these as <em>error-terms</em>, either using an LME conceptualisation of a model with <em>multiple</em> errors, or using a multilevel conceptualisation of different errors at each <em>level</em> of the data hierarchy. Importantly, what the random-effects add to the model is not any change to the mean function, rather they create <em>additional variance terms</em>. The two random elements are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -792,30 +791,10 @@ Number of Groups: 15
 </section>
 <section id="anova-tables-and-follow-up-tests">
 <h2>ANOVA Tables and Follow-up Tests<a class="headerlink" href="#anova-tables-and-follow-up-tests" title="Link to this heading">#</a></h2>
-<section id="using-anova">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code><a class="headerlink" href="#using-anova" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;sequential&#39;</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            numDF denDF   F-value p-value
-(Intercept)     1    28 1884.0239  &lt;.0001
-time            2    28  489.7321  &lt;.0001
-            numDF denDF   F-value p-value
-(Intercept)     1    28 2285.4266  &lt;.0001
-time            2    28  489.7321  &lt;.0001
-</pre></div>
-</div>
-</div>
-</div>
-<p>What about Type II? Well, there’s no direct equivalence built-in to the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function with an <code class="docutils literal notranslate"><span class="pre">lme()</span></code> model. You <em>could</em> do this manually with model comparisons (which will be covered in the workshop). However, for ease we probably just want to stick with the old faithful <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> function from <code class="docutils literal notranslate"><span class="pre">car</span></code>.</p>
-</section>
-<section id="id1">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>As we know, the typical approach when using a factor with &gt; 2 levels is to examine the <em>omnibus</em> tests via the ANOVA table. As we also know, under least-squares, the ANOVA can be conceptualised as a model comparisons procedure. Although the same is true <em>conceptually</em> with a LME model, there are added complications from the random-effects. We will discuss these more in the associated workshop. For now, we will just see what we get from using <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> to generate the omnibus tests.</p>
+<section id="omnibus-tests-from-anova">
+<h3>Omnibus Tests From <code class="docutils literal notranslate"><span class="pre">Anova()</span></code><a class="headerlink" href="#omnibus-tests-from-anova" title="Link to this heading">#</a></h3>
+<p>As we know, the <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> function from <code class="docutils literal notranslate"><span class="pre">car</span></code> is our preferred method of generating omnibus tests because of its flexibility under imbalance and its preference for Type II tests. None of that changes within the world of LME models. If we use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> on our example model, we get</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
@@ -823,22 +802,62 @@ time            2    28  489.7321  &lt;.0001
 </pre></div>
 </div>
 </div>
-</div>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Tests Using lme4</p>
-<p>So, even though we have not discussed <code class="docutils literal notranslate"><span class="pre">lme4</span></code>, this is one particular advantage of this package, because <code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> allows us to use effective degrees of freedom consistently. However, this package does have some disadvantages that make it <em>less practical</em> for general use and so we will leave it to one side for now.</p>
-</div>
-</section>
-</section>
-<section id="using-emmeans">
-<h2>Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#using-emmeans" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">emmeans</span><span class="p">)</span>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: score
+      Chisq Df Pr(&gt;Chisq)    
+time 979.46  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
 </div>
+<p>So, notice that, much like a <code class="docutils literal notranslate"><span class="pre">gls()</span></code> model, we <em>do not</em> get effective degrees of freedom here. Instead, we have asymptotic <span class="math notranslate nohighlight">\(\chi^{2}\)</span> tests. So, again, we get an unfortunate conceptual mismatch between the coefficient tests produced by <code class="docutils literal notranslate"><span class="pre">lme()</span></code> and the omnibus tests produced by <code class="docutils literal notranslate"><span class="pre">Anova()</span></code>. Although a bit awkward, this is not fundamentally a problem because</p>
+<ul class="simple">
+<li><p>We will rarely be using <em>both</em> sets of tests. Even for models <em>without</em> any factors, we can still call <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> to produce the asymptotic tests for the coefficients.</p></li>
+<li><p>If we want to use asymptotic versions of coefficient tests we can just ignore the <span class="math notranslate nohighlight">\(p\)</span>-value and the given degrees of freedom and instead calculate <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">pnorm(abs(t),</span> <span class="pre">lower.tail=FALSE)</span></code>. This will give us <span class="math notranslate nohighlight">\(p\)</span>-values based on treating the tests as a <span class="math notranslate nohighlight">\(z\)</span>-statistic rather than a <span class="math notranslate nohighlight">\(t\)</span>-statistic.</p></li>
+</ul>
+<p>So it <em>is</em> possible to keep our inferential framework consistent. The main downside is that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> has no other options, meaning we are <em>forced</em> into asymptotics, whether we like it or not. This is not true of <code class="docutils literal notranslate"><span class="pre">lme4</span></code> models, as discussed in the drop-down below.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Tests Using lme4</p>
+<p>Although we have not covered the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package, one advantage of using it over <code class="docutils literal notranslate"><span class="pre">nlme</span></code> is that effective degrees of freedom methods are more readily available. This means we can keep a more consistent inferential framework using more familiar <span class="math notranslate nohighlight">\(t\)</span>-statistics and <span class="math notranslate nohighlight">\(F\)</span>-statistics. By default, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> provides <em>no</em> <span class="math notranslate nohighlight">\(p\)</span>-values, because the authors simply do not want to commit to one particular approximation, nor try to “cover up” the inferential problems with LME models. However, other packages such as <code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkrtest</span></code> have been developed to provide these inferential options on top of <code class="docutils literal notranslate"><span class="pre">lme4</span></code>. These are then leveraged by <code class="docutils literal notranslate"><span class="pre">car</span></code> and we can use <code class="docutils literal notranslate"><span class="pre">Anova(lme4.mod,</span> <span class="pre">test.statistic='F')</span></code> to get <span class="math notranslate nohighlight">\(F\)</span>-statistics with effective degrees of freedom. Although this is all potentially more useful than the results from <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package does have some <em>disadvantages</em>. The biggest is that we cannot model the covariance structure of the residuals. Practically, this means we cannot specify models with different variances per-group and so have to assume homogeneity of variance for any between-subjects factors in the model. This is particularly problematic when our groups may be Patients vs Controls. This is not true of <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, as we will see in the associated workshop. So we need to decide between <em>modelling flexibility</em> and <em>inferential flexibility</em>. Sadly, at this point in time, we cannot have both.</p>
+</div>
+</section>
+<section id="follow-up-tests-from-emmeans">
+<h3>Follow-up Tests From <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code><a class="headerlink" href="#follow-up-tests-from-emmeans" title="Link to this heading">#</a></h3>
+<p>Finally, we can use the same approach as we have seen previously with both <code class="docutils literal notranslate"><span class="pre">lm()</span></code> and <code class="docutils literal notranslate"><span class="pre">gls()</span></code> to perform follow-up tests using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Given that we are constrained by <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> to using asymptotic methods, we need to use the <code class="docutils literal notranslate"><span class="pre">mode='asymptotic'</span></code> argument to keep our inferential framework consistent. Otherwise, this is business as usual.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span>
+<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast estimate    SE  df z.ratio p.value
+ t1 - t2      2.00 0.111 Inf  18.050  &lt;.0001
+ t1 - t3      3.45 0.111 Inf  31.166  &lt;.0001
+ t2 - t3      1.45 0.111 Inf  13.116  &lt;.0001
+
+Degrees-of-freedom method: fixed 
+P value adjustment: holm method for 3 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored using the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package to fit mixed-effects models using the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function. After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>…</p></li>
+<li><p>…</p></li>
+<li><p>…</p></li>
+</ul>
+</aside>
+</section>
 </section>
 </section>
 
@@ -919,11 +938,10 @@ time            2    28  489.7321  &lt;.0001
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#anova-tables-and-follow-up-tests">ANOVA Tables and Follow-up Tests</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-anova">Using <code class="docutils literal notranslate"><span class="pre">anova()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Using <code class="docutils literal notranslate"><span class="pre">Anova</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnibus-tests-from-anova">Omnibus Tests From <code class="docutils literal notranslate"><span class="pre">Anova()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-tests-from-emmeans">Follow-up Tests From <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-emmeans">Using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
   </nav></div>
 
