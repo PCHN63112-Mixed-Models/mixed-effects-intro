@@ -391,6 +391,8 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-use">What to Use?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-are-mixed-effects-models-useful">When are Mixed-effects Models Useful?</a></li>
 </ul>
             </nav>
         </div>
@@ -412,6 +414,44 @@
 <li><p>The data do not support more complex estimation, but it could if we had replications</p></li>
 </ul>
 <p>However, the true of the matter is that there are some situations where a GLS model may be superior, for our purposes…</p>
+</section>
+<section id="what-to-use">
+<h2>What to Use?<a class="headerlink" href="#what-to-use" title="Link to this heading">#</a></h2>
+<p>… If you have a simple repeated measurement dataset with <em>no repeats</em> (i.e. each subject only has <em>one measurement</em> per repeated measure), then your options are (in order of <em>least preferential</em> to <em>most preferential</em>):</p>
+<ol class="arabic simple">
+<li><p>The traditional repeated measures ANOVA</p>
+<ul class="simple">
+<li><p>Compound symmetric covariance structure and difficult to fit correctly using <code class="docutils literal notranslate"><span class="pre">aov()</span></code> with an <code class="docutils literal notranslate"><span class="pre">Error()</span></code> term.</p></li>
+<li><p>Advantage of <em>inferential certainty</em>, as all the theory from the normal linear model still applies.</p></li>
+<li><p>Even when the theory does <em>not</em> apply, effective degrees of freedom can be calculated via sphericity correction.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> to fit, but recognise that you are throwing-away the linear models frameowork by doing so.</p></li>
+</ul>
+</li>
+<li><p>A mixed-effects model</p>
+<ul class="simple">
+<li><p>Using a <em>random intercept</em> model, the covariance structure remains compound symmetric, which is no better than the repeated measures ANOVA.</p></li>
+<li><p>Additional <em>inferential uncertainty</em>, as the theory from the normal linear model no longer applies.</p></li>
+<li><p>No sphericity correction, though <em>effective degrees of freedom</em> are available alongside <em>asymptotic</em> results.</p></li>
+<li><p>No need to specify error terms, as these are accommodated automatically.</p></li>
+<li><p>Remains within the linear models framework, so we can still get residuals and diagnostic plots as usual.</p></li>
+</ul>
+</li>
+<li><p>Generalised Least Squares</p>
+<ul class="simple">
+<li><p>Freedom to estimate a completely unconstrained covariance structure.</p></li>
+<li><p>Greater <em>inferential uncertainty</em> as the additional structure from the data is not an inherent part of the model and cannot be used as easily to infer effective degrees of freedom. This largely forces us into <em>asymptotic</em> results.</p></li>
+<li><p>Error terms remain automatically accommodated.</p></li>
+<li><p>Like mixed-effects, remains within the linear models framework.</p></li>
+</ul>
+</li>
+</ol>
+<p>So, in this situation, GLS may be the better approach. This is quite an important conclusion because many practising researchers in psychology have moved to mixed-effects models as their <em>default</em> replacement for the repeated measures ANOVA. However, under certain circumstances, GLS can lift more assumptions than a mixed-effects model.</p>
+</section>
+<section id="when-are-mixed-effects-models-useful">
+<h2>When are Mixed-effects Models Useful?<a class="headerlink" href="#when-are-mixed-effects-models-useful" title="Link to this heading">#</a></h2>
+<p>… The problem is that we have not really seen the utility of mixed-effects models in the current examples. Next week, we will introduce a variety of data structures that mixed-effects models can be applied to. In doing do, we will see how flexible the framework is and why it is so useful.</p>
+<p>For now, there is an important lesson in all of this: the utility of a mixed-effects models does <em>not</em> come from data with no replications. In fact, there is little that a mixed-effects model can do here because the data <em>does not support</em> a more complex random-effects structure. This is key not only from an <em>analysis</em> perspective, but also from a <em>design</em> perspective. The problem is that many researchers are taught to used mixed-effects models as a drop-in replacement for the repeated measures ANOVA, yet this application effectively <em>neuters</em> the mixed-effects framework. Arguably, GLS should be used instead because it can relax the covariance assumptions entirely, even with no replications per-repeat.</p>
+<p>The catch is that almost all experiments in experimental and clinical psychology <em>do</em> have some form of replication within the repeated measurements. All neuropsychological tasks will have multiple trials per-condition. For instance, even a basic Stroop task will have multiple <em>congruent</em> and <em>incongruent</em> trials. Psychologists are often in the habit of <em>throwing this information away</em> by either summarising the trials through total scores, or creating condition averages per-subject. This is partly because this information cannot be used in traditional repeated measures analyses. However, as we will see in the materials next week, such information is <em>essential</em> for mixed-effects models to operate. So, if you do not have it, a mixed-effects model may not be the best choice. However, if you <em>do</em> have it or are able to <em>recover</em> it, a mixed-effects model suddenly becomes viable again.</p>
 </section>
 </section>
 
@@ -472,6 +512,8 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-use">What to Use?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-are-mixed-effects-models-useful">When are Mixed-effects Models Useful?</a></li>
 </ul>
   </nav></div>
 
