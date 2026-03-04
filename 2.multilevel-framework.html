@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>The Multilevel Framework &#8212; An Introduction to Linear Mixed-effects Models</title>
   
@@ -16,36 +16,33 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -56,7 +53,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -66,34 +63,33 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '2.multilevel-framework';</script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
-    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
-    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Simulating a Multilevel Model" href="3.multilevel-simulation.html" />
     <link rel="prev" title="Introduction to Mixed-effects Models" href="1.intro-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -109,8 +105,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -118,6 +125,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -125,8 +133,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -142,8 +150,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -173,17 +180,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="An Introduction to Linear Mixed-effects Models - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -209,14 +220,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -360,16 +366,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -399,7 +413,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
 </ul>
@@ -418,7 +431,7 @@
 <p>Now that we have established some general topics around mixed-effects models, we can start our journey into the world of mixed-effects from the perspective of a <em>multilevel</em> model. This is primarily because we can build the pieces of a mixed-effects model very slowly from first principles, allowing the logic to become much clearer. In addition, the multilevel framework is often the most <em>intuitive</em> way to think about these models, they are just less frequently implemented in this fashion. So, we generally advise to <em>think</em> about these models in a multilevel fashion, even if <em>practically</em> we end up specifying them in a mixed-effects fashion. This will all become clearer once we have discussed <em>both</em> perspectives.</p>
 <section id="fitting-a-model-to-one-subject">
 <h2>Fitting a Model to One Subject<a class="headerlink" href="#fitting-a-model-to-one-subject" title="Link to this heading">#</a></h2>
-<p>To start understanding multilevel models, let us imagine that we only have the data for <em>one subject</em>. Going back to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>, let us extract the data associated with the first subject, who has <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">31</span></code>.</p>
+<p>To start understanding multilevel models, let us imagine that we only have the data for <em>one subject</em>. Going back to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>, let us extract the data associated with the first subject, who has <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">'31'</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sub.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">anxiety.long</span><span class="p">[</span><span class="n">anxiety.long</span><span class="o">$</span><span class="n">id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;31&#39;</span><span class="p">,]</span>
@@ -507,7 +520,7 @@ Residual standard error: 1.453 on 2 degrees of freedom
 </div>
 </div>
 </div>
-<p>So now we have residuals and everything else will work. There is nothing ground-breaking or Earth-shattering about any of this. All we are concluding is that, based on only having a <em>single</em> subject from this experiment, the best we could do is model a <em>subject-specific constant</em> and nothing else. In this example, the average value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for subject 1 was estimated to be <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 13.10\)</span>. That is it.</p>
+<p>So now we have residuals and everything else will work. There is nothing ground-breaking about any of this. All we are concluding is that, based on only having a <em>single</em> subject from this experiment, the best we could do is model a <em>subject-specific constant</em> and nothing else. In this example, the average value of <code class="docutils literal notranslate"><span class="pre">score</span></code> for subject 1 was estimated to be <span class="math notranslate nohighlight">\(\hat{\mu}_{1} = 13.10\)</span>. That is it.</p>
 </section>
 <section id="extending-the-model-to-multiple-subjects">
 <h2>Extending the Model to Multiple Subjects<a class="headerlink" href="#extending-the-model-to-multiple-subjects" title="Link to this heading">#</a></h2>
@@ -558,9 +571,9 @@ Residual standard error: 1.572 on 2 degrees of freedom
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    y_{1j} &amp;= \mu_{1} + \eta_{1j} \\
-    y_{2j} &amp;= \mu_{2} + \eta_{2j} \\
-\end{alignat*}.
+    y_{1j} &amp;= \mu_{1} + \eta_{1j} = 13.10 + \eta_{1j}  \\
+    y_{2j} &amp;= \mu_{2} + \eta_{2j} = 13.30 + \eta_{2j}. \\
+\end{alignat*}
 \end{split}\]</div>
 <p>But, of most importance, is that we are not <em>really</em> working in isolation. We have <em>both</em> subjects together. Recall that the problem with trying to fit an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> within a single subject was that there were no replications and thus <em>no variance</em>. This is true <em>within</em> each subject, but <em>across</em> the two subjects we <em>do</em> have replications of each level of <code class="docutils literal notranslate"><span class="pre">time</span></code>. If we put the two datasets together, we get</p>
 <div class="cell docutils container">
@@ -581,7 +594,7 @@ Residual standard error: 1.572 on 2 degrees of freedom
 </div>
 </div>
 </div>
-<p>So, now we have <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t1</span></code>, <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t2</span></code> and <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t3</span></code>. The key insight is that <em>if</em> we assume that both subjects share the same effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>, we can estimate its effect <em>across</em> them. More formally, if we imagine that both subjects are drawn from the same population with a constant effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>, we can use the data from both of them to estimate what that effect is. This is distinct from imagining that the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> is different and unique to each subject, in which case we could not pool their data because we would be mixing together two different effects. So, as long as we conceptualise <code class="docutils literal notranslate"><span class="pre">time</span></code> as something <em>shared</em> between the subjects, we <em>can</em> introduce an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. If we call the effect of the <span class="math notranslate nohighlight">\(j\)</span>th level of <code class="docutils literal notranslate"><span class="pre">time</span></code> <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>, we can then think of these two models as</p>
+<p>So, now we have <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t1</span></code>, <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t2</span></code> and <em>two</em> values of <code class="docutils literal notranslate"><span class="pre">t3</span></code>. The key insight is that <em>if</em> we assume that both subjects share the same effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>, we can estimate its effect <em>across</em> them. More formally, if we imagine that both subjects are drawn from the same population with a constant effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>, we can use the data from both of them to estimate what that effect is. This is distinct from imagining that the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> is different and unique to each subject. So, as long as we conceptualise <code class="docutils literal notranslate"><span class="pre">time</span></code> as something <em>shared</em> between the subjects, we <em>can</em> introduce an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>. If we call the effect of the <span class="math notranslate nohighlight">\(j\)</span>th level of <code class="docutils literal notranslate"><span class="pre">time</span></code> <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>, we can then think of these two models as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -594,8 +607,7 @@ Residual standard error: 1.572 on 2 degrees of freedom
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}.
 \]</div>
-<p>So, we now have a <em>subject-specific</em> mean (<span class="math notranslate nohighlight">\(\mu_{i}\)</span>) and an effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). But notice that there is no subject index on <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> meaning that its value is <em>the same</em> irrespective of the specific subject. This is important because it indicates that <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> captures something <em>universal</em> across <em>all</em> subjects.</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this complete model would be</p>
+<p>So, we now have a <em>subject-specific</em> mean (<span class="math notranslate nohighlight">\(\mu_{i}\)</span>) and a <em>universal</em> effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>). In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this complete model would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.all.subs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
@@ -640,7 +652,7 @@ F-statistic:  6745 on 17 and 28 DF,  p-value: &lt; 2.2e-16
 </div>
 </div>
 </div>
-<p>where we have suppressed the intercept to make the <code class="docutils literal notranslate"><span class="pre">id</span></code> effects explicitly subject means. This is not technically necessary, but helps conceptualise what we are doing. So, we now have <em>subject-specific</em> intercepts, as well as <em>universal</em> effects of <code class="docutils literal notranslate"><span class="pre">time</span></code>.</p>
+<p>where we have suppressed the intercept to make the <code class="docutils literal notranslate"><span class="pre">id</span></code> effects explicitly subject means<a class="footnote-reference brackets" href="#submeans-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. So, we now have <em>subject-specific</em> intercepts, as well as a <em>universal</em> effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>.</p>
 <p>In general, what we have done here is create a model that has a <em>different predicted value for each subject</em>. Each subject gets their <em>own model</em>. Subject 1 is</p>
 <div class="math notranslate nohighlight">
 \[
@@ -651,7 +663,7 @@ E(y_{1j}) = \mu_{1} + \alpha_{j} = \mu_{1j},
 \[
 E(y_{2j}) = \mu_{2} + \alpha_{j} = \mu_{2j}
 \]</div>
-<p>and so on. It is like the subjects form the <em>cells</em> of the design. Crucially, each subject’s expected value is a <em>combination</em> of something specific to them <span class="math notranslate nohighlight">\(\left(\mu_{1}, \mu_{2}, \dots, \mu_{n}\right)\)</span> and something <em>universal</em> from across subjects <span class="math notranslate nohighlight">\(\left(\alpha_{1},\alpha_{2},\alpha_{3}\right)\)</span>. Thus, this model captures two important elements of our data: the <em>idiosyncrasies</em> of the individual and the <em>constant effect</em> in the population.</p>
+<p>and so on. Each subject’s expected value is then a <em>combination</em> of something specific to them <span class="math notranslate nohighlight">\(\left(\mu_{1}, \mu_{2}, \dots, \mu_{n}\right)\)</span> and something <em>universal</em> from across subjects <span class="math notranslate nohighlight">\(\left(\alpha_{1},\alpha_{2},\alpha_{3}\right)\)</span>. Thus, this model captures two important elements of our data: the <em>idiosyncrasies</em> of the individual and the <em>universal effects</em> in the population.</p>
 </section>
 <section id="understanding-mu-i-as-a-random-variable">
 <h2>Understanding <span class="math notranslate nohighlight">\(\mu_{i}\)</span> as a <em>Random Variable</em><a class="headerlink" href="#understanding-mu-i-as-a-random-variable" title="Link to this heading">#</a></h2>
@@ -660,9 +672,9 @@ E(y_{2j}) = \mu_{2} + \alpha_{j} = \mu_{2j}
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 \]</div>
-<p>and remember that this is the theoretical <em>population-level</em> description of the data-generating process. As such, what do we imagine changes about this description for each <em>new</em> subject? Ponder this for a moment.</p>
-<p>If we have a new subject, we have a new value of <span class="math notranslate nohighlight">\(i\)</span>. So which of the terms above depend upon <span class="math notranslate nohighlight">\(i\)</span>? Certainly <span class="math notranslate nohighlight">\(\mu_{i}\)</span> does. Each subject has their own unique mean that is specific to them, so a <em>new</em> subject means a <em>new</em> value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. In addition, the errors <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> depend upon the value of <span class="math notranslate nohighlight">\(i\)</span> and will change with every observation. So, when we sample someone new both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> will change.</p>
-<p>Importantly, what does <em>not</em> change is <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. Why? Because this has <em>no</em> subject-specific index. <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> is the same whether <span class="math notranslate nohighlight">\(i = 1\)</span> or <span class="math notranslate nohighlight">\(i = 1,427\)</span>. This is because this is a <em>universal effect</em> across all subjects. Its <em>estimate</em> would change with another subject (because there is now <em>more data</em>), but remember we are thinking about the true population description of the data-generating process here. In this sense, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>. It does not change with each sample, it remains a <em>fixed</em> and <em>unwavering</em> element of the universe. As stated earlier, we are imagining that each subject is drawn from a <em>population</em> with a mean that depends upon <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. So <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em> of the population distribution we are trying to estimate. If we had the whole population, we would known <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> with absolute certainty and we would not need statistics.</p>
+<p>What will change for each <em>new</em> subject? Ponder this for a moment.</p>
+<p>If we have a new subject, we have a new value of <span class="math notranslate nohighlight">\(i\)</span>. Clearly the data itself will change, but that is something of a given. More importantly, we should consider which of the <em>model terms</em> depend upon <span class="math notranslate nohighlight">\(i\)</span>? Certainly <span class="math notranslate nohighlight">\(\mu_{i}\)</span> does. Each subject has their own unique mean that is specific to them, so a <em>new</em> subject means a <em>new</em> value of <span class="math notranslate nohighlight">\(\mu_{i}\)</span>. In addition, the errors <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> depend upon the value of <span class="math notranslate nohighlight">\(i\)</span> and will change with every observation. So, when we sample someone new both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> will change.</p>
+<p>Importantly, what does <em>not</em> change is <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. Why? Because this has <em>no</em> subject-specific index. <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> is the same whether <span class="math notranslate nohighlight">\(i = 1\)</span> or <span class="math notranslate nohighlight">\(i = 1,427\)</span>. This is because this is a <em>universal effect</em> across all subjects. In this sense, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em>. It does not change with each sample, it remains a <em>fixed</em> and <em>unwavering</em> element of the universe<a class="footnote-reference brackets" href="#alpha-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. As stated earlier, we imagine that each subject is drawn from a <em>population</em> with a mean that depends upon <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. So <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is a <em>constant</em> of the population distribution we are trying to estimate. If we had the whole population, we would known <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> with absolute certainty and we would not need statistics.</p>
 <p>So, if <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is <em>fixed</em>, what does this mean for <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>? Well, what do we call a variable who’s value changes every time we observe it? A <em>random variable</em>. So, both <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> have to be <em>random variables</em>. We already know this about <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because we always think of the errors as random and ascribe them a probability distribution. So this is nothing new. What <em>is</em> new is having <em>another random variable in the model</em>. In fact, pretty much every complication that follows is a direct knock-on effect of having <em>multiple random variables</em> in the model.</p>
 <div class="tip admonition">
 <p class="admonition-title">Fixed-effects and Random-effects</p>
@@ -685,35 +697,7 @@ y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij}
 \mu_{i} \sim \mathcal{N}\left(\mu, \sigma^{2}_{2}\right),
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the grand mean of the population.</p>
-<p>We can see an example of this in <code class="docutils literal notranslate"><span class="pre">R</span></code> if we take the subject-specific means from the earlier model and then treat them like new data to be modelled further</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu.i</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">lm.all.subs</span><span class="p">)[</span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="c1"># subject means estimated from Level 1</span>
-<span class="n">lm.level.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mu.i</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="nf">summary</span><span class="p">(</span><span class="n">lm.level.2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
-lm(formula = mu.i ~ 1)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.1289 -1.0289  0.4378  0.7544  2.0378 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  17.0133     0.3501    48.6   &lt;2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 1.356 on 14 degrees of freedom
-</pre></div>
-</div>
-</div>
-</div>
-<p>There are several consequences of the assumptions made above. To begin with, there are now <em>two</em> probability distributions describing where our data come from. These distributions have different variances <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{1},\sigma^{2}_{2}\right)\)</span>, meaning we have <em>two</em> sources of error to now consider. We also need to <em>estimate</em> both of these variances from the data in order to complete the unknowns for this model. Last semester, our focus was almost exclusively on the <em>mean function</em>, but now we can see that we are shifting focus and adding complexity to the <em>variance function</em>. This means that our mental model of where our data comes from now consists of <em>two layers</em>. This is precisely the conceptualisation that a multilevel model makes explicit.</p>
+<p>There are several consequences of the assumptions made above. To begin with, there are now <em>two</em> probability distributions describing where our data come from. These distributions have different variances <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{1},\sigma^{2}_{2}\right)\)</span>, meaning we have <em>two</em> sources of error to now consider. We also need to <em>estimate</em> both of these variances from the data in order to complete the unknowns for this model. Last semester, our focus was almost exclusively on the <em>mean function</em>, but now we can see that we are shifting focus and adding complexity to the <em>variance function</em>.</p>
 </section>
 <section id="the-complete-multilevel-model">
 <h2>The Complete Multilevel Model<a class="headerlink" href="#the-complete-multilevel-model" title="Link to this heading">#</a></h2>
@@ -728,12 +712,14 @@ Residual standard error: 1.356 on 14 degrees of freedom
 <p>In the multilevel framework, these equations are considered multiple <em>layers</em> or <em>levels</em> of the data, and are usually labelled like so</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{2}
-    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) &amp;\quad\text{Level 1} \\
-    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 &amp;\quad\text{Level 2} \\
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y_{ij}        &amp;\sim \mathcal{N}(\mu_{i} + \alpha_{j}, \sigma^{2}_{1}) \\
+    \text{Level 2} \\
+    \mu_{i}       &amp;\sim \mathcal{N}(\mu , \sigma^{2}_{2})                 \\
 \end{alignat*}
 \end{split}\]</div>
-<p>This also implies a <em>hierarchy</em> of data-generation, where the data at Level 1 depends upon the data at Level 2. This is why these types of model are also known as <em>hierarchical</em> linear models or HLMs.</p>
+<p>This also implies a <em>hierarchy</em> of data-generation, where the data at Level 1 depends upon the data at Level 2. This is why these types of model are also known as <em>hierarchical linear models</em> or HLMs.</p>
 <p>We can also write this model in a slightly different way. As we know from last semester, we can always separate a probability model into an equation for the expected value plus random error. For instance, we can write a simple regression model as</p>
 <div class="math notranslate nohighlight">
 \[
@@ -750,14 +736,16 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 <p>where, in the second form, we move the probabilistic behaviour into a new error term that captures the variation in <span class="math notranslate nohighlight">\(y\)</span> around the expected value. So, if we apply the same principles here, we can rewrite the multilevel model as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{2}
-    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}             &amp;\quad\text{Level 1} \\
-    \mu_{i}   &amp;= \mu + \xi_{i}                                &amp;\quad\text{Level 2} \\
-    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right), &amp;\\
-    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right)  &amp;\\
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}            \\
+    \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{1}\right) \\
+    \text{Level 2} \\
+    \mu_{i}   &amp;= \mu + \xi_{i}                                \\
+    \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{2}\right)  \\
 \end{alignat*}
 \end{split}\]</div>
-<p>where we have added a new error term <span class="math notranslate nohighlight">\(\xi_{i}\)</span><a class="footnote-reference brackets" href="#xi-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> at Level 2. When written this way, we can see that actually what we have is two models containing <em>two error terms</em>. Each of these error terms captures a different form of <em>random deviation</em> and thus a different <em>source of variance</em>. Importantly, these are not two <em>separate</em> models, they are <em>connected together</em>. This is something we can understand more by discussing each level in turn.</p>
+<p>where we have added a new error term <span class="math notranslate nohighlight">\(\xi_{i}\)</span><a class="footnote-reference brackets" href="#xi-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> at Level 2. When written this way, we can see that actually what we have is two models containing <em>two error terms</em>. Each of these error terms captures a different form of <em>random deviation</em> and thus a different <em>source of variance</em>. Importantly, these are not two <em>separate</em> models, they are <em>connected together</em>. This is something we can understand more by discussing each level in turn.</p>
 <section id="level-1">
 <h3>Level 1<a class="headerlink" href="#level-1" title="Link to this heading">#</a></h3>
 <p>At Level 1, the model is</p>
@@ -811,44 +799,33 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 \[
 \xi_{1} = \mu_{1} - \mu.
 \]</div>
-<p>Notice that we are effectively back to a model with <em>no dependence</em> here. The Level 2 model is effectively just a simple regular linear model. As such, the variance at this level <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{2}\right)\)</span> corresponds to the <em>consistency of each subject with the group</em>. It tells us how much the subjects differ from <em>each other</em>. As such, we usually call this the <em>between-subjects</em> variance and could write <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = \sigma^{2}_{b}\)</span>.</p>
+<p>As such, the variance at this level <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{2}\right)\)</span> corresponds to the <em>consistency of each subject with the group</em>. It tells us how much the subjects differ from <em>each other</em>. As such, we usually call this the <em>between-subjects</em> variance and could write <span class="math notranslate nohighlight">\(\sigma^{2}_{2} = \sigma^{2}_{b}\)</span>.</p>
 <div class="info admonition">
 <p class="admonition-title">Level 2 Summary</p>
 <p>In this model, Level 2 explains the subjects as a group. Each unique subject mean can be decomposed into a group mean <span class="math notranslate nohighlight">\((\mu)\)</span> plus random error. These errors therefore correspond to deviations in the subject means from the group mean. The variance at this level <span class="math notranslate nohighlight">\(\left(\sigma^{2}_{2}\right)\)</span> therefore tells us how much the subjects differ <em>from each other</em>.</p>
 </div>
-</section>
-<section id="multilevel-visualisation">
-<h3>Multilevel Visualisation<a class="headerlink" href="#multilevel-visualisation" title="Link to this heading">#</a></h3>
-<figure class="align-right" id="multilevel-fig">
-<a class="reference internal image-reference" href="_images/multilevel-diagram.png"><img alt="_images/multilevel-diagram.png" src="_images/multilevel-diagram.png" style="width: 425px;" /></a>
-<figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">An illustration of a basic two-level model.</span><a class="headerlink" href="#multilevel-fig" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
-<p>To help further conceptualise the multilevel framework, <a class="reference internal" href="#multilevel-fig"><span class="std std-numref">Fig. 1</span></a> presents a diagrammatic representation of the model we have been working with so far. To navigate this, start from the <em>bottom</em> and work <em>upwards</em>. Two sampled datapoints are illustrated as <span class="math notranslate nohighlight">\(y_{i1}\)</span> and <span class="math notranslate nohighlight">\(y_{i2}\)</span>. These are measured values of the repeated measures conditions <span class="math notranslate nohighlight">\(j = 1\)</span> and <span class="math notranslate nohighlight">\(j = 2\)</span> for subject <span class="math notranslate nohighlight">\(i\)</span>. These are conceptualised as drawn from individual distributions for that specific subject. The means of these distributions are then a combination of the unique individual subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> and the fixed effects of the two conditions, <span class="math notranslate nohighlight">\(\alpha_{1}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{2}\)</span>. The subject mean <span class="math notranslate nohighlight">\(\mu_{i}\)</span> is itself conceptualised as a random drawn from the population-level distribution of subjects, with a fixed mean of <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
-<p>There are a few key takeaways from this illustration. Firstly, every term that contains the index <span class="math notranslate nohighlight">\(i\)</span> will change with each new subject. These are therefore all <em>random variables</em>. If we conceptualised drawing a new subject, think of every term that contains an <span class="math notranslate nohighlight">\(i\)</span> changing and every term that does <em>not</em> contain an <span class="math notranslate nohighlight">\(i\)</span> staying the same. Secondly, notice that the terms <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describe different <em>kinds</em> of variation. <span class="math notranslate nohighlight">\(\sigma^{2}_{2}\)</span> describes variation <em>between</em> different subjects, whereas <span class="math notranslate nohighlight">\(\sigma^{2}_{1}\)</span> describes variation <em>within</em> a single subject. Finally, we can think of this model as a <em>generalisation</em> of everything we have done previously. When our data were independent, we were thinking only in terms of Level 2. So, all the models we were looking at last semester were all representations of Level 2<a class="footnote-reference brackets" href="#levels-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The addition of repeats for each experimental unit creates the additional level of variation. So, all our previous models were really <em>single-level</em> and we can think of them as <em>special cases</em> of a multilevel model. From that perspective, the multilevel model is really <em>the</em> framework that underlies everything<a class="footnote-reference brackets" href="#gelman-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … . After reading this section, you should have a good sense of :</p>
+<p>In this section, we have explored a basic application of the multilevel framework. After reading this section, you should have a good sense of :</p>
 <ul class="simple">
-<li><p>…</p></li>
+<li><p>The idea that we can build a model up in <em>layers</em> by starting with a single subject and then expanding to multiple subjects.</p></li>
 <li><p>…</p></li>
 <li><p>…</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="xi-foot" role="note">
+<aside class="footnote brackets" id="submeans-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>The Greek letter <em>xi</em>.</p>
+<p>This is not technically necessary, but helps conceptualise what we are doing. This is simply to get around the constraint that <code class="docutils literal notranslate"><span class="pre">R</span></code> would naturally apply to make the model estimable.</p>
 </aside>
-<aside class="footnote brackets" id="levels-foot" role="note">
+<aside class="footnote brackets" id="alpha-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>Importantly, this is Level 2 in <em>this</em> model. In general, the levels of a multilevel model do not have any meaning outside of a given dataset. They are just labels for the levels the model happens to have. So, the normal linear model has just <em>one level</em> and it would not make sense to talk about this as “Level 2” outside of the current context.</p>
+<p>Remember, we are talking about the <em>true</em> population value <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> not its estimate <span class="math notranslate nohighlight">\(\hat{\alpha}_{j}\)</span>.</p>
 </aside>
-<aside class="footnote brackets" id="gelman-foot" role="note">
+<aside class="footnote brackets" id="xi-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
-<p>This is exactly the perspective taken by Gelman &amp; Hill (2007) in their book <a class="reference external" href="https://sites.stat.columbia.edu/gelman/arm/"><em>Data Analysis Using Regresion and Multilevel/Hierarchical Models</em></a>. Everything is effectively a regression model with one or more levels.</p>
+<p>The Greek letter <em>xi</em>, often pronounced like “zi” or “sigh”.</p>
 </aside>
 </aside>
 </section>
@@ -910,8 +887,7 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -926,7 +902,6 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-multilevel-model">The Complete Multilevel Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-1">Level 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#level-2">Level 2</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-visualisation">Multilevel Visualisation</a></li>
 </ul>
 </li>
 </ul>
@@ -977,8 +952,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
