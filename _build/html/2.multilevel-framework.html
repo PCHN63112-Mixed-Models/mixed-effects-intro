@@ -809,8 +809,11 @@ y_{i} \sim \mathcal{N}(\beta_{0} + \beta_{1}x_{i}, \sigma^{2})
 <p>In this section, we have explored a basic application of the multilevel framework. After reading this section, you should have a good sense of :</p>
 <ul class="simple">
 <li><p>The idea that we can build a model up in <em>layers</em> by starting with a single subject and then expanding to multiple subjects.</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>The concept that when we expand to multiple subjects, we implicitly create terms that will change with each new subject.</p></li>
+<li><p>The idea that anything that changes with each subject is a <em>random-effect</em>, whereas anything that stays the same is a <em>fixed-effect</em>.</p></li>
+<li><p>The idea that any effects that are random can be expressed as draws from a 2nd-level model with its own parameters and errors.</p></li>
+<li><p>The idea that each level implies a different form of variation which, in this simple example, corresponds to the <em>within-subject</em> and the <em>between-subjects</em> variance.</p></li>
+<li><p>The idea that, in this simple example, the levels correspond to the repeated measurements from individual subjects (Level 1) and the group of subjects as a whole (Level 2).</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />

@@ -433,18 +433,18 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="from-multilevel-to-mixed-effects">
 <h1>From Multilevel to Mixed-effects<a class="headerlink" href="#from-multilevel-to-mixed-effects" title="Link to this heading">#</a></h1>
-<p>In the previous parts of this lesson we focussed on the multilevel framework. The argument was that this is more intuitive because we can break complex complex data structures into different levels of variation. This allows us to think hierarchically about where data comes from, building up our complexity layer-by-layer. We saw this when we focussed on modelling just a single subject as our experimental unit of interest. We then built in more subjects and expanded the model logically until we came to the multilevel representation. Importantly, this was all based on capturing the <em>data structure</em>, rather than thinking in terms of the <em>covariance structure</em>. Unlike GLS, where we had to reason about the form of the variance-covariance matrix, the covariance structure in the multilevel model was an emergent property of its structure. In a way, we did not need to worry about correlation, as it was taken into account <em>automatically</em>. All we needed to think about was the data structure and the rest followed.</p>
+<p>In the previous parts of this lesson we focussed on the multilevel framework. The argument was that this is more intuitive because we can break complex complex data structures into different levels of variation. This allows us to think hierarchically about where data comes from, building up our complexity layer-by-layer. We saw this when we focussed on modelling just a single subject as our experimental unit of interest. We then built in more subjects and expanded the model logically until we came to the multilevel representation. Importantly, this was all based on capturing the <em>data structure</em>, rather than thinking in terms of the <em>covariance structure</em>. Unlike GLS, where we had to reason about the form of the variance-covariance matrix, the covariance structure in the multilevel model was an emergent property of its structure.</p>
 <p>Although this focus on <em>data structure</em> can be more intuitive, it is not how these types of models are typically fit in practice. Now, this is not so much a <em>technical</em> limitation as it is a decision about <em>perspective</em>. Software for explicitly fitting multilevel models does exist. For instance, <a class="reference external" href="https://www.bristol.ac.uk/cmm/software/mlwin/">MLwin</a> developed by the Centre for Multilevel Modelling at the University of Bristol is designed <em>specifically</em> for fitting models from this perspective. As shown in the screenshot below, models are fit by writing the multilevel equations which are then estimated from the given data. This provides a <em>direct</em> connection between the theory and the application of these models to complex datasets.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="_images/mlwin-screenshot-lge.gif"><img alt="_images/mlwin-screenshot-lge.gif" src="_images/mlwin-screenshot-lge.gif" style="width: 600px;" />
+<a class="reference internal image-reference" href="_images/mlwin-screenshot-lge.gif"><img alt="_images/mlwin-screenshot-lge.gif" src="_images/mlwin-screenshot-lge.gif" style="width: 700px;" />
 </a>
 </figure>
 <p>Another example of this approach is the <a class="reference external" href="https://ssilive.com/license/hlm">HLM</a> software which, as shown below, also specifies these types of models explicitly in terms of equations for the different levels. This illustrates that it <em>is</em> possible to apply the multilevel perspective in practice. It also illustrates why understanding the theory is so important, especially when faced with software that requires you to write the theoretical model down in order to use it.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="_images/hlm-screenshot.png"><img alt="_images/hlm-screenshot.png" src="_images/hlm-screenshot.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="_images/hlm-screenshot.png"><img alt="_images/hlm-screenshot.png" src="_images/hlm-screenshot.png" style="width: 700px;" />
 </a>
 </figure>
-<p>However, this multilevel perspective is not the typical method used in <code class="docutils literal notranslate"><span class="pre">R</span></code> (or <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code> or <code class="docutils literal notranslate"><span class="pre">SAS</span></code>) for these types of models. Instead, these software packages use an <em>equivalent</em> approach in the form of <em>linear mixed-effects</em> (LME) models. In this part of the lesson, we will connect these two perspectives together and then show how these forms of models can be fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> using both the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package (familiar from the use of <code class="docutils literal notranslate"><span class="pre">gls()</span></code>) and the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package.</p>
+<p>However, this multilevel perspective is not the typical method used in <code class="docutils literal notranslate"><span class="pre">R</span></code> (or <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code> or <code class="docutils literal notranslate"><span class="pre">SAS</span></code>) for these types of models. Instead, these software packages use an <em>equivalent</em> approach in the form of <em>linear mixed-effects</em> (LME) models. In this part of the lesson, we will connect these two perspectives together before showing how these forms of models can be fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package in the final part of the lesson.</p>
 <section id="turning-a-multilevel-models-into-a-mixed-effects-model">
 <h2>Turning a Multilevel Models into a Mixed-effects Model<a class="headerlink" href="#turning-a-multilevel-models-into-a-mixed-effects-model" title="Link to this heading">#</a></h2>
 <p>To start understanding the equivalence between <em>multilevel</em> models and LME models, we will start with our multilevel model from the previous part of this lesson. We will then walk through the steps of turning it into an LME model.</p>
@@ -453,16 +453,12 @@ document.write(`
 <p>To review, we previously finished modelling our simple repeated measures data using the following multilevel specification</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{2}
-    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij}             &amp;\quad\text{Level 1} \\
-    \mu_{i}   &amp;= \mu + \xi_{i}                                &amp;\quad\text{Level 2}
-\end{alignat*}
-\end{split}\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{2}
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij} \\
     \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right) \\
+    \text{Level 2} \\
+    \mu_{i}   &amp;= \mu + \xi_{i} \\
     \xi_{i}   &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{b}\right).
 \end{alignat*}
 \end{split}\]</div>
@@ -477,7 +473,7 @@ document.write(`
 </section>
 <section id="the-lme-trick">
 <h3>The LME Trick<a class="headerlink" href="#the-lme-trick" title="Link to this heading">#</a></h3>
-<p>Turning this model into an LME model only requires a single step. ALl we do is <em>collapse</em> the levels together and then work with a <em>single</em> equation. To see how to do this, notice above that the Level 1 equation is given as</p>
+<p>Turning this model into an LME model only requires a single step. All we do is <em>collapse</em> the levels together and then work with a <em>single</em> equation. To see how to do this, notice above that the Level 1 equation is given as</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \mu_{i} + \alpha_{j} + \eta_{ij},
@@ -537,7 +533,7 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
     \eta_{ij} &amp;\sim \mathcal{N}\left(0,\sigma^{2}_{w}\right)
 \end{alignat*}
 \end{split}\]</div>
-<p>tells us <em>very little</em> about the data structure. We do not get the same intuition about the data-generating process when written this way. Indeed, it just looks like we have stuck an additional error term into the normal linear model. Although mathematically that <em>is</em> all that has happened, intuitively there is less of a clear sense of <em>why</em> this happened and what it implies. This is why we spent so long with the multilevel model, because jumping over the multilevel perspective straight into mixed-effects is a recipe for confusion. Indeed, this is exactly what many applied researchers do when told to use mixed-effects models. However, this can lead to a conceptual gap where mixed-effects models are just not understood as well as they could be, if the route through multilevel level models was taken instead. So we can think, very broadly, that the hierarchical perspective is the most useful <em>intuitively</em>, but the mixed-effects perspective is the most useful <em>practically</em>.</p>
+<p>tells us <em>very little</em> about the data structure. We do not get the same intuition about the data-generating process when written this way. Indeed, it just looks like we have stuck an additional error term into the normal linear model. Although mathematically that <em>is</em> all that has happened, intuitively there is less of a clear sense of <em>why</em> this happened and what it implies. This is why we spent so long with the multilevel model, because jumping over the multilevel perspective straight into mixed-effects is a recipe for confusion. So we can think, very broadly, that the hierarchical perspective is the most useful <em>intuitively</em>, but the mixed-effects perspective is the most useful <em>practically</em>.</p>
 </section>
 <section id="advantages-of-multilevel-lme-models">
 <h2>Advantages of Multilevel/LME Models<a class="headerlink" href="#advantages-of-multilevel-lme-models" title="Link to this heading">#</a></h2>
@@ -561,11 +557,13 @@ y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta
 <p>Another perspective on <em>partial pooling</em> is as a form of <em>regularisation</em>. Regularisation is a broader concept in mathematics, but we can think of it as the use of some sort of <em>penalty</em> or <em>restriction</em> that forces our model to give us <em>sensible answers</em>. This is key because ultimately any mathematical model simply produces numbers based on some other numbers. In order for this to be useful, we need to introduce constraints in terms of what numbers the model can spit out. If it gives us values that are way off the scale of what we are measuring, or is predicting responses that are implausible, then it is not a very good model. The introduction of <em>penalties</em> or <em>restrictions</em> is known as <em>regularising the solution</em>. These penalties are not usually all-or-nothing. We do not make certain values <em>impossible</em>, rather the penalty scales with plausibility <em>and</em> the amount of data. The model is therefore allowed to consider extreme values, but <em>only</em> when these are overwhelmingly supported by the data. Bayesian methods embed this in their overarching framework. Frequentist methods do not always do this, but the behaviour of an LME model does allow this to a degree. Pooling and shrinkage are a <em>form</em> of regularisation. A subject is only allowed to have a mean that is <em>extreme</em>, in terms of its distance from the population average, if they also have <em>a lot</em> of data supporting this value. If they do not, their mean will be <em>shrunk</em> towards the population average in order to <em>regularise</em> the solution. This keeps the model <em>sensible</em> and balances the structure we have imposed with what the data is telling us.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … . After reading this section, you should have a good sense of :</p>
+<p>In this section, we have explored the process around turning a multilevel model into a mixed-effects model, as well as some general advantages of the multilevel/mixed-effects framework. After reading this section, you should have a good sense of :</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>The idea that only some software supports expressing these models in a multilevel fashion, with most widely-used packages preferring to use mixed-effects form instead.</p></li>
+<li><p>The process of converting a multilevel model to a mixed-effects model by collapsing the hierarchy to a single equation.</p></li>
+<li><p>The concept that a mixed-effects model can be seen as a partitioned-error model, which is why the repeated measures ANOVA is effectively a <em>simplistic form of a mixed-effects model</em>.</p></li>
+<li><p>The key advantages of a multilevel/mixed-effects framework, including automatic covariance modelling via the data structure, the concept of pooling information across units and the concept of shrinking noisy estimates.</p></li>
+<li><p>The idea that this behaviour can be seen as a solution to the bias-variance tradeoff, as well as a form of regularisation.</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
