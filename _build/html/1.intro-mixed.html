@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Introduction to Mixed-effects Models &#8212; An Introduction to Linear Mixed-effects Models</title>
   
@@ -16,36 +16,33 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -56,7 +53,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -64,34 +61,33 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = '1.intro-mixed';</script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
-    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
-    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Multilevel Framework" href="2.multilevel-framework.html" />
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -107,8 +103,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -116,6 +123,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -123,8 +131,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -140,8 +148,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -171,17 +178,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="An Introduction to Linear Mixed-effects Models - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -207,14 +218,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -358,16 +364,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -417,15 +431,14 @@
 <p>We will start with a brief high-level discussion about mixed-effects models. Because these types of model can be quite complex, we will just talk very generally about a few key topics, before we turn to the actual theory in the next part of the lesson.</p>
 <section id="multilevel-vs-hierarchical-vs-mixed-effects">
 <h2>Multilevel vs Hierarchical vs Mixed-effects<a class="headerlink" href="#multilevel-vs-hierarchical-vs-mixed-effects" title="Link to this heading">#</a></h2>
-<p>Perhaps one of the more confusing aspects of mixed-effects models is that they have <em>multiple names</em>. Worse than this, those multiple names come with different ways of <em>writing</em> and <em>thinking about</em> these models. This is to the extent that naive researchers sometimes do not even realise they are the same thing. So, it is important that we establish this from that start: a mixed-effects model can also be called a <em>multilevel model</em> or a <em>hierarchical linear model</em>. This should be burned into your brain by the end of this lesson.</p>
+<p>Perhaps one of the more confusing aspects of mixed-effects models is that they have <em>multiple names</em>. Worse than this, those multiple names come with different ways of <em>writing</em> and <em>thinking about</em> these models. This is to the extent that naive researchers sometimes do not even realise they are the same thing. So, it is important that we establish this from that start: a mixed-effects model can also be called a <em>multilevel model</em> or a <em>hierarchical linear model</em>.</p>
 <p>Although typical to teach these types of models from only <em>one</em> of these perspectives, we are taking the approach of teaching them <em>all</em> simultaneously. Though this sounds challenging, there is good reason for doing so:</p>
 <ul class="simple">
 <li><p>Multilevel and hierarchical refer to the <em>same</em> perspective, so there are only <em>two</em> ways of looking at these models, not <em>three</em>.</p></li>
 <li><p>Both perspectives have their merit and it is likely you will find one of them more intuitive than the other. If you know <em>both</em>, you can choose.</p></li>
 <li><p>Different software requires different perspectives. If you know both, you can use anything you want.</p></li>
 </ul>
-<p>From the perspective of this lesson, there is a preference for <em>thinking about</em> these models as multilevel/hierarchical, but then <em>implementing</em> them as mixed-effects. This involves building the model conceptually as a multilevel/hierarchical model, but then translating it into mixed-effects form for the purpose of fitting in software. You may disagree, but that is some of the point of presenting <em>both</em> perspectives.</p>
-<p>In addition, we will use the term <em>multilevel</em> throughout. The term <em>hierarchical</em> is entirely equivalent, so if anyone ever talks to you about <em>hierarchical linear models</em>, they are talking about <em>multilevel models</em>. Our preference for <em>multilevel</em> comes down to it being (a) more directly descriptive of the model form and (b) easier to say.</p>
+<p>From the perspective of this lesson, there is a preference for <em>thinking about</em> these models as multilevel/hierarchical, but then <em>implementing</em> them as mixed-effects. This involves building the model conceptually as a multilevel/hierarchical model, but then translating it into mixed-effects form for the purpose of fitting in software. We will also have a preference for the term <em>multilevel</em> instead of <em>hierarchical</em>. This comes down to the term being (a) more directly descriptive of the model form and (b) easier to say.</p>
 </section>
 <section id="estimation-of-mixed-effects-models">
 <h2>Estimation of Mixed-effects Models<a class="headerlink" href="#estimation-of-mixed-effects-models" title="Link to this heading">#</a></h2>
@@ -433,10 +446,10 @@
 <ul class="simple">
 <li><p>Iterative algorithms can fail if they do not land on a solution after the default number of iterations.</p></li>
 <li><p>We are not finding closed-form solutions here, we are using the computer to search for the “best” solution in an unknown landscape of possibilities.</p></li>
-<li><p>Failure can either be a <em>structural</em> problem with the model or a <em>computational</em> problem related to either the algorithm itself, or the computer running out of memory.</p></li>
+<li><p>Failure can either be a <em>structural</em> problem with the model or a <em>computational</em> problem related to the algorithm itself or the resources of the computer it is running on.</p></li>
 </ul>
-<p>You should not run into any problems using the examples in these lessons because they are chosen to be <em>simple</em>. However, in the real world, using large datasets, these problems can emerge. This is precisely because we have left the world of least-squares certainty and have entered the world of iterative optimisation algorithms.</p>
-<p>In addition, most mixed-effects software will have the option of finding parameters using either <em>maximum likelihood</em> (ML) or <em>restricted maximum likelihood</em> (REML). As we know from last semester, ML is <em>biased</em> when estimating variance terms because it treats the mean structure as <em>known</em>. REML is <em>unbiased</em> because it is able to accommodate that uncertainty. So, obviously we just want to use REML? In general, yes, however, there is a catch. If we are <em>comparing models</em>, using REML will change elements of the model structure beyond those that we want to compare. As such, we need to make sure we are using ML when performing model comparisons. We will discuss this in more detail in the associated workshop.</p>
+<p>You should not run into any problems using the examples in these lessons because they are chosen to be <em>simple</em>. However, in the real world, using large datasets, these problems can emerge. This is precisely because we have left the world of least-squares certainty and have entered the world of iterative optimisation problems.</p>
+<p>In addition, most mixed-effects software will have the option of finding parameters using either <em>maximum likelihood</em> (ML) or <em>restricted maximum likelihood</em> (REML). As we know from last semester, ML is <em>biased</em> when estimating variance terms because it treats the mean structure as <em>known</em>. REML is <em>unbiased</em> because it is able to accommodate that uncertainty. So, obviously we just want to use REML? In general, yes, however, there is a catch. If we are <em>comparing models</em>, using REML will change elements of the model structure beyond those that we want to compare. As such, we need to make sure we are using ML when performing model comparisons. We saw this already with GLS and the same applies to mixed-effects models.</p>
 </section>
 <section id="inference-in-mixed-effects-models">
 <h2>Inference in Mixed-effects Models<a class="headerlink" href="#inference-in-mixed-effects-models" title="Link to this heading">#</a></h2>
@@ -446,43 +459,46 @@
 <li><p>Ignore the problem, but only under the assumption that we have so much data that it does not matter.</p></li>
 <li><p>Construct fictitious degrees of freedom as a proxy for our uncertainty.</p></li>
 </ol>
-<p>One advantage of mixed-effects models is that software developments have tended to focus on their use over methods like GLS, so there can be more options available. For instance, the effective degrees of freedom method developed by <a class="reference external" href="https://www.jstor.org/stable/2533558">Kenward &amp; Rogers (1997)</a> is available in the <code class="docutils literal notranslate"><span class="pre">R</span></code> package <code class="docutils literal notranslate"><span class="pre">pbkrtest</span></code>, but only for mixed-effects models<a class="footnote-reference brackets" href="#lme4-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This is despite the method itself is more general-purpose. Mixed-effects models also embed the structure of the data within the model because this is <em>where</em> the covariance structure comes from. This can allow for better approximations to the degrees of freedom because certain structural elements, such as the number of subjects, is a known part of the model structure. This is not true of GLS. GLS has no idea where the covariance structure has come from. It just takes what we give it and dutifully removes it. So knowledge of the data structure is a helpful addition. Of course, if we do not care for effective degrees of freedom then these advantages are largely moot.</p>
+<p>One advantage of mixed-effects models is that software developments have tended to focus on their use over methods like GLS, so there can be more options available. For instance, the effective degrees of freedom method developed by <a class="reference external" href="https://www.jstor.org/stable/2533558">Kenward &amp; Rogers (1997)</a> is available in the <code class="docutils literal notranslate"><span class="pre">R</span></code> package <code class="docutils literal notranslate"><span class="pre">pbkrtest</span></code>, but only for mixed-effects models<a class="footnote-reference brackets" href="#lme4-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This is despite the method itself being more general-purpose. Mixed-effects models also embed the structure of the data within the model because this is <em>where</em> the covariance structure comes from. This can allow for better approximations to the degrees of freedom because certain structural elements, such as the number of subjects, is a known part of the model. This is not true of GLS. GLS has no idea where the covariance structure has come from. It just takes what we give it and dutifully removes it. So knowledge of the data structure is a helpful addition. Of course, if we do not care for effective degrees of freedom then these advantages are largely moot.</p>
 </section>
 <section id="mixed-effects-applied-to-repeated-measurements">
 <h2>Mixed-effects Applied to Repeated Measurements<a class="headerlink" href="#mixed-effects-applied-to-repeated-measurements" title="Link to this heading">#</a></h2>
 <p>In what follows, we will be mainly looking at mixed-effects models through the lens of <em>repeated measurements</em>. This is because this is the most common situation in experimental psychology and cognitive neuroscience where mixed-effects models are applied. However, as we will see next week, the power of mixed-effects models is that they can be applied to a variety of situations where the data has additional structure that we want to accommodate. This includes, but is not limited to, repeated measurement designs. So remember, mixed-effects are much <em>broader</em> than repeated measures. We are just limiting the discussion for the moment to keeps things clearer.</p>
-<p>On the topic of repeated measurements, this is also where terminology can start to become unhelpful. For instance, to a traditionally trained psychologist, a mixed ANOVA is one that contains <em>within-subject</em> and <em>between-subjects</em> factors. To a statistician, a mixed ANOVA refers to a mixed-effects model. The problem? A mixed ANOVA <em>is</em> a mixed-effects model, but the term “mixed” is being used in two different ways. The psychologist means “mixed” in terms of the form of experimental manipulation, whereas the statistician means “mixed” in terms of the modelled effects. A statistician would refer to this type of experiment as a “split-plot” design, but this is not common terminology in psychology. So you can see how confusion can easily set in. To get around this, we prefer to use the term “repeated measures” ANOVA <em>generically</em> for all situations where repeated measures are involved. We make no distinction between models that contain all within-subject manipulations or models that contain both within-subject and between-subjects manipulations. These are elements of <em>experimental design</em> that do not necessarily require further qualification when describing the statistical model. If you feel strongly about keep the term “mixed”, we would suggest you always qualify this to make your meaning known. For instance, a “mixed-design” ANOVA compared to a “mixed-effects” ANOVA.</p>
+<p>On the topic of repeated measurements, this is also where terminology can start to become unhelpful. For instance, to a traditionally trained psychologist, a mixed ANOVA is one that contains <em>within-subject</em> and <em>between-subjects</em> factors. To a statistician, a mixed ANOVA refers to a mixed-effects model. The problem? A mixed ANOVA <em>is</em> a mixed-effects model, but the term “mixed” is being used in two different ways. The psychologist means “mixed” in terms of the form of experimental manipulation, whereas the statistician means “mixed” in terms of the modelled effects. A statistician would refer to this type of experiment as a “split-plot” design, but this is not common terminology in psychology. So you can see how confusion can easily set in. To get around this, we prefer to use the term “repeated measures” ANOVA <em>generically</em> for all situations where repeated measures are involved. We make no distinction between models that contain all within-subject manipulations or models that contain both within-subject and between-subjects manipulations. These are elements of <em>experimental design</em> that do not necessarily require further qualification when describing the statistical model. If you feel strongly about keep the term “mixed”, we would suggest you always qualify this as a “mixed-design” to make it distinct from “mixed-effects”.</p>
 </section>
 <section id="packages-for-mixed-effects">
 <h2>Packages for Mixed-effects<a class="headerlink" href="#packages-for-mixed-effects" title="Link to this heading">#</a></h2>
-<p>As a final point in this section, we need to address the fact that there are <em>two</em> main packages used in <code class="docutils literal notranslate"><span class="pre">R</span></code> for fitting mixed-effects models. This is unfortunate because it adds a degree of confusion that we could do without. This situation is largely a <em>historic</em> one, however, neither package can be considered superior to the other as they each have their <em>advantages</em> and <em>disadvantages</em>. Unfortunately, no single <em>uber package</em> exists that combines all the advantages of both. Until that day, you need to make an informed decision about which to use for a given analysis.</p>
+<p>As a final point in this section, we need to address the fact that there are <em>two</em> main packages used in <code class="docutils literal notranslate"><span class="pre">R</span></code> for fitting mixed-effects models. This is unfortunate because it adds a degree of confusion that we could do without. This situation is largely a <em>historic</em> one, however, neither package can be considered superior to the other as they each have their <em>advantages</em> and <em>disadvantages</em>.</p>
 <section id="nlme">
 <h3><code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#nlme" title="Link to this heading">#</a></h3>
-<p>The older of the two packages is <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. We have used this package already for the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function, but it also provides the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function for fitting mixed-effects models. This package is fully described in the associated textbook <em>Mixed-effects Models in S and S-Plus</em> by <a class="reference external" href="https://link.springer.com/book/10.1007/b98882">Pinheiro &amp; Bates (2000)</a>. As the name suggests, this package actually <em>pre-dates</em> the wide-spread adoption of <code class="docutils literal notranslate"><span class="pre">R</span></code> as a language, instead focusing on the language that pre-dated <code class="docutils literal notranslate"><span class="pre">R</span></code> called <code class="docutils literal notranslate"><span class="pre">S</span></code> (for <em>statistics</em>) and <code class="docutils literal notranslate"><span class="pre">S-Plus</span></code> (a commercialised implementation of <code class="docutils literal notranslate"><span class="pre">S</span></code>). Although older, <code class="docutils literal notranslate"><span class="pre">nlme</span></code> has several advantages over the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code>, which will become more apparent as we move through the materials. For now, the biggest advantage is that we can add a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> term to a mixed-effects model in <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to accommodate heterogeneity of variance. So, if we do have between-subjects manipulations, we can model different variances for the different groups. In many situations, this is a very important aspect. For instance, in clinical studies our between-subjects manipulation may correspond to <em>patients</em> vs <em>controls</em>. In that situation, different degrees of variability could be <em>characteristic</em> of the condition under study and ignoring it could bias our inference. The ability to accommodate this makes <code class="docutils literal notranslate"><span class="pre">nlme</span></code> an attractive prospect, despite the age of the package.</p>
+<p>The older of the two packages is <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. We have used this package already for the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function, but it also provides the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function for fitting mixed-effects models. This package is fully described in the associated textbook <em>Mixed-effects Models in S and S-Plus</em> by <a class="reference external" href="https://link.springer.com/book/10.1007/b98882">Pinheiro &amp; Bates (2000)</a>. As the name suggests, this package actually <em>pre-dates</em> the wide-spread adoption of <code class="docutils literal notranslate"><span class="pre">R</span></code> as a language, instead focusing on the language that pre-dated <code class="docutils literal notranslate"><span class="pre">R</span></code> called <code class="docutils literal notranslate"><span class="pre">S</span></code> (for <em>statistics</em>) and <code class="docutils literal notranslate"><span class="pre">S-Plus</span></code> (a commercialised implementation of <code class="docutils literal notranslate"><span class="pre">S</span></code>). Although older, <code class="docutils literal notranslate"><span class="pre">nlme</span></code> has several advantages over the more recent <code class="docutils literal notranslate"><span class="pre">lme4</span></code>, which will become more apparent as we move through the materials. For now, the biggest advantage is that we can add a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> term to a mixed-effects model in <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to accommodate heterogeneity of variance. For instance, if we have between-subjects manipulations, we can model different variances for the different groups. In many situations, this is a very important aspect. For instance, in clinical studies our between-subjects manipulation may correspond to <em>patients</em> vs <em>controls</em>. In that situation, different degrees of variability could be <em>characteristic</em> of the condition under study and ignoring it could bias our inference. The ability to accommodate this makes <code class="docutils literal notranslate"><span class="pre">nlme</span></code> an attractive prospect, despite the age of the package.</p>
 </section>
 <section id="lme4">
 <h3><code class="docutils literal notranslate"><span class="pre">lme4</span></code><a class="headerlink" href="#lme4" title="Link to this heading">#</a></h3>
-<p>Unlike <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package was developed much more recently directly for <code class="docutils literal notranslate"><span class="pre">R</span></code>. Its focus is on several aspects where <code class="docutils literal notranslate"><span class="pre">nlme</span></code> falls down. Firstly, by implementing much of the computation in <code class="docutils literal notranslate"><span class="pre">C++</span></code> and then interfacing with <code class="docutils literal notranslate"><span class="pre">R</span></code>, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> gets a significant speed boost over <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. This can make the model fitting much more robust and less prone to failing with large and complex datasets. Secondly, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> allows for <em>crossed random-effects</em>, which is something <code class="docutils literal notranslate"><span class="pre">nlme</span></code> cannot do. This is a much more advanced topics, so do not worry about it for now. Just know that there are certain types of model that <code class="docutils literal notranslate"><span class="pre">nlme</span></code> <em>cannot fit</em>. Finally, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> allows mixed-effects models for non-normal outcome variables via an implementation of <em>generalised linear mixed-effects models</em>. Again, this is a much more advanced topic, but is worth remembering because this is something that is <em>not possible</em> using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. However, the main <em>disadvantage</em> of <code class="docutils literal notranslate"><span class="pre">lme4</span></code> is that it has no facility for accommodating between-subjects variance differences. So while <code class="docutils literal notranslate"><span class="pre">lme4</span></code> has several modelling and computational advantages, for more basic usage where accommodation of heterogeneity of variance is important, <code class="docutils literal notranslate"><span class="pre">nlme</span></code> may be more applicable. This is why we will be largely sticking with <code class="docutils literal notranslate"><span class="pre">nlme</span></code> for all our examples. However, it is worth knowing that the syntax of these two packages is <em>very similar</em>, so once you understand one of them, it is not particularly difficult to switch to the other.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package was developed much more recently directly for <code class="docutils literal notranslate"><span class="pre">R</span></code>. Its focus is on several aspects where <code class="docutils literal notranslate"><span class="pre">nlme</span></code> falls down. Firstly, by implementing much of the computation in <code class="docutils literal notranslate"><span class="pre">C++</span></code> and then interfacing with <code class="docutils literal notranslate"><span class="pre">R</span></code>, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> gets a significant speed boost over <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. This can make the model fitting much more robust and less prone to failing with large and complex datasets. Secondly, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> allows for <em>crossed random-effects</em>, which is something <code class="docutils literal notranslate"><span class="pre">nlme</span></code> cannot do. This is a much more advanced topics, so do not worry about it for now. Just know that there are certain types of model that <code class="docutils literal notranslate"><span class="pre">nlme</span></code> <em>cannot fit</em>. Finally, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> allows mixed-effects models for non-normal outcome variables via an implementation of <em>generalised linear mixed-effects models</em>. Again, this is a much more advanced topic, but is worth remembering because this is something that is <em>not possible</em> using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>. However, the main <em>disadvantage</em> of <code class="docutils literal notranslate"><span class="pre">lme4</span></code> is that it has no facility for accommodating heterogeneity of variance. So while <code class="docutils literal notranslate"><span class="pre">lme4</span></code> has several modelling and computational advantages, for more basic usage where accommodation of difference variances is important, <code class="docutils literal notranslate"><span class="pre">nlme</span></code> may be more applicable. This is why we will be largely sticking with <code class="docutils literal notranslate"><span class="pre">nlme</span></code> for all our examples. However, it is worth knowing that the syntax of these two packages is <em>very similar</em>, so once you understand one of them, it is not particularly difficult to switch to the other.</p>
 </section>
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
 <figure class="align-right">
-<a class="reference internal image-reference" href="_images/lme-textbook-front.png"><img alt="_images/lme-textbook-front.png" src="_images/lme-textbook-front.png" style="width: 268.8px; height: 384.0px;" /></a>
+<a class="reference internal image-reference" href="_images/lme-textbook-front.png"><img alt="_images/lme-textbook-front.png" src="_images/lme-textbook-front.png" style="width: 268.8px; height: 384.0px;" />
+</a>
 </figure>
-<p>Finally, it is worth saying that the topic of mixed-effects models can be quite complicated and difficult to get your head around. We will be trying to build intuition as best we can throughout these materials. However, it is often advantageous to have more examples and explanations available. For that reason, we recommend the book <em>Linear Mixed Models: A Practical Guide Using Statistical Software</em> by <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki">West, Welch and Galecki (2022)</a>, which is now on its 3rd edition. This book is unique because it contains the analysis of several different types of data structure using <em>all</em> major software packages. This means each chapter contains examples using <code class="docutils literal notranslate"><span class="pre">nlme</span></code> and <code class="docutils literal notranslate"><span class="pre">lme4</span></code> in <code class="docutils literal notranslate"><span class="pre">R</span></code>, <em>as well as</em> <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code>, <code class="docutils literal notranslate"><span class="pre">SAS</span></code> and <code class="docutils literal notranslate"><span class="pre">HLM</span></code>. So you can easily see how mixed-effects procedures work across different software platforms. Although written by statisticians, and so quite technical in places, the guided examples of analyses can be highly information, especially as this shows you <em>how a statistician would perform the analysis</em>. The analysis of these different data structures will also be the basis of the examples next week, so we will be revising this book again.</p>
+<p>Finally, it is worth saying that the topic of mixed-effects models can be quite complicated and difficult to get your head around. We will be trying to build intuition as best we can throughout these materials. However, it is often advantageous to have more examples and explanations available. For that reason, we recommend the book <em>Linear Mixed Models: A Practical Guide Using Statistical Software</em> by <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki">West, Welch and Galecki (2022)</a>, which is now on its 3rd edition. This book is unique because it contains the analysis of several different types of data structure using <em>all</em> major software packages. This means each chapter contains examples using <code class="docutils literal notranslate"><span class="pre">nlme</span></code> and <code class="docutils literal notranslate"><span class="pre">lme4</span></code> in <code class="docutils literal notranslate"><span class="pre">R</span></code>, <em>as well as</em> <code class="docutils literal notranslate"><span class="pre">SPSS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATA</span></code>, <code class="docutils literal notranslate"><span class="pre">SAS</span></code> and <code class="docutils literal notranslate"><span class="pre">HLM</span></code>. So you can easily see how mixed-effects procedures work across different software platforms. Although written by statisticians, and so quite technical in places, the guided examples of analyses can be highly informative, especially as this demonstrates you <em>how a statistician would perform the analysis</em>. The various different data structures covered in this book will also be the basis of the various examples next week.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … . After reading this section, you should have a good sense of :</p>
+<p>In this section, we have explored some general topics around mixed-effects models. After reading this section, you should have a good sense of :</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>The fact that mixed-effects models are also known as <em>multilevel</em> models and <em>hierarchical</em> linear models.</p></li>
+<li><p>The fact that mixed-effects models are estimated using iterative REML methods and so can be prone to failure on large and complex datasets.</p></li>
+<li><p>The principle that mixed-effects models do <em>not</em> solve the issues around inference that were discussed last week.</p></li>
+<li><p>The idea that repeated measurements represents only <em>one</em> possible data structure that mixed-effects models can be applied to.</p></li>
+<li><p>The fact that <code class="docutils literal notranslate"><span class="pre">R</span></code> has two packages commonly used for mixed-effects models: <code class="docutils literal notranslate"><span class="pre">nlme</span></code> and <code class="docutils literal notranslate"><span class="pre">lme4</span></code>.</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="lme4-foot" role="note">
+<aside class="footnote brackets" id="lme4-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Specifically, mixed-effects models fit using the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package, rather than fit using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>.</p>
 </aside>
@@ -545,8 +561,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -613,8 +628,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
