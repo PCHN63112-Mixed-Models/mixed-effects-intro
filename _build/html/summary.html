@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Summary &#8212; An Introduction to Linear Mixed-effects Models</title>
   
@@ -16,33 +16,36 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -53,7 +56,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -61,32 +64,33 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'summary';</script>
-    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
-    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
     <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Mixed-effects Models in R" href="5.mixed-R.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -102,19 +106,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -122,7 +115,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -130,8 +122,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -147,7 +139,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -177,21 +170,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="An Introduction to Linear Mixed-effects Models - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -217,9 +206,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -363,27 +357,17 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
-
-
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
 </button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
 </div></div>
       
     </div>
@@ -399,16 +383,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-use">What to Use?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-are-mixed-effects-models-useful">When are Mixed-effects Models Useful?</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -420,53 +394,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
-<section id="have-we-made-any-progress">
-<h2>Have We Made Any Progress?<a class="headerlink" href="#have-we-made-any-progress" title="Link to this heading">#</a></h2>
-<p>Given all the above, it might be natural to wonder whether we have actually made any progress over the repeated measures ANOVA? Although we have an estimation framework that is more general, and we have removed the awkwardness of having to manually construct inferential tests via multiple ANOVA tables, the lack of sphericity correction means that we are tied-in to compound symmetry.</p>
-<ul class="simple">
-<li><p>Sphericity is misleading in practice?</p></li>
-<li><p>The data do not support more complex estimation, but it could if we had replications</p></li>
-</ul>
-<p>However, the true of the matter is that there are some situations where a GLS model may be superior, for our purposes…</p>
-</section>
-<section id="what-to-use">
-<h2>What to Use?<a class="headerlink" href="#what-to-use" title="Link to this heading">#</a></h2>
-<p>… If you have a simple repeated measurement dataset with <em>no repeats</em> (i.e. each subject only has <em>one measurement</em> per repeated measure), then your options are (in order of <em>least preferential</em> to <em>most preferential</em>):</p>
-<ol class="arabic simple">
-<li><p>The traditional repeated measures ANOVA</p>
-<ul class="simple">
-<li><p>Compound symmetric covariance structure and difficult to fit correctly using <code class="docutils literal notranslate"><span class="pre">aov()</span></code> with an <code class="docutils literal notranslate"><span class="pre">Error()</span></code> term.</p></li>
-<li><p>Advantage of <em>inferential certainty</em>, as all the theory from the normal linear model still applies.</p></li>
-<li><p>Even when the theory does <em>not</em> apply, effective degrees of freedom can be calculated via sphericity correction.</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> to fit, but recognise that you are throwing-away the linear models frameowork by doing so.</p></li>
-</ul>
-</li>
-<li><p>A mixed-effects model</p>
-<ul class="simple">
-<li><p>Using a <em>random intercept</em> model, the covariance structure remains compound symmetric, which is no better than the repeated measures ANOVA.</p></li>
-<li><p>Additional <em>inferential uncertainty</em>, as the theory from the normal linear model no longer applies.</p></li>
-<li><p>No sphericity correction, though <em>effective degrees of freedom</em> are available alongside <em>asymptotic</em> results.</p></li>
-<li><p>No need to specify error terms, as these are accommodated automatically.</p></li>
-<li><p>Remains within the linear models framework, so we can still get residuals and diagnostic plots as usual.</p></li>
-</ul>
-</li>
-<li><p>Generalised Least Squares</p>
-<ul class="simple">
-<li><p>Freedom to estimate a completely unconstrained covariance structure.</p></li>
-<li><p>Greater <em>inferential uncertainty</em> as the additional structure from the data is not an inherent part of the model and cannot be used as easily to infer effective degrees of freedom. This largely forces us into <em>asymptotic</em> results.</p></li>
-<li><p>Error terms remain automatically accommodated.</p></li>
-<li><p>Like mixed-effects, remains within the linear models framework.</p></li>
-</ul>
-</li>
-</ol>
-<p>So, in this situation, GLS may be the better approach. This is quite an important conclusion because many practising researchers in psychology have moved to mixed-effects models as their <em>default</em> replacement for the repeated measures ANOVA. However, under certain circumstances, GLS can lift more assumptions than a mixed-effects model.</p>
-</section>
-<section id="when-are-mixed-effects-models-useful">
-<h2>When are Mixed-effects Models Useful?<a class="headerlink" href="#when-are-mixed-effects-models-useful" title="Link to this heading">#</a></h2>
-<p>… The problem is that we have not really seen the utility of mixed-effects models in the current examples. Next week, we will introduce a variety of data structures that mixed-effects models can be applied to. In doing do, we will see how flexible the framework is and why it is so useful.</p>
-<p>For now, there is an important lesson in all of this: the utility of a mixed-effects models does <em>not</em> come from data with no replications. In fact, there is little that a mixed-effects model can do here because the data <em>does not support</em> a more complex random-effects structure. This is key not only from an <em>analysis</em> perspective, but also from a <em>design</em> perspective. The problem is that many researchers are taught to used mixed-effects models as a drop-in replacement for the repeated measures ANOVA, yet this application effectively <em>neuters</em> the mixed-effects framework. Arguably, GLS should be used instead because it can relax the covariance assumptions entirely, even with no replications per-repeat.</p>
-<p>The catch is that almost all experiments in experimental and clinical psychology <em>do</em> have some form of replication within the repeated measurements. All neuropsychological tasks will have multiple trials per-condition. For instance, even a basic Stroop task will have multiple <em>congruent</em> and <em>incongruent</em> trials. Psychologists are often in the habit of <em>throwing this information away</em> by either summarising the trials through total scores, or creating condition averages per-subject. This is partly because this information cannot be used in traditional repeated measures analyses. However, as we will see in the materials next week, such information is <em>essential</em> for mixed-effects models to operate. So, if you do not have it, a mixed-effects model may not be the best choice. However, if you <em>do</em> have it or are able to <em>recover</em> it, a mixed-effects model suddenly becomes viable again.</p>
-</section>
+<p>In this lesson, we have introduced the mixed-effects framework as an alternative to both traditional repeated measurement models and as an alternative to GLS. We have seen how to represent a model in a multilevel fashion, building up complexity in layers, before collapsing down to mixed-effects form. Furthermore, we have seen how the mixed-effects framework does not require pre-specification of a covariance structure. Instead, the structure becomes a natural emergent property of the model. This alone is an advantage. However, it is difficult to overlook the fact that a mixed-effects model is a fundamentally more complex affair than either the repeated measures ANOVA or a GLS model. Indeed, if our aim is to get away from assumptions of compound symmetry and the need for manual specification of error terms, the examples in this lesson are all suggestive of using GLS rather than a mixed-effects model. So, from our current vantage, it might be natural to wonder whether we have actually made any progress at all?</p>
+<p>The problem is that we have not really seen the utility of mixed-effects models in the current examples. Simple repeated measurement datasets with no replications of the repeats are not where mixed-effects models really shine. Next week, we will introduce a variety of data structures that mixed-effects models can be applied to. In doing do, we will see how flexible the framework is and why it is so useful. For now, there is an important lesson in all of this: the utility of a mixed-effects models does <em>not</em> come from data with no replications. In fact, there is little that a mixed-effects model can do here because the data <em>does not support</em> a more complex random-effects structure. This is key not only from an <em>analysis</em> perspective, but also from a <em>design</em> perspective. The problem is that many researchers are taught to used mixed-effects models as a drop-in replacement for the repeated measures ANOVA, yet this application effectively <em>neuters</em> the mixed-effects framework. Arguably, GLS should be used instead because it can relax the covariance assumptions entirely, even with no replications per-repeat.</p>
+<p>The catch is that almost all experiments in experimental and clinical psychology <em>do</em> have some form of replication within the repeated measurements. Indeed, almost all experiments will have <em>multiple trials</em> of the same condition. The problem is that psychologists are often in the habit of <em>throwing this information away</em> by either summarising the trials through total scores, or creating condition averages per-subject. This is why the datasets in the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package are the way that they are. It is almost a certainty that the experiments that generated many of these datasets had multiple trials, but this information has been discarded. As we will see in the materials next week, such information is <em>essential</em> for mixed-effects models to operate. So, if you do not have it, a mixed-effects model may not be the best choice. If you <em>do</em> have it, a mixed-effects model suddenly becomes viable again. More so, a mixed-effects models can become the <em>better choice</em>.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -515,23 +445,6 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#have-we-made-any-progress">Have We Made Any Progress?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-use">What to Use?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-are-mixed-effects-models-useful">When are Mixed-effects Models Useful?</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
-              
             
           </div>
           <footer class="bd-footer-content">
@@ -575,8 +488,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
