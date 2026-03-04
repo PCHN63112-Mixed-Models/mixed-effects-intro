@@ -439,7 +439,7 @@ document.write(`
 <p>As the final part of this lesson, we turn to the process of fitting LME models using <code class="docutils literal notranslate"><span class="pre">R</span></code>, as well as options around inference. These examples will all be fairly basic, but we will see more variety in the workshop this week. In addition, our focus will be on the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package, as discussed at the beginning of the lesson.</p>
 <section id="fitting-mixed-effects-models-with-nlme">
 <h2>Fitting Mixed-effects Models with <code class="docutils literal notranslate"><span class="pre">nlme</span></code><a class="headerlink" href="#fitting-mixed-effects-models-with-nlme" title="Link to this heading">#</a></h2>
-<p>To fit an LME model using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, we use the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function, which has a syntax very similar to the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function. To understand how to use this, we will return to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>.</p>
+<p>To fit a LME model using <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, we use the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function, which has a syntax very similar to the <code class="docutils literal notranslate"><span class="pre">gls()</span></code> function. To understand how to use this, we will return to the long-formatted <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> data from <code class="docutils literal notranslate"><span class="pre">datarium</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">anxiety.long</span><span class="p">)</span>
@@ -461,9 +461,11 @@ document.write(`
 <p>Our multilevel model for these data was specified earlier as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{2}
-    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij} &amp;\quad\text{Level 1} \\
-    \mu_{i}   &amp;= \mu + \xi_{i}                    &amp;\quad\text{Level 2} \\
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y_{ij}    &amp;= \mu_{i} + \alpha_{j} + \eta_{ij} \\
+    \text{Level 2} \\
+    \mu_{i}   &amp;= \mu + \xi_{i}                     \\
 \end{alignat*}
 \end{split}\]</div>
 <p>which we can collapse to a single level by replacing <span class="math notranslate nohighlight">\(\mu_{i}\)</span> with <span class="math notranslate nohighlight">\(\mu + \xi_{i}\)</span> at Level 1. This gives the LME model</p>
@@ -475,6 +477,7 @@ y_{ij} = \mu + \alpha_{j} + \xi_{i} + \eta_{ij},
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
+
 <span class="n">lme.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -489,7 +492,7 @@ y_{ij} = \mu + \alpha_{j} + \xi_{i} + \eta_{ij},
 \[
 y_{ij} = \overbrace{\mu + \alpha_{j}}^{\text{fixed}} + \overbrace{\xi_{i} + \eta_{ij}}^{\text{random}},
 \]</div>
-<p>so the <em>fixed-effects</em> part just appears in the model equation as <code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">time</span></code> (or <code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">time</span></code>, if we want to be more explicit). The <em>random-effects</em> part consists of <span class="math notranslate nohighlight">\(\xi_{i} + \eta_{ij}\)</span>, but we do not need to specify <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because that is the residual error term that is <em>always</em> included in a linear model. We know this already from <code class="docutils literal notranslate"><span class="pre">lm()</span></code> as we never have to ask for residuals, they are always there. So, the only thing that differentiates the model above from something we could fit with <code class="docutils literal notranslate"><span class="pre">lm()</span></code> is the term <span class="math notranslate nohighlight">\(\xi_{i}\)</span>. This is <em>precisely</em> what we specify using the <code class="docutils literal notranslate"><span class="pre">random=</span></code> argument.</p>
+<p>so the <em>fixed-effects</em> part just appears in the model equation as <code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">time</span></code> (or <code class="docutils literal notranslate"><span class="pre">score</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">time</span></code>, if we want to be more explicit). The <em>random-effects</em> part consists of <span class="math notranslate nohighlight">\(\xi_{i} + \eta_{ij}\)</span>, but we do not need to specify <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> because that is the residual error term that is <em>always</em> included in a linear model. We know this already from <code class="docutils literal notranslate"><span class="pre">lm()</span></code> as we never have to ask for residuals, they are always there. So, the only element that differentiates the model above from something we could fit with <code class="docutils literal notranslate"><span class="pre">lm()</span></code> is the term <span class="math notranslate nohighlight">\(\xi_{i}\)</span>. This is <em>precisely</em> what we specify using the <code class="docutils literal notranslate"><span class="pre">random=</span></code> argument.</p>
 <p>So what is <span class="math notranslate nohighlight">\(\xi_{i}\)</span>? Well, if we look at its index, it is a value that changes with <em>each subject</em>. It is therefore <em>constant</em> within a subject, but different between subjects. So how do we specify a value that is only constant <em>within</em> each subject? Well, we represent it as a constant using a <code class="docutils literal notranslate"><span class="pre">1</span></code> but make it <em>conditional</em> on the subject by using <code class="docutils literal notranslate"><span class="pre">|id</span></code>. So <code class="docutils literal notranslate"><span class="pre">1|id</span></code> can be read as <em>a constant per-subject</em> or an <em>intercept per-subject</em>. This is why these models are sometimes called <em>random intercept</em> models.</p>
 <div class="tip admonition">
 <p class="admonition-title">Multilevel Conceptualisation</p>
@@ -591,7 +594,7 @@ Number of Groups: 15
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5.112548e-15
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5.832372e-15
 </pre></div>
 </div>
 </div>
@@ -645,11 +648,10 @@ Number of Groups: 15
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="_images/2bb570d785d5c55987fdadf56777cbb23dde912208ac59ff16565f8757fa9631.png" src="_images/2bb570d785d5c55987fdadf56777cbb23dde912208ac59ff16565f8757fa9631.png" />
+<img alt="_images/822e000fee26bd8a8528686b63b70f2faba22a5b8ff7ca2cb613621eaa966ec8.png" src="_images/822e000fee26bd8a8528686b63b70f2faba22a5b8ff7ca2cb613621eaa966ec8.png" />
 </div>
 </div>
 <p>Although the amount of data in this example makes the distributional form harder to verify, the key element to note is that the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> is <em>much wider</em> than the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span>. This is because the distribution of <span class="math notranslate nohighlight">\(\xi_{i}\)</span> reflects measurements from <em>different subjects</em> and the distribution of <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> reflects measurements from the <em>same subject</em>. So this fits entirely with our expectations about the sources of variance in these data.</p>
-<p>We can also see the fundamental assumption behind treating <code class="docutils literal notranslate"><span class="pre">id</span></code> as a <em>random-effect</em>. When we do this, we conceptualise each level of <code class="docutils literal notranslate"><span class="pre">id</span></code> as a random draw from a larger population of subjects. We therefore assume some distributional form for the <em>subject</em> effects and estimate its variance. This is the distribution we see in the plot above. If we instead treated <code class="docutils literal notranslate"><span class="pre">id</span></code> as a <em>fixed-effect</em>, we assume that each of its levels represents some population-level constant that we want to estimate. There would be no distribution and no variance to estimate. We would be effectively saying that we are only interested in <em>these subjects</em> and no one else. We want to <em>precisely</em> know the mean of <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">'32'</span></code> and make comparisons and inference on <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">32</span></code> compared to <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">42</span></code> or <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">==</span> <span class="pre">44</span></code> or between any pairs of subjects. It would be like treating the levels of <code class="docutils literal notranslate"><span class="pre">id</span></code> in the same way as the levels of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Although there may be cases where the subjects that you have are <em>special</em> and each one is <em>meaningful</em> on their own, this is not our usual aim when we collect a sample. So, for most experiments, the subjects <em>have</em> to be treated as a <em>random-effect</em> in order for this to make sense.</p>
 </section>
 </section>
 <section id="inference-in-mixed-effects-models">
@@ -690,9 +692,7 @@ Number of Groups: 15
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
 
-<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;31&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span>
-<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">Sigma</span><span class="o">$</span><span class="n">`31`</span><span class="p">)</span>
-
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.mod</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;31&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`31`</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
 <span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
 </pre></div>
@@ -705,7 +705,7 @@ Number of Groups: 15
 3 1.807698 1.807698 1.899778
 </pre></div>
 </div>
-<img alt="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" src="_images/64018c114f880f473de3827b3830087f33036bcdb6692b24664339ef6894b9c0.png" />
+<img alt="_images/aaaf224601d92d42072ab2708bd900e1d2cc2075bd027768eae7865fcdd0dd8d.png" src="_images/aaaf224601d92d42072ab2708bd900e1d2cc2075bd027768eae7865fcdd0dd8d.png" />
 </div>
 </div>
 <p>As expected, this is <em>compound symmetric</em>, though this is now <em>implied</em> by the random-effects, rather than specified directly as we did with GLS. We can also use the function defined in the drop-down below to construct the <em>full</em> covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, using the details about the model structure in the model object returned by <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
@@ -749,7 +749,7 @@ Number of Groups: 15
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" src="_images/1cafa04af6b99b9ab3d3febeed41d784cb86d9846f58355833ad41db8b53f329.png" />
+<img alt="_images/e86fbb8063222c31f3bae3dc3c46e0125f1e0940e54b507e64cd8a013bb6e608.png" src="_images/e86fbb8063222c31f3bae3dc3c46e0125f1e0940e54b507e64cd8a013bb6e608.png" />
 </div>
 </div>
 <p>So we can see that this is indeed block-diagonal, with a compound symmetric structure per-subject and zeros everywhere else.</p>
@@ -837,7 +837,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <p>So it <em>is</em> possible to keep our inferential framework consistent. The main downside is that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> has no other options, meaning we are <em>forced</em> into asymptotics, whether we like it or not. This is not true of <code class="docutils literal notranslate"><span class="pre">lme4</span></code> models, as discussed in the drop-down below.</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Tests Using lme4</p>
-<p>Although we have not covered the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package, one advantage of using it over <code class="docutils literal notranslate"><span class="pre">nlme</span></code> is that effective degrees of freedom methods are more readily available. This means we can keep a more consistent inferential framework using more familiar <span class="math notranslate nohighlight">\(t\)</span>-statistics and <span class="math notranslate nohighlight">\(F\)</span>-statistics. By default, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> provides <em>no</em> <span class="math notranslate nohighlight">\(p\)</span>-values, because the authors simply do not want to commit to one particular approximation, nor try to “cover up” the inferential problems with LME models. However, other packages such as <code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkrtest</span></code> have been developed to provide these inferential options on top of <code class="docutils literal notranslate"><span class="pre">lme4</span></code>. These are then leveraged by <code class="docutils literal notranslate"><span class="pre">car</span></code> and we can use <code class="docutils literal notranslate"><span class="pre">Anova(lme4.mod,</span> <span class="pre">test.statistic='F')</span></code> to get <span class="math notranslate nohighlight">\(F\)</span>-statistics with effective degrees of freedom. Although this is all potentially more useful than the results from <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package does have some <em>disadvantages</em>. The biggest is that we cannot model the covariance structure of the residuals. Practically, this means we cannot specify models with different variances per-group and so have to assume homogeneity of variance for any between-subjects factors in the model. This is particularly problematic when our groups may be Patients vs Controls. This is not true of <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, as we will see in the associated workshop. So we need to decide between <em>modelling flexibility</em> and <em>inferential flexibility</em>. Sadly, at this point in time, we cannot have both.</p>
+<p>Although we have not covered the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package, one advantage of using it over <code class="docutils literal notranslate"><span class="pre">nlme</span></code> is that effective degrees of freedom methods are more readily available. This means we can keep a more consistent inferential framework using more familiar <span class="math notranslate nohighlight">\(t\)</span>-statistics and <span class="math notranslate nohighlight">\(F\)</span>-statistics. By default, <code class="docutils literal notranslate"><span class="pre">lme4</span></code> provides <em>no</em> <span class="math notranslate nohighlight">\(p\)</span>-values, because the authors simply do not want to commit to one particular approximation, nor try to “cover up” the inferential problems with LME models. However, other packages such as <code class="docutils literal notranslate"><span class="pre">lmerTest</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkrtest</span></code> have been developed to provide these inferential options on top of <code class="docutils literal notranslate"><span class="pre">lme4</span></code>. These are then leveraged by <code class="docutils literal notranslate"><span class="pre">car</span></code> and we can use <code class="docutils literal notranslate"><span class="pre">Anova(lme4.mod,</span> <span class="pre">test.statistic='F')</span></code> to get <span class="math notranslate nohighlight">\(F\)</span>-statistics with effective degrees of freedom. Although this is all potentially more useful than the results from <code class="docutils literal notranslate"><span class="pre">nlme</span></code>, the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package does have some <em>disadvantages</em> as discussed earlier in the lesson.</p>
 </div>
 </section>
 <section id="follow-up-tests-from-emmeans">
@@ -853,9 +853,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast estimate    SE  df z.ratio p.value
- t1 - t2      2.00 0.111 Inf  18.050  &lt;.0001
- t1 - t3      3.45 0.111 Inf  31.166  &lt;.0001
- t2 - t3      1.45 0.111 Inf  13.116  &lt;.0001
+ t1 - t2      2.00 0.111 Inf  18.050 &lt;0.0001
+ t1 - t3      3.45 0.111 Inf  31.166 &lt;0.0001
+ t2 - t3      1.45 0.111 Inf  13.116 &lt;0.0001
 
 Degrees-of-freedom method: fixed 
 P value adjustment: holm method for 3 tests 
@@ -863,13 +863,28 @@ P value adjustment: holm method for 3 tests
 </div>
 </div>
 </div>
+<p>We can also create plots of the effects using the <code class="docutils literal notranslate"><span class="pre">effects</span></code> package. Again, much as we have seen before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;time&#39;</span><span class="p">,</span><span class="n">lme.mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/cf8cc32fe3bf49d6f1782e2c0e80533cb9f91833ce680d5dbef619569a1d3ee1.png" src="_images/cf8cc32fe3bf49d6f1782e2c0e80533cb9f91833ce680d5dbef619569a1d3ee1.png" />
+</div>
+</div>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
 <p>In this section, we have explored using the <code class="docutils literal notranslate"><span class="pre">nlme</span></code> package to fit mixed-effects models using the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function. After reading this section, you should have a good sense of:</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>The syntax of <code class="docutils literal notranslate"><span class="pre">lme()</span></code>, particularly around specifying random intercepts using <code class="docutils literal notranslate"><span class="pre">1|id</span></code>.</p></li>
+<li><p>The idea that the random effects are <em>deflections</em> representing an additional error term that can be used to estimate a variance partition of the data.</p></li>
+<li><p>The concept that a LME model <em>implies</em> a marginal model that is the same as GLS, meaning that we can conceptualise a LME model as the same as GLS, but with a more sophisticated way of creating the covariance structure.</p></li>
+<li><p>The idea that all the inferential problems of GLS still exist with an LME model.</p></li>
+<li><p>The idea that the <code class="docutils literal notranslate"><span class="pre">lme()</span></code> function calculates effective degrees of freedom when we call <code class="docutils literal notranslate"><span class="pre">summary()</span></code>.</p></li>
+<li><p>The idea that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> still uses asymptotic inference for the omnibus tests, which we can echo in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> by setting <code class="docutils literal notranslate"><span class="pre">mode='asymptotic'</span></code>.</p></li>
 </ul>
 </aside>
 </section>
