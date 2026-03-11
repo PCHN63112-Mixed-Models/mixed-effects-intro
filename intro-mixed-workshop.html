@@ -6,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to Mixed-effects Workshop &#8212; An Introduction to Linear Mixed-effects Models</title>
+    <title>PCHN63112 Workshop: Introduction to Mixed-effects &#8212; An Introduction to Linear Mixed-effects Models</title>
   
   
   
@@ -16,36 +16,33 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -56,40 +53,41 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro-mixed-workshop';</script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
-    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
-    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
+    <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -105,8 +103,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -114,6 +123,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -121,8 +131,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -140,8 +150,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -171,17 +180,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="An Introduction to Linear Mixed-effects Models - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -207,14 +220,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -358,16 +366,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -381,7 +397,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Introduction to Mixed-effects Workshop</h1>
+    <h1>PCHN63112 Workshop: Introduction to Mixed-effects</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -392,17 +408,19 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors">Multiple Within-subject Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-random-effects-structure">Basic Random-effects Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-random-effect-specifications">More Complex Random-effect Specifications</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors">Within-subject and Between-subject Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effect-specification">Random-effect Specification</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparisons">Model Comparisons</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparisons">Model Comparisons</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-assumptions">Model Assumptions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-on-pooling-and-shrinkage">More on Pooling and Shrinkage</a></li>
 </ul>
             </nav>
         </div>
@@ -414,32 +432,533 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-mixed-effects-workshop">
-<h1>Introduction to Mixed-effects Workshop<a class="headerlink" href="#introduction-to-mixed-effects-workshop" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-introduction-to-mixed-effects">
+<h1>PCHN63112 Workshop: Introduction to Mixed-effects<a class="headerlink" href="#pchn63112-workshop-introduction-to-mixed-effects" title="Link to this heading">#</a></h1>
 <section id="multiple-within-subject-factors">
 <h2>Multiple Within-subject Factors<a class="headerlink" href="#multiple-within-subject-factors" title="Link to this heading">#</a></h2>
+<p>We will start with an example of a mixed-effects model applied to multiple within-subject factors. As with last week, we will use the <code class="docutils literal notranslate"><span class="pre">weightloss</span></code> dataset included with <code class="docutils literal notranslate"><span class="pre">datarium</span></code>. Below is the code for loading the data, restructuring it into long-format and then printing the values associated with the first subject.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;reshape2&#39;</span><span class="p">)</span>
+
+<span class="nf">data</span><span class="p">(</span><span class="s">&#39;weightloss&#39;</span><span class="p">)</span>
+
+<span class="c1"># repeats and number of subjects</span>
+<span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="c1"># 2 * 2 * 3</span>
+<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">12</span>
+
+<span class="c1"># reshape wide -&gt; long</span>
+<span class="n">weightloss.long</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">melt</span><span class="p">(</span><span class="n">weightloss</span><span class="p">,</span><span class="w">                         </span><span class="c1"># wide data frame</span>
+<span class="w">                        </span><span class="n">id.vars</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="s">&#39;diet&#39;</span><span class="p">,</span><span class="s">&#39;exercises&#39;</span><span class="p">),</span><span class="w"> </span><span class="c1"># what stays fixed?</span>
+<span class="w">                        </span><span class="n">variable.name</span><span class="o">=</span><span class="s">&quot;time&quot;</span><span class="p">,</span><span class="w">               </span><span class="c1"># name for the new predictor</span>
+<span class="w">                        </span><span class="n">value.name</span><span class="o">=</span><span class="s">&quot;weight&quot;</span><span class="p">)</span><span class="w">                </span><span class="c1"># name for the new outcome</span>
+
+<span class="n">weightloss.long</span><span class="w">           </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">weightloss.long</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">id</span><span class="p">),]</span><span class="w"> </span><span class="c1"># order by ID</span>
+<span class="nf">rownames</span><span class="p">(</span><span class="n">weightloss.long</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w">                                  </span><span class="c1"># fix row names</span>
+
+<span class="n">weightloss.long</span><span class="o">$</span><span class="n">id</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">id</span><span class="p">)</span><span class="w">               </span><span class="c1"># id as factor</span>
+<span class="n">weightloss.long</span><span class="o">$</span><span class="n">diet</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">diet</span><span class="p">)</span><span class="w">             </span><span class="c1"># diet as factor</span>
+<span class="n">weightloss.long</span><span class="o">$</span><span class="n">exercises</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">exercises</span><span class="p">)</span><span class="w">        </span><span class="c1"># exercises as factor</span>
+<span class="n">weightloss.long</span><span class="o">$</span><span class="n">time</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">time</span><span class="p">)</span><span class="w">             </span><span class="c1"># time as factor</span>
+
+<span class="n">weightloss.long</span><span class="p">[</span><span class="n">weightloss.long</span><span class="o">$</span><span class="n">id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   id diet exercises time weight
+1   1   no        no   t1  10.43
+2   1   no       yes   t1  11.12
+3   1  yes        no   t1  10.20
+4   1  yes       yes   t1  10.43
+5   1   no        no   t2  13.21
+6   1   no       yes   t2  12.51
+7   1  yes        no   t2  12.51
+8   1  yes       yes   t2  12.51
+9   1   no        no   t3  11.59
+10  1   no       yes   t3  15.76
+11  1  yes        no   t3  14.60
+12  1  yes       yes   t3  14.37
+</pre></div>
+</div>
+</div>
+</div>
+<section id="basic-random-effects-structure">
+<h3>Basic Random-effects Structure<a class="headerlink" href="#basic-random-effects-structure" title="Link to this heading">#</a></h3>
+<p>The most basic model we can fit includes a random intercept per-subject. We will discuss the process of building these models in more detail next week, so do not worry too much about how this decision has been reached. The aim here is just to see more examples of basic mixed-effects models and how they work. We can specify this using <code class="docutils literal notranslate"><span class="pre">lme()</span></code> below, using the syntax <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> for the random-effects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
+<span class="n">weightloss.lme.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">diet</span><span class="o">*</span><span class="n">exercises</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">weightloss.long</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">weightloss.lme.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: weightloss.long 
+       AIC      BIC    logLik
+  469.9397 510.2989 -220.9699
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept) Residual
+StdDev:    0.317161 1.120828
+
+Fixed effects:  weight ~ diet * exercises * time 
+                                Value Std.Error  DF  t-value p-value
+(Intercept)                 10.909167 0.3362595 121 32.44270  0.0000
+dietyes                      0.833333 0.4575760 121  1.82119  0.0710
+exercisesyes                -0.115000 0.4575760 121 -0.25132  0.8020
+timet2                       0.656667 0.4575760 121  1.43510  0.1538
+timet3                       0.540833 0.4575760 121  1.18195  0.2395
+dietyes:exercisesyes        -0.234167 0.6471102 121 -0.36187  0.7181
+dietyes:timet2               0.016667 0.6471102 121  0.02576  0.9795
+dietyes:timet3               1.503333 0.6471102 121  2.32315  0.0218
+exercisesyes:timet2          1.970000 0.6471102 121  3.04430  0.0029
+exercisesyes:timet3          5.482500 0.6471102 121  8.47228  0.0000
+dietyes:exercisesyes:timet2 -0.811667 0.9151520 121 -0.88692  0.3769
+dietyes:exercisesyes:timet3 -4.265000 0.9151520 121 -4.66043  0.0000
+ Correlation: 
+                            (Intr) dietys exrcss timet2 timet3 dtys:x dtys:2
+dietyes                     -0.680                                          
+exercisesyes                -0.680  0.500                                   
+timet2                      -0.680  0.500  0.500                            
+timet3                      -0.680  0.500  0.500  0.500                     
+dietyes:exercisesyes         0.481 -0.707 -0.707 -0.354 -0.354              
+dietyes:timet2               0.481 -0.707 -0.354 -0.707 -0.354  0.500       
+dietyes:timet3               0.481 -0.707 -0.354 -0.354 -0.707  0.500  0.500
+exercisesyes:timet2          0.481 -0.354 -0.707 -0.707 -0.354  0.500  0.500
+exercisesyes:timet3          0.481 -0.354 -0.707 -0.354 -0.707  0.500  0.250
+dietyes:exercisesyes:timet2 -0.340  0.500  0.500  0.500  0.250 -0.707 -0.707
+dietyes:exercisesyes:timet3 -0.340  0.500  0.500  0.250  0.500 -0.707 -0.354
+                            dtys:3 exrc:2 exrc:3 dty::2
+dietyes                                                
+exercisesyes                                           
+timet2                                                 
+timet3                                                 
+dietyes:exercisesyes                                   
+dietyes:timet2                                         
+dietyes:timet3                                         
+exercisesyes:timet2          0.250                     
+exercisesyes:timet3          0.500  0.500              
+dietyes:exercisesyes:timet2 -0.354 -0.707 -0.354       
+dietyes:exercisesyes:timet3 -0.707 -0.354 -0.707  0.500
+
+Standardized Within-Group Residuals:
+       Min         Q1        Med         Q3        Max 
+-2.4599506 -0.6916938  0.1093729  0.6290647  2.6887742 
+
+Number of Observations: 144
+Number of Groups: 12 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that there are only <em>two</em> variances in this model, as indicated by <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> under the <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code> section. This indicates already that this model is assuming <em>compound symmetry</em> and so, at present, is not much improvement over a repeated measures ANOVA. Putting this to one side, we can generate an ANOVA table as usual</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+<span class="nf">Anova</span><span class="p">(</span><span class="n">weightloss.lme.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: weight
+                       Chisq Df Pr(&gt;Chisq)    
+diet                  4.0687  1    0.04368 *  
+exercises            56.6472  1  5.215e-14 ***
+time                168.2687  2  &lt; 2.2e-16 ***
+diet:exercises       26.5860  1  2.521e-07 ***
+diet:time             1.9260  2    0.38174    
+exercises:time       53.6780  2  2.208e-12 ***
+diet:exercises:time  24.4971  2  4.792e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>which is suggestive of a 3-way interaction between <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. We can plot this using <code class="docutils literal notranslate"><span class="pre">effects</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;diet:exercises:time&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">weightloss.lme.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+</pre></div>
+</div>
+<img alt="_images/347de7877a0bddd842cc32f4c561dc4e84fe008a2efbf4c1f41d5e481d95a029.png" src="_images/347de7877a0bddd842cc32f4c561dc4e84fe008a2efbf4c1f41d5e481d95a029.png" />
+</div>
+</div>
+<p>which is strongly suggestive of a combined effect of both <code class="docutils literal notranslate"><span class="pre">diet</span></code> and <code class="docutils literal notranslate"><span class="pre">exercises</span></code> on the amount of weight loss over time.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 1</b> Can you go back to the materials from semester 1 and work out how to break this interaction down using <code>emmeans</code>?
+</div></section>
 <section id="multilevel-conceptualisation">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#multilevel-conceptualisation" title="Link to this heading">#</a></h3>
-</section>
+<p>To connect with the materials from the lesson, the multilevel conceptualisation of this model is as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1}\\
+    y_{ijkl} &amp;= \mu_{i} + \alpha_{j} + \beta_{k} + \gamma_{l} + (\alpha\beta)_{jk} + (\alpha\gamma)_{jl} + (\beta\gamma)_{kl} + (\alpha\beta\gamma)_{jkl} + \eta_{ijkl} \\
+    \quad \\
+\text{Level 2} \\
+    \mu_{i} &amp;= \mu + \xi_{i}
+\end{alignat*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>subject</em>, <span class="math notranslate nohighlight">\(j\)</span> indexes <em>diet</em>, <span class="math notranslate nohighlight">\(k\)</span> indexes <em>exercises</em> and <span class="math notranslate nohighlight">\(l\)</span> indexes <em>time</em>. We can think of this in a very similar fashion to the repeated measures ANOVA, however, notice that there are only <em>two</em> error terms here. This is quite important for what follows.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 2</b> If you go back to the materials from previous weeks, can you specify a repeated measures ANOVA for these data and count the number of error terms in the ANOVA table? As way of comparison, how many error terms does the mixed-effects model have?
+</div></section>
+<section id="more-complex-random-effect-specifications">
+<h3>More Complex Random-effect Specifications<a class="headerlink" href="#more-complex-random-effect-specifications" title="Link to this heading">#</a></h3>
+<p>Last week, we saw that this particular dataset causes problems for <code class="docutils literal notranslate"><span class="pre">gls()</span></code> due to how large a completely unstructured covariance matrix would be. There are similar constraints at play here, but mixed-effects models actually provide more options. To start with, we will check the covariance structure currently in use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
+
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">weightloss.lme.0</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1         2         3         4         5         6         7
+1  1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+2  0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+3  0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911
+4  0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911
+5  0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911
+6  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911
+7  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458
+8  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+9  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+10 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+11 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+12 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+           8         9        10        11        12
+1  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+2  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+3  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+4  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+5  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+6  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+7  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+8  1.3568458 0.1005911 0.1005911 0.1005911 0.1005911
+9  0.1005911 1.3568458 0.1005911 0.1005911 0.1005911
+10 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911
+11 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911
+12 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458
+</pre></div>
+</div>
+<img alt="_images/87f1785ed5a174f5020f02446033427eec3e99669d5bfa72daa08e126418998d.png" src="_images/87f1785ed5a174f5020f02446033427eec3e99669d5bfa72daa08e126418998d.png" />
+</div>
+</div>
+<p>Unsurprisingly, this is <em>compound symmetric</em>. So what options do we have? Using a process that we will detail in the materials next week, we should in theory be able to fit a model per-subject that contains all the effects up to a 2-way interaction. This would have the form <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">diet</span> <span class="pre">+</span> <span class="pre">exercises</span> <span class="pre">+</span> <span class="pre">time</span> <span class="pre">+</span> <span class="pre">diet:exercises</span> <span class="pre">+</span> <span class="pre">diet:time</span> <span class="pre">+</span> <span class="pre">exercises:time</span></code>. This also echoes the error terms used in the repeated measures ANOVA. Unfortunately, the covariance structure implied by this specification is too complex to fit. This is not a problem of theory, rather it is a limitation of the software. The REML estimation procedure will keep iterating, never converge and then stop. So, we are forced to simplify. In order to do so, we forget the interactions and just fit the main effects of each term.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">weightloss.lme.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">diet</span><span class="o">*</span><span class="n">exercises</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diet</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">exercises</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">weightloss.long</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This still requires a little fiddling-around by setting a slightly different option for the optimisation algorithm. The default is a tad flaky and so adding this option is often a first port-of-call to see if we can get the model to converge.</p>
+<p>Importantly, the implication of this specification is that the effect of <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> are allowed to vary from subject-to-subject. We assume that there is something fundamental about different individuals that changes how their weight responds to <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. However, we are forced to assume that the way these aspects interact is the <em>same</em> irrespective of the individual. We will discuss more about these interpretations in the materials this week. For now, the point is to see how different random effects structures change the covariance matrix.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">weightloss.lme.1</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            1          2          3          4           5          6
+1  1.32509899 0.17708871 0.07621244 0.15019043 0.043238445 0.11721644
+2  0.17708871 1.52806888 0.13098837 0.25998026 0.074707230 0.20369912
+3  0.07621244 0.13098837 1.27867294 0.11146059 0.032185008 0.08696094
+4  0.15019043 0.25998026 0.11146059 1.44323870 0.063653793 0.17344362
+5  0.04323844 0.07470723 0.03218501 0.06365379 1.240963739 0.05044425
+6  0.11721644 0.20369912 0.08696094 0.17344362 0.050444247 1.35891521
+7  0.01634016 0.02860689 0.01265723 0.02492396 0.007922025 0.02018875
+8  0.09031816 0.15759878 0.06743316 0.13471379 0.039390810 0.10667143
+9  0.10307581 0.17701502 0.07618509 0.15012430 0.043215160 0.11715438
+10 0.17705380 0.30600692 0.13096102 0.25991413 0.074683945 0.20363706
+11 0.07617753 0.13091468 0.05665731 0.11139446 0.032161723 0.08689888
+12 0.15015552 0.25990657 0.11143324 0.22118429 0.063630508 0.17338156
+             7          8          9         10         11         12
+1  0.016340164 0.09031816 0.10307581 0.17705380 0.07617753 0.15015552
+2  0.028606887 0.15759878 0.17701502 0.30600692 0.13091468 0.25990657
+3  0.012657233 0.06743316 0.07618509 0.13096102 0.05665731 0.11143324
+4  0.024923956 0.13471379 0.15012430 0.25991413 0.11139446 0.22118429
+5  0.007922025 0.03939081 0.04321516 0.07468395 0.03216172 0.06363051
+6  0.020188748 0.10667143 0.11715438 0.20363706 0.08689888 0.17338156
+7  1.226227371 0.01650582 0.01632444 0.02859116 0.01264151 0.02490823
+8  0.016505817 1.30577472 0.09026366 0.15754428 0.06737866 0.13465928
+9  0.016324438 0.09026366 1.32505477 0.17700571 0.07617577 0.15011499
+10 0.028591161 0.15754428 0.17700571 1.52794710 0.13091292 0.25986604
+11 0.012641507 0.06737866 0.07617577 0.13091292 1.27864383 0.11139271
+12 0.024908230 0.13465928 0.15011499 0.25986604 0.11139271 1.44313204
+</pre></div>
+</div>
+<img alt="_images/48d1f0ca8142842b3b7db8b1f8c0ebb75efad9071a71a88745d3aa259755d60b.png" src="_images/48d1f0ca8142842b3b7db8b1f8c0ebb75efad9071a71a88745d3aa259755d60b.png" />
+</div>
+</div>
+<p>So notice that we have now achieved the aim we had last week of a completely unstructured covariance matrix. This was too complex to fit using <code class="docutils literal notranslate"><span class="pre">gls()</span></code>, but we have managed it using a mixed-effects model.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 3</b> An alternative assumption about the random-effects structure would be that both <code>diet</code> and <code>exercises</code> affect different people in different ways, but that <code>time</code> affects everyone in the same way. How could you integrate this assumption into the model? Can you now include the interaction terms as well? What does the covariance structure look like?
+</div><div class="alert alert-block alert-info"> 
+<b>ACTIVITY 4</b> Can you now produce the extra tests for the new model with the more general covariance structure? Does anything substantive change in terms of the omnibus tests, follow-up tests or plots? What does this suggest about the sensitivity of our inference to the covariance assumptions?
+</div></section>
 </section>
 <section id="within-subject-and-between-subject-factors">
 <h2>Within-subject and Between-subject Factors<a class="headerlink" href="#within-subject-and-between-subject-factors" title="Link to this heading">#</a></h2>
+<p>We can also revisit the example from last week of the <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> dataset which contains both a <em>within-subject</em> and <em>between-subjects</em> factor. We load and wrangle the data below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;anxiety&#39;</span><span class="p">)</span>
+
+<span class="c1"># repeats and number of subjects</span>
+<span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">45</span>
+
+<span class="c1"># reshape wide -&gt; long</span>
+<span class="n">anxiety.long</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">melt</span><span class="p">(</span><span class="n">anxiety</span><span class="p">,</span><span class="w">                 </span><span class="c1"># wide data frame</span>
+<span class="w">                     </span><span class="n">id.vars</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="s">&#39;group&#39;</span><span class="p">),</span><span class="w"> </span><span class="c1"># both id and group stay fixed</span>
+<span class="w">                     </span><span class="n">variable.name</span><span class="o">=</span><span class="s">&#39;time&#39;</span><span class="p">,</span><span class="w">    </span><span class="c1"># name for the new predictor</span>
+<span class="w">                     </span><span class="n">value.name</span><span class="o">=</span><span class="s">&#39;score&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># name for the new outcome</span>
+
+<span class="n">anxiety.long</span><span class="w">           </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">anxiety.long</span><span class="w"> </span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">anxiety.long</span><span class="o">$</span><span class="n">id</span><span class="p">),]</span><span class="w"> </span><span class="c1"># order by ID</span>
+<span class="nf">rownames</span><span class="p">(</span><span class="n">anxiety.long</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w">                             </span><span class="c1"># fix row names</span>
+<span class="n">anxiety.long</span><span class="o">$</span><span class="n">id</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">anxiety.long</span><span class="o">$</span><span class="n">id</span><span class="p">)</span><span class="w">             </span><span class="c1"># id as factor</span>
+<span class="n">anxiety.long</span><span class="o">$</span><span class="n">group</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">anxiety.long</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">          </span><span class="c1"># group as factor</span>
+<span class="n">anxiety.long</span><span class="o">$</span><span class="n">time</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">anxiety.long</span><span class="o">$</span><span class="n">time</span><span class="p">)</span><span class="w">           </span><span class="c1"># time as factor</span>
+
+<span class="nf">head</span><span class="p">(</span><span class="n">anxiety.long</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  id group time score
+1  1  grp1   t1  14.1
+2  1  grp1   t2  14.4
+3  1  grp1   t3  14.1
+4  2  grp1   t1  14.5
+5  2  grp1   t2  14.6
+6  2  grp1   t3  14.3
+</pre></div>
+</div>
+</div>
+</div>
+<section id="random-effect-specification">
+<h3>Random-effect Specification<a class="headerlink" href="#random-effect-specification" title="Link to this heading">#</a></h3>
+<p>Unlike the previous example, because there are no replications here we are forced to only use a <em>random intercept</em> per-subject. Again, the logic of doing this will be more explicitly laid out in the materials this week. For now, we will just explore what these models give us and the options we have available.</p>
+<p>We fit the model below using <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> for the random effects</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">anxiety.lme.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">anxiety.lme.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: anxiety.long 
+       AIC     BIC    logLik
+  278.6349 309.834 -128.3174
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev:     1.53169 0.2903382
+
+Fixed effects:  score ~ group * time 
+                     Value Std.Error DF   t-value p-value
+(Intercept)      17.086667 0.4025229 84  42.44893  0.0000
+groupgrp2        -0.440000 0.5692534 42  -0.77294  0.4439
+groupgrp3        -0.073333 0.5692534 42  -0.12882  0.8981
+timet2           -0.160000 0.1060165 84  -1.50920  0.1350
+timet3           -0.580000 0.1060165 84  -5.47084  0.0000
+groupgrp2:timet2 -0.020000 0.1499300 84  -0.13340  0.8942
+groupgrp3:timet2 -1.840000 0.1499300 84 -12.27239  0.0000
+groupgrp2:timet3 -0.540000 0.1499300 84  -3.60168  0.0005
+groupgrp3:timet3 -2.873333 0.1499300 84 -19.16450  0.0000
+ Correlation: 
+                 (Intr) grpgr2 grpgr3 timet2 timet3 grp2:2 grp3:2 grp2:3
+groupgrp2        -0.707                                                 
+groupgrp3        -0.707  0.500                                          
+timet2           -0.132  0.093  0.093                                   
+timet3           -0.132  0.093  0.093  0.500                            
+groupgrp2:timet2  0.093 -0.132 -0.066 -0.707 -0.354                     
+groupgrp3:timet2  0.093 -0.066 -0.132 -0.707 -0.354  0.500              
+groupgrp2:timet3  0.093 -0.132 -0.066 -0.354 -0.707  0.500  0.250       
+groupgrp3:timet3  0.093 -0.066 -0.132 -0.354 -0.707  0.250  0.500  0.500
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-3.37115621 -0.48292646  0.06398687  0.51738361  2.03335172 
+
+Number of Observations: 135
+Number of Groups: 45 
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, there are only two variance terms and we have a compound symmetric structure again.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 5</b> Can you confirm the covariance structure for this model by extracting and visualising it?
+</div><p>We can then continue our usual approach of generating omnibus tests</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">anxiety.lme.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: score
+              Chisq Df Pr(&gt;Chisq)    
+group        8.7036  2    0.01288 *  
+time       789.8190  2    &lt; 2e-16 ***
+group:time 440.7504  4    &lt; 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>and can plot the <code class="docutils literal notranslate"><span class="pre">group:time</span></code> effect</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;group:time&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">anxiety.lme.0</span><span class="p">),</span><span class="w"> </span><span class="n">x.var</span><span class="o">=</span><span class="s">&#39;time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/fbdbb7eb110dfca2d094247de67a0fa86e6410da3b86fb874b10d5ce8c51bb12.png" src="_images/fbdbb7eb110dfca2d094247de67a0fa86e6410da3b86fb874b10d5ce8c51bb12.png" />
+</div>
+</div>
+<p>where there appears to be a clear change in the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> depending upon the <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 6</b> Can you follow-up this interaction using <code>emmeans</code>?
+</div></section>
 <section id="id1">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>As we saw earlier, we can present the multilevel version of this model. Again, the process of building this will be given in much more detail in the materials this week, so do not worry about understanding every nuance of this</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1}\\
+    y_{ijk} &amp;= \mu_{i} + \alpha_{j} + (\alpha\beta)_{jk} + \eta_{ijk} \\
+    \quad \\
+\text{Level 2} \\
+    \mu_{i} &amp;= \mu + \beta_{k} + \xi_{i}
+\end{alignat*}
+\end{split}\]</div>
+<p>For now, notice that the <em>between-subjects</em> factor enters at Level 2. This again echoes how this effects are split into error terms in the repeated measures ANOVA.</p>
 </section>
-</section>
-<section id="including-a-weights-structure-in-lme">
-<h2>Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#including-a-weights-structure-in-lme" title="Link to this heading">#</a></h2>
-</section>
+<section id="including-a-weights-structure">
+<h3>Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure<a class="headerlink" href="#including-a-weights-structure" title="Link to this heading">#</a></h3>
+<p>As mentioned, the lack of replications limits the random-effects structure. However, an advantage of <code class="docutils literal notranslate"><span class="pre">lme()</span></code> is that we have access to same <code class="docutils literal notranslate"><span class="pre">weights=</span></code> options as <code class="docutils literal notranslate"><span class="pre">gls()</span></code>. This means that we can make the structure more general across the levels of <code class="docutils literal notranslate"><span class="pre">group</span></code> by allowing different variances. The syntax for this is</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">anxiety.lme.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="o">=</span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">group</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">anxiety.lme.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: anxiety.long 
+       AIC      BIC    logLik
+  281.9984 318.8701 -127.9992
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev:    1.531916 0.3013531
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | group 
+ Parameter estimates:
+    grp1     grp2     grp3 
+1.000000 0.878552 1.006210 
+Fixed effects:  score ~ group * time 
+                     Value Std.Error DF   t-value p-value
+(Intercept)      17.086667 0.4031194 84  42.38611  0.0000
+groupgrp2        -0.440000 0.5688843 42  -0.77344  0.4436
+groupgrp3        -0.073333 0.5701631 42  -0.12862  0.8983
+timet2           -0.160000 0.1100386 84  -1.45404  0.1497
+timet3           -0.580000 0.1100386 84  -5.27088  0.0000
+groupgrp2:timet2 -0.020000 0.1464735 84  -0.13654  0.8917
+groupgrp3:timet2 -1.840000 0.1561020 84 -11.78717  0.0000
+groupgrp2:timet3 -0.540000 0.1464735 84  -3.68667  0.0004
+groupgrp3:timet3 -2.873333 0.1561020 84 -18.40677  0.0000
+ Correlation: 
+                 (Intr) grpgr2 grpgr3 timet2 timet3 grp2:2 grp3:2 grp2:3
+groupgrp2        -0.709                                                 
+groupgrp3        -0.707  0.501                                          
+timet2           -0.136  0.097  0.096                                   
+timet3           -0.136  0.097  0.096  0.500                            
+groupgrp2:timet2  0.103 -0.129 -0.072 -0.751 -0.376                     
+groupgrp3:timet2  0.096 -0.068 -0.137 -0.705 -0.352  0.530              
+groupgrp2:timet3  0.103 -0.129 -0.072 -0.376 -0.751  0.500  0.265       
+groupgrp3:timet3  0.096 -0.068 -0.137 -0.352 -0.705  0.265  0.500  0.530
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-3.24258231 -0.47011972  0.05821115  0.55560638  1.93952465 
+
+Number of Observations: 135
+Number of Groups: 45 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 7</b> Use the data to identify the <code>id</code> of the first subject from each level of <code>group</code>. Extract the covariance matrices for each of these subjects and compare them.
+</div></section>
 <section id="model-comparisons">
-<h2>Model Comparisons<a class="headerlink" href="#model-comparisons" title="Link to this heading">#</a></h2>
+<h3>Model Comparisons<a class="headerlink" href="#model-comparisons" title="Link to this heading">#</a></h3>
+<p>We can also use model comparisons to determine whether these types of choice are supported by the data. For instance, to see if the <code class="docutils literal notranslate"><span class="pre">weights=</span></code> structure is needed, we can use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w">                                    </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="o">=</span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">group</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
+
+<span class="nf">anova</span><span class="p">(</span><span class="n">mod.0</span><span class="p">,</span><span class="n">mod.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Model df      AIC      BIC    logLik   Test   L.Ratio p-value
+mod.0     1 11 261.5386 293.4966 -119.7693                         
+mod.1     2 13 264.8566 302.6252 -119.4283 1 vs 2 0.6819275  0.7111
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 8</b> Does this result suggest that a different variance per-level of <code>group</code> is needed or not?
+</div></section>
 </section>
 <section id="model-assumptions">
 <h2>Model Assumptions<a class="headerlink" href="#model-assumptions" title="Link to this heading">#</a></h2>
-</section>
-<section id="more-on-pooling-and-shrinkage">
-<h2>More on Pooling and Shrinkage<a class="headerlink" href="#more-on-pooling-and-shrinkage" title="Link to this heading">#</a></h2>
-<p>… In this part of the workshop, we will</p>
 </section>
 </section>
 
@@ -480,8 +999,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -491,17 +1009,19 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-within-subject-factors">Multiple Within-subject Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-random-effects-structure">Basic Random-effects Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multilevel-conceptualisation">Multilevel Conceptualisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-random-effect-specifications">More Complex Random-effect Specifications</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#within-subject-and-between-subject-factors">Within-subject and Between-subject Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effect-specification">Random-effect Specification</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Multilevel Conceptualisation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparisons">Model Comparisons</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-weights-structure-in-lme">Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure in <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparisons">Model Comparisons</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-assumptions">Model Assumptions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-on-pooling-and-shrinkage">More on Pooling and Shrinkage</a></li>
 </ul>
   </nav></div>
 
@@ -550,8 +1070,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
