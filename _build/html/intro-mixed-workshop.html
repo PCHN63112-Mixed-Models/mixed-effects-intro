@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>PCHN63112 Workshop: Introduction to Mixed-effects &#8212; An Introduction to Linear Mixed-effects Models</title>
   
@@ -16,33 +16,36 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=a80109f0" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rgl.css?v=57907efa" />
     <link rel="stylesheet" type="text/css" href="_static/sphericity_3d_files/htmltools-fill-0.5.8.1/fill.css?v=971cc1da" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -53,7 +56,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -63,31 +66,32 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro-mixed-workshop';</script>
-    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shadersrc.src.js?v=6ce05c17"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/buffer.src.js?v=1efca185"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/mouse.src.js?v=96f0b970"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/projection.src.js?v=98871b91"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/axes.src.js?v=3250d244"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglTimer.src.js?v=ac1c3151"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pretty.src.js?v=4f2cffba"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/shaders.src.js?v=bbbdf37d"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
     <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/animation.src.js?v=74f9b9e8"></script>
-    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/textures.src.js?v=9482728f"></script>
-    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/pieces.src.js?v=280fd571"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/selection.src.js?v=5b47ed7d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/init.src.js?v=f5bdcbbb"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/subscenes.src.js?v=42cb429d"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/controls.src.js?v=4b3dbe6f"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/draw.src.js?v=49d9cbaa"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/utils.src.js?v=56efe719"></script>
+    <script src="_static/sphericity_3d_files/rglwidgetClass-1.3.18/rglClass.src.js?v=9e593197"></script>
     <script src="_static/sphericity_3d_files/rglWebGL-binding-1.3.18/rglWebGL.js?v=8cd6f6d7"></script>
+    <script src="_static/sphericity_3d_files/htmlwidgets-1.6.4/htmlwidgets.js?v=175713be"></script>
+    <script src="_static/sphericity_3d_files/CanvasMatrix4-1.3.18/CanvasMatrix.src.js?v=5a2d04be"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -103,19 +107,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -123,7 +116,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -131,8 +123,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -150,7 +142,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -180,21 +173,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="An Introduction to Linear Mixed-effects Models - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="An Introduction to Linear Mixed-effects Models - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="An Introduction to Linear Mixed-effects Models - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -220,9 +209,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -366,24 +360,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -434,6 +420,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-introduction-to-mixed-effects">
 <h1>PCHN63112 Workshop: Introduction to Mixed-effects<a class="headerlink" href="#pchn63112-workshop-introduction-to-mixed-effects" title="Link to this heading">#</a></h1>
+<p>In the associated lesson, we introduced the mixed-effects framework as a more general approach to dealing with dependence in our data. This initial introduction kept the model quite simple and our exposition of the theory and logic was somewhat limited. However, you should have <em>some</em> sense of what these models are doing, even if it does not feel completely clear at present. The materials for this week will dig into this much more to try and expose the full framework to you. For now, our aim is just to play around with some different model specifications and examine the effects on the assumed covariance structure and inference. In this workshop, we will present some further examples of mixed-effects models, as applied to the datasets used for discussing GLS last week. We will also examine assumptions testing using a visual approach similar to those used for <code class="docutils literal notranslate"><span class="pre">lm()</span></code> and <code class="docutils literal notranslate"><span class="pre">gls()</span></code> last week. The aim is not to be fully familiar at this point, rather it is to gain exposure to this approach to start building your intuition.</p>
 <section id="multiple-within-subject-factors">
 <h2>Multiple Within-subject Factors<a class="headerlink" href="#multiple-within-subject-factors" title="Link to this heading">#</a></h2>
 <p>We will start with an example of a mixed-effects model applied to multiple within-subject factors. As with last week, we will use the <code class="docutils literal notranslate"><span class="pre">weightloss</span></code> dataset included with <code class="docutils literal notranslate"><span class="pre">datarium</span></code>. Below is the code for loading the data, restructuring it into long-format and then printing the values associated with the first subject.</p>
@@ -486,7 +473,8 @@ document.write(`
 </div>
 <section id="basic-random-effects-structure">
 <h3>Basic Random-effects Structure<a class="headerlink" href="#basic-random-effects-structure" title="Link to this heading">#</a></h3>
-<p>The most basic model we can fit includes a random intercept per-subject. We will discuss the process of building these models in more detail next week, so do not worry too much about how this decision has been reached. The aim here is just to see more examples of basic mixed-effects models and how they work. We can specify this using <code class="docutils literal notranslate"><span class="pre">lme()</span></code> below, using the syntax <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> for the random-effects.</p>
+<p>The most basic model we can fit includes a random intercept per-subject. We will discuss the process of building these models in more detail next week, so do not worry too much about the theory behind this. The aim here is just to explore more examples of basic mixed-effects models.</p>
+<p>We can specify this using the syntax below, where we use <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> for the random-effects.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
@@ -521,34 +509,22 @@ exercisesyes:timet3          5.482500 0.6471102 121  8.47228  0.0000
 dietyes:exercisesyes:timet2 -0.811667 0.9151520 121 -0.88692  0.3769
 dietyes:exercisesyes:timet3 -4.265000 0.9151520 121 -4.66043  0.0000
  Correlation: 
-                            (Intr) dietys exrcss timet2 timet3 dtys:x dtys:2
-dietyes                     -0.680                                          
-exercisesyes                -0.680  0.500                                   
-timet2                      -0.680  0.500  0.500                            
-timet3                      -0.680  0.500  0.500  0.500                     
-dietyes:exercisesyes         0.481 -0.707 -0.707 -0.354 -0.354              
-dietyes:timet2               0.481 -0.707 -0.354 -0.707 -0.354  0.500       
-dietyes:timet3               0.481 -0.707 -0.354 -0.354 -0.707  0.500  0.500
-exercisesyes:timet2          0.481 -0.354 -0.707 -0.707 -0.354  0.500  0.500
-exercisesyes:timet3          0.481 -0.354 -0.707 -0.354 -0.707  0.500  0.250
-dietyes:exercisesyes:timet2 -0.340  0.500  0.500  0.500  0.250 -0.707 -0.707
-dietyes:exercisesyes:timet3 -0.340  0.500  0.500  0.250  0.500 -0.707 -0.354
-                            dtys:3 exrc:2 exrc:3 dty::2
-dietyes                                                
-exercisesyes                                           
-timet2                                                 
-timet3                                                 
-dietyes:exercisesyes                                   
-dietyes:timet2                                         
-dietyes:timet3                                         
-exercisesyes:timet2          0.250                     
-exercisesyes:timet3          0.500  0.500              
-dietyes:exercisesyes:timet2 -0.354 -0.707 -0.354       
-dietyes:exercisesyes:timet3 -0.707 -0.354 -0.707  0.500
+                            (Intr) dietys exrcss timet2 timet3 dtys:x dtys:2 dtys:3 exrc:2 exrc:3 dty::2
+dietyes                     -0.680                                                                      
+exercisesyes                -0.680  0.500                                                               
+timet2                      -0.680  0.500  0.500                                                        
+timet3                      -0.680  0.500  0.500  0.500                                                 
+dietyes:exercisesyes         0.481 -0.707 -0.707 -0.354 -0.354                                          
+dietyes:timet2               0.481 -0.707 -0.354 -0.707 -0.354  0.500                                   
+dietyes:timet3               0.481 -0.707 -0.354 -0.354 -0.707  0.500  0.500                            
+exercisesyes:timet2          0.481 -0.354 -0.707 -0.707 -0.354  0.500  0.500  0.250                     
+exercisesyes:timet3          0.481 -0.354 -0.707 -0.354 -0.707  0.500  0.250  0.500  0.500              
+dietyes:exercisesyes:timet2 -0.340  0.500  0.500  0.500  0.250 -0.707 -0.707 -0.354 -0.707 -0.354       
+dietyes:exercisesyes:timet3 -0.340  0.500  0.500  0.250  0.500 -0.707 -0.354 -0.707 -0.354 -0.707  0.500
 
 Standardized Within-Group Residuals:
        Min         Q1        Med         Q3        Max 
--2.4599506 -0.6916938  0.1093729  0.6290647  2.6887742 
+-2.4599506 -0.6916938  0.1093729  0.6290647  2.6887743 
 
 Number of Observations: 144
 Number of Groups: 12 
@@ -556,7 +532,8 @@ Number of Groups: 12
 </div>
 </div>
 </div>
-<p>Notice that there are only <em>two</em> variances in this model, as indicated by <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> under the <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code> section. This indicates already that this model is assuming <em>compound symmetry</em> and so, at present, is not much improvement over a repeated measures ANOVA. Putting this to one side, we can generate an ANOVA table as usual</p>
+<p>Notice that there are only <em>two</em> variances in this model, as indicated by <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> under the <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects:</span></code> section. This indicates already that this model is assuming <em>compound symmetry</em> and so, at present, is not much improvement over a repeated measures ANOVA.</p>
+<p>Putting this to one side, we can generate an ANOVA table as usual</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
@@ -598,12 +575,12 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 See ?effectsTheme for details.
 </pre></div>
 </div>
-<img alt="_images/347de7877a0bddd842cc32f4c561dc4e84fe008a2efbf4c1f41d5e481d95a029.png" src="_images/347de7877a0bddd842cc32f4c561dc4e84fe008a2efbf4c1f41d5e481d95a029.png" />
+<img alt="_images/b79dacbbaae468a948b5d320c5ae95b8fbea918a827d63057014711ab82e62e1.png" src="_images/b79dacbbaae468a948b5d320c5ae95b8fbea918a827d63057014711ab82e62e1.png" />
 </div>
 </div>
 <p>which is strongly suggestive of a combined effect of both <code class="docutils literal notranslate"><span class="pre">diet</span></code> and <code class="docutils literal notranslate"><span class="pre">exercises</span></code> on the amount of weight loss over time.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 1</b> Can you go back to the materials from semester 1 and work out how to break this interaction down using <code>emmeans</code>?
+<b>ACTIVITY 1</b> How would you break this interaction down using <code>emmeans</code>?
 </div></section>
 <section id="multilevel-conceptualisation">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#multilevel-conceptualisation" title="Link to this heading">#</a></h3>
@@ -612,18 +589,20 @@ See ?effectsTheme for details.
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 1}\\
-    y_{ijkl} &amp;= \mu_{i} + \alpha_{j} + \beta_{k} + \gamma_{l} + (\alpha\beta)_{jk} + (\alpha\gamma)_{jl} + (\beta\gamma)_{kl} + (\alpha\beta\gamma)_{jkl} + \eta_{ijkl} \\
+    y_{ijkt} &amp;= \mu_{i} + \alpha_{j} + \beta_{k} + \gamma_{t} + (\alpha\beta)_{jk} + (\alpha\gamma)_{jt} + (\beta\gamma)_{kt} + (\alpha\beta\gamma)_{jkt} + \eta_{ijkt} \\
     \quad \\
 \text{Level 2} \\
     \mu_{i} &amp;= \mu + \xi_{i}
 \end{alignat*}
 \end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>subject</em>, <span class="math notranslate nohighlight">\(j\)</span> indexes <em>diet</em>, <span class="math notranslate nohighlight">\(k\)</span> indexes <em>exercises</em> and <span class="math notranslate nohighlight">\(l\)</span> indexes <em>time</em>. We can think of this in a very similar fashion to the repeated measures ANOVA, however, notice that there are only <em>two</em> error terms here. This is quite important for what follows.</p>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>subject</em>, <span class="math notranslate nohighlight">\(j\)</span> indexes <em>diet</em>, <span class="math notranslate nohighlight">\(k\)</span> indexes <em>exercises</em> and <span class="math notranslate nohighlight">\(t\)</span> indexes <em>time</em>.</p>
+<p>This looks quite complicated, but we can think of it in a very similar fashion to a 3-way repeated measures ANOVA. However, notice that there are only <em>two</em> error terms here: <span class="math notranslate nohighlight">\(\eta_{ijkt}\)</span> and <span class="math notranslate nohighlight">\(\xi_{i}\)</span>.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 2</b> If you go back to the materials from previous weeks, can you specify a repeated measures ANOVA for these data and count the number of error terms in the ANOVA table? As way of comparison, how many error terms does the mixed-effects model have?
+<b>ACTIVITY 2</b> If you go back to the materials from previous weeks, can you specify a repeated measures ANOVA for these data and count the number of error terms in the ANOVA table? Does this make a difference for inference and what does it suggest about the <i>simplicity</i> of the mixed-effects model?
 </div></section>
 <section id="more-complex-random-effect-specifications">
 <h3>More Complex Random-effect Specifications<a class="headerlink" href="#more-complex-random-effect-specifications" title="Link to this heading">#</a></h3>
+<p>The simplicity of the random effects structure given above is directly translated into a simple covariance structure. If we believe this structure is too simplistic, we need to make adjustments to the random effects themselves. The logic of building these models from first principles will be given in the materials this week, so do not worry about this too much right now. The point is to see how the covariance structure is tied to the random effects themselves.</p>
 <p>Last week, we saw that this particular dataset causes problems for <code class="docutils literal notranslate"><span class="pre">gls()</span></code> due to how large a completely unstructured covariance matrix would be. There are similar constraints at play here, but mixed-effects models actually provide more options. To start with, we will check the covariance structure currently in use</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -636,38 +615,34 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1         2         3         4         5         6         7
-1  1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-2  0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-3  0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911
-4  0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911
-5  0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911
-6  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911
-7  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458
-8  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-9  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-10 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-11 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-12 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-           8         9        10        11        12
-1  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-2  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-3  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-4  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-5  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-6  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-7  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
-8  1.3568458 0.1005911 0.1005911 0.1005911 0.1005911
-9  0.1005911 1.3568458 0.1005911 0.1005911 0.1005911
-10 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911
-11 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911
-12 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1         2         3         4         5         6         7         8         9        10        11        12
+1  1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+2  0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+3  0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+4  0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+5  0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+6  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+7  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911
+8  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911 0.1005911
+9  0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911 0.1005911
+10 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911 0.1005911
+11 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458 0.1005911
+12 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 0.1005911 1.3568458
 </pre></div>
 </div>
-<img alt="_images/87f1785ed5a174f5020f02446033427eec3e99669d5bfa72daa08e126418998d.png" src="_images/87f1785ed5a174f5020f02446033427eec3e99669d5bfa72daa08e126418998d.png" />
+<img alt="_images/6ce1aa33d9f8386622a57d3be16ba0283f82c7c5a2ae27da6cdb84dc4d6c29c4.png" src="_images/6ce1aa33d9f8386622a57d3be16ba0283f82c7c5a2ae27da6cdb84dc4d6c29c4.png" />
 </div>
 </div>
-<p>Unsurprisingly, this is <em>compound symmetric</em>. So what options do we have? Using a process that we will detail in the materials next week, we should in theory be able to fit a model per-subject that contains all the effects up to a 2-way interaction. This would have the form <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">diet</span> <span class="pre">+</span> <span class="pre">exercises</span> <span class="pre">+</span> <span class="pre">time</span> <span class="pre">+</span> <span class="pre">diet:exercises</span> <span class="pre">+</span> <span class="pre">diet:time</span> <span class="pre">+</span> <span class="pre">exercises:time</span></code>. This also echoes the error terms used in the repeated measures ANOVA. Unfortunately, the covariance structure implied by this specification is too complex to fit. This is not a problem of theory, rather it is a limitation of the software. The REML estimation procedure will keep iterating, never converge and then stop. So, we are forced to simplify. In order to do so, we forget the interactions and just fit the main effects of each term.</p>
+<p>Unsurprisingly, this is <em>compound symmetric</em>. If we believe this is too simplistic, what options do we have?</p>
+<p>Using a process that we will detail later, we <em>should</em> be able to fit a model per-subject that contains all random effects up to a 2-way interaction. This would have the form <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">diet</span> <span class="pre">+</span> <span class="pre">exercises</span> <span class="pre">+</span> <span class="pre">time</span> <span class="pre">+</span> <span class="pre">diet:exercises</span> <span class="pre">+</span> <span class="pre">diet:time</span> <span class="pre">+</span> <span class="pre">exercises:time</span></code> or, more concisely, <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">(diet</span> <span class="pre">+</span> <span class="pre">exercises</span> <span class="pre">+</span> <span class="pre">time)^2</span></code>. This echoes the error terms used in the repeated measures ANOVA and encodes the belief that each individual will vary uniquely in their response to <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>, as well as the relationship between them.</p>
+<p>Unfortunately, the covariance structure implied by this specification is too complex to fit. This is not a problem of theory, rather it is a limitation of the software. The REML estimation procedure will keep iterating for a very long time, never converge and then stop. This will happen sometimes when using these methods. Our general rule-of-thumb is:</p>
+<ul class="simple">
+<li><p>&lt; 5 seconds = normal</p></li>
+<li><p>5–30 seconds = moderately complex but fine</p></li>
+<li><p>30–60 seconds = suspicious</p></li>
+<li><p>1–2 minutes = usually a model problem</p></li>
+</ul>
+<p>In this case, several minutes can pass without convergence and so we are forced to simplify. In order to do so, we forget the interactions and just fit the main effects of each term as follows</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">weightloss.lme.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">diet</span><span class="o">*</span><span class="n">exercises</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diet</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">exercises</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">weightloss.long</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
@@ -675,8 +650,9 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>This still requires a little fiddling-around by setting a slightly different option for the optimisation algorithm. The default is a tad flaky and so adding this option is often a first port-of-call to see if we can get the model to converge.</p>
-<p>Importantly, the implication of this specification is that the effect of <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> are allowed to vary from subject-to-subject. We assume that there is something fundamental about different individuals that changes how their weight responds to <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. However, we are forced to assume that the way these aspects interact is the <em>same</em> irrespective of the individual. We will discuss more about these interpretations in the materials this week. For now, the point is to see how different random effects structures change the covariance matrix.</p>
+<p>This still requires us to change the optimisation algorithm using the <code class="docutils literal notranslate"><span class="pre">control=</span></code> option. The default used by <code class="docutils literal notranslate"><span class="pre">lme()</span></code> is a bit flaky and will often complain of a lack of convergence after its default number of iterations has passed. When this happens, our first method for solving this is to change the algorithm. If this still fails, we can try changing the number of iterations by setting <code class="docutils literal notranslate"><span class="pre">control=lmeControl(opt='optim',</span> <span class="pre">msMaxIter=200)</span></code>. If this still does not work, then it points to a more fundamental issue with the model specification.</p>
+<p>Importantly, the implication of these random effects is that <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> are allowed to vary from subject-to-subject. We assume that there is something fundamental about different individuals that changes how their weight responds to <code class="docutils literal notranslate"><span class="pre">diet</span></code>, <code class="docutils literal notranslate"><span class="pre">exercises</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. However, we are forced to assume that the way these aspects interact is the <em>same</em> irrespective of the individual. So the way a person’s weight responds to <code class="docutils literal notranslate"><span class="pre">diet</span></code> or <code class="docutils literal notranslate"><span class="pre">exercises</span></code> is different. Some people fundamentally respond better to <code class="docutils literal notranslate"><span class="pre">diet</span></code> over <code class="docutils literal notranslate"><span class="pre">exercises</span></code>, for instance. However, the way that these two aspects <em>compound</em> is the same across everyone. So, irrespective of how well a person responds to <code class="docutils literal notranslate"><span class="pre">diet</span></code> or <code class="docutils literal notranslate"><span class="pre">exercises</span></code>, their <em>combination</em> is always beneficial in a way that does not depend upon the specific individual.</p>
+<p>We will discuss more about these interpretations in the materials this week. For now, the point is to see how different random effects structures change the covariance matrix. So let us now extract the new covariance matrix and see how it compares.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">weightloss.lme.1</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
@@ -686,47 +662,45 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            1          2          3          4           5          6
-1  1.32509899 0.17708871 0.07621244 0.15019043 0.043238445 0.11721644
-2  0.17708871 1.52806888 0.13098837 0.25998026 0.074707230 0.20369912
-3  0.07621244 0.13098837 1.27867294 0.11146059 0.032185008 0.08696094
-4  0.15019043 0.25998026 0.11146059 1.44323870 0.063653793 0.17344362
-5  0.04323844 0.07470723 0.03218501 0.06365379 1.240963739 0.05044425
-6  0.11721644 0.20369912 0.08696094 0.17344362 0.050444247 1.35891521
-7  0.01634016 0.02860689 0.01265723 0.02492396 0.007922025 0.02018875
-8  0.09031816 0.15759878 0.06743316 0.13471379 0.039390810 0.10667143
-9  0.10307581 0.17701502 0.07618509 0.15012430 0.043215160 0.11715438
-10 0.17705380 0.30600692 0.13096102 0.25991413 0.074683945 0.20363706
-11 0.07617753 0.13091468 0.05665731 0.11139446 0.032161723 0.08689888
-12 0.15015552 0.25990657 0.11143324 0.22118429 0.063630508 0.17338156
-             7          8          9         10         11         12
-1  0.016340164 0.09031816 0.10307581 0.17705380 0.07617753 0.15015552
-2  0.028606887 0.15759878 0.17701502 0.30600692 0.13091468 0.25990657
-3  0.012657233 0.06743316 0.07618509 0.13096102 0.05665731 0.11143324
-4  0.024923956 0.13471379 0.15012430 0.25991413 0.11139446 0.22118429
-5  0.007922025 0.03939081 0.04321516 0.07468395 0.03216172 0.06363051
-6  0.020188748 0.10667143 0.11715438 0.20363706 0.08689888 0.17338156
-7  1.226227371 0.01650582 0.01632444 0.02859116 0.01264151 0.02490823
-8  0.016505817 1.30577472 0.09026366 0.15754428 0.06737866 0.13465928
-9  0.016324438 0.09026366 1.32505477 0.17700571 0.07617577 0.15011499
-10 0.028591161 0.15754428 0.17700571 1.52794710 0.13091292 0.25986604
-11 0.012641507 0.06737866 0.07617577 0.13091292 1.27864383 0.11139271
-12 0.024908230 0.13465928 0.15011499 0.25986604 0.11139271 1.44313204
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            1          2          3          4           5          6           7          8          9         10         11
+1  1.32509853 0.17708806 0.07621213 0.15019008 0.043238063 0.11721601 0.016340089 0.09031804 0.10307520 0.17705315 0.07617723
+2  0.17708806 1.52806845 0.13098813 0.25998010 0.074706712 0.20369868 0.028606783 0.15759875 0.17701438 0.30600635 0.13091445
+3  0.07621213 0.13098813 1.27867294 0.11146051 0.032184773 0.08696077 0.012657156 0.06743315 0.07618479 0.13096078 0.05665717
+4  0.15019008 0.25998010 0.11146051 1.44323895 0.063653421 0.17344344 0.024923850 0.13471387 0.15012397 0.25991398 0.11139440
+5  0.04323806 0.07470671 0.03218477 0.06365342 1.240963620 0.05044384 0.007921905 0.03939055 0.04321478 0.07468343 0.03216149
+6  0.11721601 0.20369868 0.08696077 0.17344344 0.050443844 1.35891494 0.020188599 0.10667127 0.11715396 0.20363663 0.08689872
+7  0.01634009 0.02860678 0.01265716 0.02492385 0.007921905 0.02018860 1.226227396 0.01650567 0.01632437 0.02859106 0.01264143
+8  0.09031804 0.15759875 0.06743315 0.13471387 0.039390553 0.10667127 0.016505666 1.30577480 0.09026354 0.15754426 0.06737866
+9  0.10307520 0.17701438 0.07618479 0.15012397 0.043214782 0.11715396 0.016324366 0.09026354 1.32505431 0.17700507 0.07617547
+10 0.17705315 0.30600635 0.13096078 0.25991398 0.074683430 0.20363663 0.028591060 0.15754426 0.17700507 1.52794669 0.13091270
+11 0.07617723 0.13091445 0.05665717 0.11139440 0.032161491 0.08689872 0.012641433 0.06737866 0.07617547 0.13091270 1.27864384
+12 0.15015518 0.25990642 0.11143317 0.22118441 0.063630139 0.17338138 0.024908127 0.13465937 0.15011465 0.25986590 0.11139264
+           12
+1  0.15015518
+2  0.25990642
+3  0.11143317
+4  0.22118441
+5  0.06363014
+6  0.17338138
+7  0.02490813
+8  0.13465937
+9  0.15011465
+10 0.25986590
+11 0.11139264
+12 1.44313231
 </pre></div>
 </div>
-<img alt="_images/48d1f0ca8142842b3b7db8b1f8c0ebb75efad9071a71a88745d3aa259755d60b.png" src="_images/48d1f0ca8142842b3b7db8b1f8c0ebb75efad9071a71a88745d3aa259755d60b.png" />
+<img alt="_images/d77136f6868013c3dabde0301a52bf4428d4eb74bc6640c9644d6543d33fc61a.png" src="_images/d77136f6868013c3dabde0301a52bf4428d4eb74bc6640c9644d6543d33fc61a.png" />
 </div>
 </div>
 <p>So notice that we have now achieved the aim we had last week of a completely unstructured covariance matrix. This was too complex to fit using <code class="docutils literal notranslate"><span class="pre">gls()</span></code>, but we have managed it using a mixed-effects model.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 3</b> An alternative assumption about the random-effects structure would be that both <code>diet</code> and <code>exercises</code> affect different people in different ways, but that <code>time</code> affects everyone in the same way. How could you integrate this assumption into the model? Can you now include the interaction terms as well? What does the covariance structure look like?
-</div><div class="alert alert-block alert-info"> 
-<b>ACTIVITY 4</b> Can you now produce the extra tests for the new model with the more general covariance structure? Does anything substantive change in terms of the omnibus tests, follow-up tests or plots? What does this suggest about the sensitivity of our inference to the covariance assumptions?
+<b>ACTIVITY 3</b> An alternative assumption about the random-effects structure would be that both <code>diet</code> and <code>exercises</code> affect different people in different ways, but that <code>time</code> affects everyone in the same way. How could you integrate this assumption into the model?
 </div></section>
 </section>
 <section id="within-subject-and-between-subject-factors">
 <h2>Within-subject and Between-subject Factors<a class="headerlink" href="#within-subject-and-between-subject-factors" title="Link to this heading">#</a></h2>
-<p>We can also revisit the example from last week of the <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> dataset which contains both a <em>within-subject</em> and <em>between-subjects</em> factor. We load and wrangle the data below</p>
+<p>As well as multiple within-subject factors, we can also revisit the example from last week of the <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> dataset which contains both a <em>within-subject</em> and <em>between-subjects</em> factor. We load and wrangle the data below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;anxiety&#39;</span><span class="p">)</span>
@@ -763,10 +737,11 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
+<p>As we can see, this is much simpler than the <code class="docutils literal notranslate"><span class="pre">weightloss</span></code> dataset. But with this simplicity comes <em>fewer options</em>.</p>
 <section id="random-effect-specification">
 <h3>Random-effect Specification<a class="headerlink" href="#random-effect-specification" title="Link to this heading">#</a></h3>
-<p>Unlike the previous example, because there are no replications here we are forced to only use a <em>random intercept</em> per-subject. Again, the logic of doing this will be more explicitly laid out in the materials this week. For now, we will just explore what these models give us and the options we have available.</p>
-<p>We fit the model below using <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> for the random effects</p>
+<p>Unlike the previous example, there are no replications within the repeated measurements. Each subject only has a single <code class="docutils literal notranslate"><span class="pre">score</span></code> at each time-point. Our heuristic is that we can therefore only use a <em>random intercept</em> model. Again, the logic of this will be more explicitly laid out in the materials this week.</p>
+<p>We can fit the model using the syntax below with <code class="docutils literal notranslate"><span class="pre">random=</span> <span class="pre">~</span> <span class="pre">1|id</span></code> used for the random effects</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">anxiety.lme.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
@@ -817,10 +792,9 @@ Number of Groups: 45
 </div>
 </div>
 </div>
-<p>As expected, there are only two variance terms and we have a compound symmetric structure again.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 5</b> Can you confirm the covariance structure for this model by extracting and visualising it?
-</div><p>We can then continue our usual approach of generating omnibus tests</p>
+<b>ACTIVITY 4</b> Can you confirm the covariance structure for this model by extracting and visualising it?
+</div><p>We can continue with our usual approach of generating omnibus tests</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">anxiety.lme.0</span><span class="p">)</span>
@@ -849,16 +823,16 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/fbdbb7eb110dfca2d094247de67a0fa86e6410da3b86fb874b10d5ce8c51bb12.png" src="_images/fbdbb7eb110dfca2d094247de67a0fa86e6410da3b86fb874b10d5ce8c51bb12.png" />
+<img alt="_images/34d2b7ed8fa03ae8ac2b98d07d5eafe852d832743be0ec1dbe9af8925d53ec7b.png" src="_images/34d2b7ed8fa03ae8ac2b98d07d5eafe852d832743be0ec1dbe9af8925d53ec7b.png" />
 </div>
 </div>
 <p>where there appears to be a clear change in the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> depending upon the <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 6</b> Can you follow-up this interaction using <code>emmeans</code>?
+<b>ACTIVITY 5</b> Can you follow-up this interaction using <code>emmeans</code>? Remember to check that your inferential approach is <i>consistent</i> with the method used by <code>Anova()</code>.
 </div></section>
 <section id="id1">
 <h3>Multilevel Conceptualisation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<p>As we saw earlier, we can present the multilevel version of this model. Again, the process of building this will be given in much more detail in the materials this week, so do not worry about understanding every nuance of this</p>
+<p>As we saw earlier, we can present the multilevel version of this model. Again, the process of building this will be given in much more detail in the materials this week, so do not worry about understanding every aspect of this. The aim is that, by the end of next week, you would be able to build the model below from first principles and will understand where its various elements have come from.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -869,11 +843,11 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
     \mu_{i} &amp;= \mu + \beta_{k} + \xi_{i}
 \end{alignat*}
 \end{split}\]</div>
-<p>For now, notice that the <em>between-subjects</em> factor enters at Level 2. This again echoes how this effects are split into error terms in the repeated measures ANOVA.</p>
+<p>For now, notice that the <em>between-subjects</em> factor enters at Level 2. This again echoes how this effects are split into error terms in the repeated measures ANOVA. In these very basic models we can think of Level 1 in relation to the <em>within-subject</em> elements of the data and Level 2 in relation to the <em>between-subjects</em> elements of the data.</p>
 </section>
 <section id="including-a-weights-structure">
 <h3>Including a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> Structure<a class="headerlink" href="#including-a-weights-structure" title="Link to this heading">#</a></h3>
-<p>As mentioned, the lack of replications limits the random-effects structure. However, an advantage of <code class="docutils literal notranslate"><span class="pre">lme()</span></code> is that we have access to same <code class="docutils literal notranslate"><span class="pre">weights=</span></code> options as <code class="docutils literal notranslate"><span class="pre">gls()</span></code>. This means that we can make the structure more general across the levels of <code class="docutils literal notranslate"><span class="pre">group</span></code> by allowing different variances. The syntax for this is</p>
+<p>As mentioned, the lack of replications limits the random-effects structure. If we were using the <code class="docutils literal notranslate"><span class="pre">lme4</span></code> package, we would have no further options and would be forced to accept compound symmetry. However, an advantage of <code class="docutils literal notranslate"><span class="pre">lme()</span></code> is that we have access to same <code class="docutils literal notranslate"><span class="pre">weights=</span></code> options as <code class="docutils literal notranslate"><span class="pre">gls()</span></code>. This means that we can make the structure more general across the levels of <code class="docutils literal notranslate"><span class="pre">group</span></code> by allowing different variances. The syntax for this is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">anxiety.lme.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="o">=</span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">group</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">anxiety.long</span><span class="p">)</span>
@@ -890,25 +864,25 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Random effects:
  Formula: ~1 | id
         (Intercept)  Residual
-StdDev:    1.531916 0.3013531
+StdDev:     1.53192 0.3013514
 
 Variance function:
  Structure: Different standard deviations per stratum
  Formula: ~1 | group 
  Parameter estimates:
-    grp1     grp2     grp3 
-1.000000 0.878552 1.006210 
+     grp1      grp2      grp3 
+1.0000000 0.8785575 1.0062156 
 Fixed effects:  score ~ group * time 
                      Value Std.Error DF   t-value p-value
-(Intercept)      17.086667 0.4031194 84  42.38611  0.0000
-groupgrp2        -0.440000 0.5688843 42  -0.77344  0.4436
-groupgrp3        -0.073333 0.5701631 42  -0.12862  0.8983
-timet2           -0.160000 0.1100386 84  -1.45404  0.1497
-timet3           -0.580000 0.1100386 84  -5.27088  0.0000
-groupgrp2:timet2 -0.020000 0.1464735 84  -0.13654  0.8917
-groupgrp3:timet2 -1.840000 0.1561020 84 -11.78717  0.0000
-groupgrp2:timet3 -0.540000 0.1464735 84  -3.68667  0.0004
-groupgrp3:timet3 -2.873333 0.1561020 84 -18.40677  0.0000
+(Intercept)      17.086667 0.4031204 84  42.38602  0.0000
+groupgrp2        -0.440000 0.5688857 42  -0.77344  0.4436
+groupgrp3        -0.073333 0.5701645 42  -0.12862  0.8983
+timet2           -0.160000 0.1100380 84  -1.45404  0.1497
+timet3           -0.580000 0.1100380 84  -5.27091  0.0000
+groupgrp2:timet2 -0.020000 0.1464731 84  -0.13654  0.8917
+groupgrp3:timet2 -1.840000 0.1561016 84 -11.78720  0.0000
+groupgrp2:timet3 -0.540000 0.1464731 84  -3.68668  0.0004
+groupgrp3:timet3 -2.873333 0.1561016 84 -18.40682  0.0000
  Correlation: 
                  (Intr) grpgr2 grpgr3 timet2 timet3 grp2:2 grp3:2 grp2:3
 groupgrp2        -0.709                                                 
@@ -921,8 +895,8 @@ groupgrp2:timet3  0.103 -0.129 -0.072 -0.376 -0.751  0.500  0.265
 groupgrp3:timet3  0.096 -0.068 -0.137 -0.352 -0.705  0.265  0.500  0.530
 
 Standardized Within-Group Residuals:
-        Min          Q1         Med          Q3         Max 
--3.24258231 -0.47011972  0.05821115  0.55560638  1.93952465 
+       Min         Q1        Med         Q3        Max 
+-3.2426010 -0.4701193  0.0582123  0.5556083  1.9395237 
 
 Number of Observations: 135
 Number of Groups: 45 
@@ -931,7 +905,7 @@ Number of Groups: 45
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 7</b> Use the data to identify the <code>id</code> of the first subject from each level of <code>group</code>. Extract the covariance matrices for each of these subjects and compare them.
+<b>ACTIVITY 6</b> Use the data to identify the <code>id</code> of the first subject from each level of <code>group</code>. Extract the covariance matrices for each of these subjects and compare them.
 </div></section>
 <section id="model-comparisons">
 <h3>Model Comparisons<a class="headerlink" href="#model-comparisons" title="Link to this heading">#</a></h3>
@@ -954,12 +928,73 @@ mod.1     2 13 264.8566 302.6252 -119.4283 1 vs 2 0.6819275  0.7111
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY 8</b> Does this result suggest that a different variance per-level of <code>group</code> is needed or not?
+<b>ACTIVITY 7</b> Does this result suggest that a different variance per-level of <code>group</code> is needed or not? How does the assumption of homogeneity of variance affect the inference?
 </div></section>
 </section>
 <section id="model-assumptions">
 <h2>Model Assumptions<a class="headerlink" href="#model-assumptions" title="Link to this heading">#</a></h2>
-</section>
+<p>Assessing the assumptions of a mixed-effects model is very similar in spirit to what we have seen previously, particularly given the discussion of GLS in the last workshop. Below, we present a function similar to the <code class="docutils literal notranslate"><span class="pre">plot.gls()</span></code> function we created last week. The key differences are</p>
+<ul class="simple">
+<li><p>An explicit <code class="docutils literal notranslate"><span class="pre">vcov.id</span></code> is needed to extract the marginal covariance matrix for a single individual</p></li>
+<li><p>The normality of the random effects needs to be checked and so additional QQ-normal plots are added dynamically, depending upon the number of random effects in the model.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">plot.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="p">){</span>
+
+<span class="w">  </span><span class="n">resid.norm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">fit</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fitted</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">rand.effs</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">random.effects</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+<span class="w">  </span><span class="n">rand.names</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">rand.effs</span><span class="p">)</span>
+<span class="w">  </span><span class="n">n.rand</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dim</span><span class="p">(</span><span class="n">rand.effs</span><span class="p">)[</span><span class="m">2</span><span class="p">]</span>
+
+<span class="w">  </span><span class="n">n.rows</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">ceiling</span><span class="p">(</span><span class="n">n.rand</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
+<span class="w">  </span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">n.rows</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+
+<span class="w">  </span><span class="c1"># Residuals vs fitted</span>
+<span class="w">  </span><span class="nf">plot</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">resid.norm</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Residuals vs fitted&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="nf">lines</span><span class="p">(</span><span class="nf">lowess</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="n">resid.norm</span><span class="p">))</span>
+
+<span class="w">  </span><span class="c1"># Normal Q-Q</span>
+<span class="w">  </span><span class="nf">qqnorm</span><span class="p">(</span><span class="n">resid.norm</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&quot;Residuals&quot;</span><span class="p">)</span><span class="w"> </span>
+<span class="w">  </span><span class="nf">qqline</span><span class="p">(</span><span class="n">resid.norm</span><span class="p">)</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1"># Scale-Location</span>
+<span class="w">  </span><span class="nf">plot</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">resid.norm</span><span class="p">)),</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Scale-Location&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="nf">lines</span><span class="p">(</span><span class="nf">lowess</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">resid.norm</span><span class="p">))))</span>
+
+<span class="w">  </span><span class="c1"># Visualisation of the marginal covariance structure</span>
+<span class="w">  </span><span class="n">V</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="n">vcov.id</span><span class="p">)[[</span><span class="n">vcov.id</span><span class="p">]]</span>
+<span class="w">  </span><span class="n">graphics</span><span class="o">::</span><span class="nf">image</span><span class="p">(</span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">V</span><span class="p">)[</span><span class="nf">nrow</span><span class="p">(</span><span class="n">V</span><span class="p">)</span><span class="o">:</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Marginal covariance structure (ID=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;)&#39;</span><span class="p">))</span>
+
+<span class="w">  </span><span class="c1">## Normal Q-Q of the random effects</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.rand</span><span class="p">){</span>
+<span class="w">    </span><span class="n">RE</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rand.effs</span><span class="p">[,</span><span class="n">i</span><span class="p">]</span>
+<span class="w">    </span><span class="nf">qqnorm</span><span class="p">(</span><span class="n">RE</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="n">rand.names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">qqline</span><span class="p">(</span><span class="n">RE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use this function with the last model of <code class="docutils literal notranslate"><span class="pre">anxiety</span></code> that we fit</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">anxiety.lme.1</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e7ea178dcdb82d1d799663ab8448ce8c96308f07c8bd4480f571d47a89e52e67.png" src="_images/e7ea178dcdb82d1d799663ab8448ce8c96308f07c8bd4480f571d47a89e52e67.png" />
+</div>
+</div>
+<p>Of note is that the <em>normalised</em> residuals are used because they have had the covariance structure <em>removed</em>. If we have captured the correlational and variance differences correctly, there should be no structure left here. In addition, we have the normality of the random effects to consider.</p>
+<p>In general, the normality assumption for random effects is there to make estimation possible. Minor deviations are not really that important. If the distribution looks very non-normal, the first suspicion should be that the model is missing structure (e.g. additional groups that are not captured by the current random effects). Another possibility is that some of the individuals in the model have unusual data. So, any non-normality here points towards either model misspecification or some particularly odd cases. Beyond dealing with these possibilities, there is not much we can do if normality appears poorly met.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY 8</b> Try using this function to generate plots from some other models in this lesson, particularly those with multiple random effects, and try changing the option for <code>vcov.id</code>.
+</div></section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -999,7 +1034,8 @@ mod.1     2 13 264.8566 302.6252 -119.4283 1 vs 2 0.6819275  0.7111
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1070,8 +1106,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
